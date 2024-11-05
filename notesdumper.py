@@ -31,8 +31,8 @@ def export_notes_to_markdown(export_path, folder_name=None, max_notes=None):
         end if
         
         set noteCount to (count of allNotes)
-        if max_notes > 0 
-        	set maxToProcess to max_notes 
+        if {max_notes} > 0 
+        	set maxToProcess to {max_notes} 
         else
         	set maxToProcess to noteCount
         end if
