@@ -3,6 +3,11 @@ import os
 from datetime import datetime
 import argparse
 
+DEFAULT_EXPORT_PATH = "~/Documents/openai/notesdump/gitnotes"
+
+
+
+
 def setup_git_repo(repo_path, github_url):
     """Initialize Git repo and set remote if not already set up"""
     if not os.path.exists(os.path.join(repo_path, '.git')):
@@ -67,8 +72,8 @@ def main():
     parser.add_argument('--max-notes', type=int,
                       help='Maximum number of notes to process')
     parser.add_argument('--export-path', type=str, 
-                      default=os.path.expanduser("~/Documents/GitNotes"),
-                      help='Path to export the notes (default: ~/Documents/GitNotes)')
+                      default=os.path.expanduser(f"DEFAULT_EXPORT_PATH"),
+                      help=f'Path to export the notes (default: {DEFAULT_EXPORT_PATH})')
     parser.add_argument('--github-url', type=str, required=True,
                       help='GitHub repository URL')
     
