@@ -72,7 +72,7 @@ def main():
     parser.add_argument('--max-notes', type=int,
                       help='Maximum number of notes to process')
     parser.add_argument('--export-path', type=str, 
-                      default=os.path.expanduser(f"DEFAULT_EXPORT_PATH"),
+                      default=os.path.expanduser(f"{DEFAULT_EXPORT_PATH}"),
                       help=f'Path to export the notes (default: {DEFAULT_EXPORT_PATH})')
     parser.add_argument('--github-url', type=str, required=True,
                       help='GitHub repository URL')
