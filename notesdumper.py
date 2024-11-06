@@ -18,12 +18,13 @@ def export_notes_to_markdown(export_path, folder_name=None, max_notes=None):
     """Export Notes using osascript with folder and count limits"""
     applescript = f'''
     tell application "Notes"
-        if length of "{folder_name if folder_name else ''}" > 0 then
+        --if folder_name else ''
+        if length of "{folder_name}" > 0 then
             try
                 set targetFolder to folder "{folder_name}"
                 set allNotes to every note in targetFolder
             on error
-                log "Folder not found"
+                log "Folder {folder_name} not found"
                 return 0
             end try
         else
