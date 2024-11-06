@@ -1,6 +1,12 @@
 # notesdump
 python and applescript to back up macOS notes
 
-** DOES NOT WORK YET **
+## Usage
 
-issue 1: `Error: 472:534: syntax error: Expected expression but found unknown token. (-2741)`
+`python notesdumper.py --folder='<foldername>' --max-notes <Int> --github-url https://github.com/<user>/<repo>`
+
+`--folder` is optional
+`--max-notes` is optional
+
+
+
