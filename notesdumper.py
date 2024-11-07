@@ -13,6 +13,9 @@ def setup_git_repo(repo_path, DEFAULT_GITHUB_URL):
     if not os.path.exists(os.path.join(repo_path, '.git')):
         subprocess.run(['git', 'init'], cwd=repo_path)
         subprocess.run(['git', 'remote', 'add', 'origin', DEFAULT_GITHUB_URL], cwd=repo_path)
+        #subprocess.run(['git', 'commit', '-m', "initial commit"], cwd=repo_path)
+        #subprocess.run(['git', 'push', 'origin', 'main'], cwd=repo_path)
+       
 
 def export_notes_to_markdown(export_path, folder_name=None, max_notes=None):
     """Export Notes using osascript with folder and count limits"""
