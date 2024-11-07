@@ -13,8 +13,8 @@ def setup_git_repo(repo_path, DEFAULT_GITHUB_URL):
     if not os.path.exists(os.path.join(repo_path, '.git')):
         subprocess.run(['git', 'init'], cwd=repo_path)
         subprocess.run(['git', 'remote', 'add', 'origin', DEFAULT_GITHUB_URL], cwd=repo_path)
-        #subprocess.run(['git', 'commit', '-m', "initial commit"], cwd=repo_path)
-        #subprocess.run(['git', 'push', 'origin', 'main'], cwd=repo_path)
+        subprocess.run(['git', 'branch', '-m', 'main'], cwd=repo_path)
+
        
 
 def export_notes_to_markdown(export_path, folder_name=None, max_notes=None):
@@ -78,7 +78,7 @@ def commit_and_push(repo_path, folder_name=None):
     print(f"repo_path:{repo_path}, folder_name:{folder_name}, commit_message:{commit_message}")
     subprocess.run(['git', 'commit', '-m', commit_message], cwd=f"{repo_path}/{folder_name}")
     print("past git commit")
-    subprocess.run(['git', 'push', 'origin', 'master'], cwd=f"{repo_path}/{folder_name}")
+    subprocess.run(['git', 'push', 'origin', 'main'], cwd=f"{repo_path}/{folder_name}")
 
 def main():
     parser = argparse.ArgumentParser(description='Export Apple Notes to GitHub')
