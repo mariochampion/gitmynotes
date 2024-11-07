@@ -1,6 +1,11 @@
 # notesdump
 python and applescript to back up macOS notes
 
+## to do
+
+make sure the folders are auto-created to store .md
+
+
 ## Usage
 
 
