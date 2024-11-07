@@ -72,13 +72,36 @@ def export_notes_to_markdown(export_path, folder_name=None, max_notes=None):
 
 def commit_and_push(repo_path, folder_name=None):
     """Commit changes and push to GitHub"""
-    subprocess.run(['git', 'add', '.'], cwd=f"{repo_path}/{folder_name}")
+    result_gitadd = subprocess.run(['git', 'add', '.'], cwd=f"{repo_path}/{folder_name}")
+    if result_gitadd.returncode == 0:
+        print(f"Successfully GIT ADDed to origin/main.")
+    else:
+        print(f"Error GIT ADD to origin/main:")
+        print(result_gitadd)
+    
+    
     folder_info = f" from folder '{folder_name}'" if folder_name else ""
     commit_message = f"Updated notes{folder_info} - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
     print(f"repo_path:{repo_path}, folder_name:{folder_name}, commit_message:{commit_message}")
-    subprocess.run(['git', 'commit', '-m', commit_message], cwd=f"{repo_path}/{folder_name}")
+    result_gitcommit = subprocess.run(['git', 'commit', '-m', commit_message], cwd=f"{repo_path}/{folder_name}")
     print("past git commit")
-    subprocess.run(['git', 'push', 'origin', 'main'], cwd=f"{repo_path}/{folder_name}")
+    if result_gitcommit.returncode == 0:
+        print(f"Successfully COMMITed to origin/main/.")
+    else:
+        print(f"Error COMMITing to origin/main/:")
+        print(result_gitcommit)
+        
+    
+    #subprocess.run(['git', 'push', 'origin', 'main'], cwd=f"{repo_path}/{folder_name}")
+    result = subprocess.run(['git', 'push', 'origin', 'main'], cwd=f"{repo_path}/{folder_name}", capture_output=True, text=True)
+    
+    if result.returncode == 0:
+        print("Successfully pushed to origin/main.")
+    else:
+        print("Error pushing to origin/main:")
+        print(result.stderr)
+    
+    
 
 def main():
     parser = argparse.ArgumentParser(description='Export Apple Notes to GitHub')
