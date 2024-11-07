@@ -4,15 +4,15 @@ from datetime import datetime
 import argparse
 
 DEFAULT_EXPORT_PATH = "~/Documents/openai/notesdump/gitnotes"
+DEFAULT_GITHUB_URL = "https://github.com/mariochampion/notesdump"
 
 
 
-
-def setup_git_repo(repo_path, github_url):
+def setup_git_repo(repo_path, DEFAULT_GITHUB_URL):
     """Initialize Git repo and set remote if not already set up"""
     if not os.path.exists(os.path.join(repo_path, '.git')):
         subprocess.run(['git', 'init'], cwd=repo_path)
-        subprocess.run(['git', 'remote', 'add', 'origin', github_url], cwd=repo_path)
+        subprocess.run(['git', 'remote', 'add', 'origin', DEFAULT_GITHUB_URL], cwd=repo_path)
 
 def export_notes_to_markdown(export_path, folder_name=None, max_notes=None):
     """Export Notes using osascript with folder and count limits"""
@@ -68,11 +68,12 @@ def export_notes_to_markdown(export_path, folder_name=None, max_notes=None):
 
 def commit_and_push(repo_path, folder_name=None):
     """Commit changes and push to GitHub"""
-    subprocess.run(['git', 'add', '.'], cwd=repo_path)
+    subprocess.run(['git', 'add', '.'], cwd=f"{repo_path}/{folder_name}")
     folder_info = f" from folder '{folder_name}'" if folder_name else ""
     commit_message = f"Updated notes{folder_info} - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
-    subprocess.run(['git', 'commit', '-m', commit_message], cwd=repo_path)
-    subprocess.run(['git', 'push', 'origin', 'main'], cwd=repo_path)
+    print(f"repo_path:{repo_path}, folder_name:{folder_name}, commit_message:{commit_message}")
+    subprocess.run(['git', 'commit', '-m', commit_message], cwd=f"{repo_path}/{folder_name}")
+    subprocess.run(['git', 'push', 'origin', 'main'], cwd=f"{repo_path}/{folder_name}")
 
 def main():
     parser = argparse.ArgumentParser(description='Export Apple Notes to GitHub')
@@ -83,7 +84,8 @@ def main():
     parser.add_argument('--export-path', type=str, 
                       default=os.path.expanduser(f"{DEFAULT_EXPORT_PATH}"),
                       help=f'Path to export the notes (default: {DEFAULT_EXPORT_PATH})')
-    parser.add_argument('--github-url', type=str, required=True,
+    parser.add_argument('--github-url', type=str,
+    				  default=DEFAULT_GITHUB_URL,
                       help='GitHub repository URL')
     
     args = parser.parse_args()
