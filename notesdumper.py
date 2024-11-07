@@ -77,7 +77,8 @@ def commit_and_push(repo_path, folder_name=None):
     commit_message = f"Updated notes{folder_info} - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
     print(f"repo_path:{repo_path}, folder_name:{folder_name}, commit_message:{commit_message}")
     subprocess.run(['git', 'commit', '-m', commit_message], cwd=f"{repo_path}/{folder_name}")
-    subprocess.run(['git', 'push', 'origin', 'main'], cwd=f"{repo_path}/{folder_name}")
+    print("past git commit")
+    subprocess.run(['git', 'push', 'origin', 'master'], cwd=f"{repo_path}/{folder_name}")
 
 def main():
     parser = argparse.ArgumentParser(description='Export Apple Notes to GitHub')
