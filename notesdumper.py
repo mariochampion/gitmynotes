@@ -22,6 +22,7 @@ def export_notes_to_markdown(export_path, folder_name=None, max_notes=None):
             try
                 set targetFolder to folder "{folder_name}"
                 set allNotes to every note in targetFolder
+                set export_path_full to "{export_path}/{folder_name}"
             on error
                 log "Folder {folder_name} not found"
                 return 0
@@ -54,7 +55,7 @@ def export_notes_to_markdown(export_path, folder_name=None, max_notes=None):
             set fileName to cleanTitle & ".md"
             
             -- Write to file
-            do shell script "echo " & quoted form of noteContent & " > " & quoted form of ("{export_path}/" & fileName)
+            do shell script "echo " & quoted form of noteContent & " > " & quoted form of export_path_full & "/" & fileName
         end repeat
         
         return notesToProcess
