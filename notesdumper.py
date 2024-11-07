@@ -96,6 +96,9 @@ def main():
     args = parser.parse_args()
     
     os.makedirs(args.export_path, exist_ok=True)
+    if args.folder:
+        export_path_w_folder = f"{args.export_path}/{args.folder}"
+        os.makedirs(export_path_w_folder, exist_ok=True)
     
     setup_git_repo(args.export_path, args.github_url)
     
