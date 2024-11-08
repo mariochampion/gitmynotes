@@ -3,7 +3,8 @@ import os
 from datetime import datetime
 import argparse
 
-DEFAULT_EXPORT_PATH = "~/Documents/openai/notesdump/gitnotes"
+DEFAULT_EXPORT_PATH = "~/Documents/openai/notesdump"
+DEFAULT_NOTES_OUTERDIR = "gitnotes"
 DEFAULT_GITHUB_URL = "https://github.com/mariochampion/notesdump"
 
 
@@ -30,7 +31,7 @@ def export_notes_to_markdown(export_path, folder_name=None, max_notes=None):
             try
                 set targetFolder to folder "{folder_name}"
                 set allNotes to every note in targetFolder
-                set export_path_full to "{export_path}/{folder_name}"
+                set export_path_full to "{export_path}/{DEFAULT_NOTES_OUTERDIR}/{folder_name}"
             on error
                 log "Folder {folder_name} not found"
                 return 0
