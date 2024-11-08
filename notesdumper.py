@@ -14,6 +14,11 @@ def setup_git_repo(repo_path, DEFAULT_GITHUB_URL):
         subprocess.run(['git', 'init'], cwd=repo_path)
         subprocess.run(['git', 'remote', 'add', 'origin', DEFAULT_GITHUB_URL], cwd=repo_path)
         subprocess.run(['git', 'branch', '-m', 'main'], cwd=repo_path)
+        # Add this to handle remote repository state
+        try:
+            subprocess.run(['git', 'pull', 'origin', 'main'], cwd=repo_path)
+        except:
+            print("No remote content to pull")
 
        
 
@@ -72,35 +77,42 @@ def export_notes_to_markdown(export_path, folder_name=None, max_notes=None):
 
 def commit_and_push(repo_path, folder_name=None):
     """Commit changes and push to GitHub"""
-    result_gitadd = subprocess.run(['git', 'add', '.'], cwd=f"{repo_path}/{folder_name}")
+    # Always operate from the git root directory
+    result_gitadd = subprocess.run(['git', 'add', '.'], cwd=repo_path)
     if result_gitadd.returncode == 0:
         print(f"Successfully GIT ADDed to origin/main.")
     else:
         print(f"Error GIT ADD to origin/main:")
         print(result_gitadd)
     
-    
     folder_info = f" from folder '{folder_name}'" if folder_name else ""
     commit_message = f"Updated notes{folder_info} - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
     print(f"repo_path:{repo_path}, folder_name:{folder_name}, commit_message:{commit_message}")
-    result_gitcommit = subprocess.run(['git', 'commit', '-m', commit_message], cwd=f"{repo_path}/{folder_name}")
+    
+    result_gitcommit = subprocess.run(['git', 'commit', '-m', commit_message], cwd=repo_path)
     print("past git commit")
     if result_gitcommit.returncode == 0:
-        print(f"Successfully COMMITed to origin/main/.")
+        print(f"Successfully COMMITed to origin/main.")
     else:
-        print(f"Error COMMITing to origin/main/:")
+        print(f"Error COMMITing to origin/main:")
         print(result_gitcommit)
-        
     
-    #subprocess.run(['git', 'push', 'origin', 'main'], cwd=f"{repo_path}/{folder_name}")
-    result = subprocess.run(['git', 'push', 'origin', 'main'], cwd=f"{repo_path}/{folder_name}", capture_output=True, text=True)
+    # Try to pull and rebase before pushing
+    try:
+        subprocess.run(['git', 'pull', '--rebase', 'origin', 'main'], cwd=repo_path)
+    except:
+        print("No remote changes to pull")
+    
+    result = subprocess.run(['git', 'push', 'origin', 'main'], cwd=repo_path, capture_output=True, text=True)
     
     if result.returncode == 0:
         print("Successfully pushed to origin/main.")
     else:
         print("Error pushing to origin/main:")
         print(result.stderr)
-    
+        # Optionally, try force push if regular push fails
+        # result = subprocess.run(['git', 'push', '-f', 'origin', 'main'], cwd=repo_path, capture_output=True, text=True)
+   
     
 
 def main():
