@@ -4,7 +4,7 @@ from datetime import datetime
 import argparse
 
 DEFAULT_EXPORT_PATH = "~/Documents/openai/notesdump"
-DEFAULT_NOTES_OUTERDIR = "gitnotes"
+DEFAULT_NOTES_OUTERDIR = "macosnotes"
 DEFAULT_GITHUB_URL = "https://github.com/mariochampion/notesdump"
 
 
@@ -79,7 +79,7 @@ def export_notes_to_markdown(export_path, folder_name=None, max_notes=None):
 def commit_and_push(repo_path, folder_name=None):
     """Commit changes and push to GitHub"""
     # Always operate from the git root directory
-    result_gitadd = subprocess.run(['git', 'add', '.'], cwd=repo_path)
+    result_gitadd = subprocess.run(['git', 'add', f'{DEFAULT_NOTES_OUTERDIR}'], cwd=repo_path)
     if result_gitadd.returncode == 0:
         print(f"Successfully GIT ADDed to origin/main.")
     else:
@@ -133,7 +133,7 @@ def main():
     
     os.makedirs(args.export_path, exist_ok=True)
     if args.folder:
-        export_path_w_folder = f"{args.export_path}/{args.folder}"
+        export_path_w_folder = f"{args.export_path}/{DEFAULT_NOTES_OUTERDIR}/{args.folder}"
         os.makedirs(export_path_w_folder, exist_ok=True)
     
     setup_git_repo(args.export_path, args.github_url)
