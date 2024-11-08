@@ -4,6 +4,10 @@ python and applescript to back up macOS notes
 ## to do
 write real instructions
 
+add image capability
+
+do some error catching (bad names, non numbers in maxnotes, etc)
+
 
 ## Usage
 
