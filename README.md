@@ -30,14 +30,22 @@ write real instructions
 	
 4. open terminal and cd to `notesdump` dir
 
-5. run `python notesdumper.py --folder='<notesFolderName>' --max-notes <N> `
+5. run Ex: `python notesdumper.py --folder='<notesFolderName>' --max-notes <N> `
 
-`--folder` is optional
+```
+Export MacOS Notes to GitHub
 
-`--max-notes` is optional
- 
+options:
+  -h, --help            show this help message and exit
+  --folder FOLDER       Specific Notes folder to export (default: all folders)
+  --max-notes MAX_NOTES
+                        Maximum number of notes to process
+  --export-path EXPORT_PATH
+                        Path to export the notes (default: ~/Documents/openai/notesdump)
+  --github-url GITHUB_URL
+                        GitHub repository URL
 
-
+```
 
 
 
