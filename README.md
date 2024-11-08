@@ -30,7 +30,7 @@ write real instructions
 	
 4. open terminal and cd to `notesdump` dir
 
-5. run `python3 notesdumper.py --folder='<notesFolderName>' --max-notes <N> `
+5. run `python notesdumper.py --folder='<notesFolderName>' --max-notes <N> `
 
 `--folder` is optional
 
