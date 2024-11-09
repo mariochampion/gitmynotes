@@ -38,6 +38,7 @@ def export_notes_to_markdown(export_path, folder_name=None, max_notes=None):
             end try
         else
             set allNotes to every note
+            set export_path_full to "{export_path}/{DEFAULT_NOTES_OUTERDIR}"
         end if
         
         set noteCount to (count of allNotes)
@@ -58,8 +59,8 @@ def export_notes_to_markdown(export_path, folder_name=None, max_notes=None):
             
             set noteTitle to the name of currentNote
             set linebreaker to "\n"
-            set noteCreateDate to "<div></b>Creation Date:</b> " & creation date of currentNote & "<br></div>"
-            set noteModDate to "<div></b>Modification Date:</b> " & modification date of currentNote & "<br></div>"
+            set noteCreateDate to "<div><b>Creation Date:</b> " & creation date of currentNote & "<br></div>"
+            set noteModDate to "<div><b>Modification Date:</b> " & modification date of currentNote & "<br></div>"
             set noteContent to the body of currentNote
             
             -- Clean the title for use as filename
