@@ -57,6 +57,8 @@ def export_notes_to_markdown(export_path, folder_name=None, max_notes=None):
             set currentNote to item i of allNotes
             
             set noteTitle to the name of currentNote
+            set noteCreationDate to "<div></b>Creation Date</b> " & creation date of currentNote & "<br></div>"
+            set linebreaker to "<div><br></div>"
             set noteContent to the body of currentNote
             
             -- Clean the title for use as filename
@@ -64,7 +66,7 @@ def export_notes_to_markdown(export_path, folder_name=None, max_notes=None):
             set fileName to cleanTitle & ".md"
             
             -- Write to file
-            do shell script "echo " & quoted form of noteContent & " > " & quoted form of export_path_full & "/" & fileName
+            do shell script "echo " & quoted form of noteCreationDate & quoted form of linebreaker & quoted form of noteContent & " > " & quoted form of export_path_full & "/" & fileName
         end repeat
         
         return notesToProcess
