@@ -39,7 +39,7 @@ do some error catching (bad names, non numbers in maxnotes, etc)
 5. run Ex: `python notesdumper.py --folder='<notesFolderName>' --max-notes <N> `
 
 ```
-Export MacOS Notes to GitHub
+Export Apple Notes to GitHub
 
 options:
   -h, --help            show this help message and exit
@@ -50,6 +50,8 @@ options:
                         Path to export the notes (default: ~/Documents/openai/notesdump)
   --github-url GITHUB_URL
                         GitHub repository URL
+  --wrapper-dir WRAPPER_DIR
+                        Outer directory to hold folders
 
 ```
 

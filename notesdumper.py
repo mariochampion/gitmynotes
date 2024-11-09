@@ -128,6 +128,12 @@ def main():
     parser.add_argument('--github-url', type=str,
     				  default=DEFAULT_GITHUB_URL,
                       help='GitHub repository URL')
+    parser.add_argument('--wrapper-dir', type=str,
+    				  default=DEFAULT_NOTES_OUTERDIR,
+                      help='Outer directory to hold folders')                      
+                      
+                      
+                      
     
     args = parser.parse_args()
     
