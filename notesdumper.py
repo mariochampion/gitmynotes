@@ -63,7 +63,7 @@ def export_notes_to_markdown(export_path, folder_name=None, max_notes=None):
             set noteContent to the body of currentNote
             
             -- Clean the title for use as filename
-            set cleanTitle to do shell script "echo -e " & quoted form of noteTitle & " | sed 's/[^a-zA-Z0-9.]/-/g' | tr '[:upper:]' '[:lower:]'"
+            set cleanTitle to do shell script "echo " & quoted form of noteTitle & " | sed 's/[^a-zA-Z0-9.]/-/g' | tr '[:upper:]' '[:lower:]'"
             set fileName to cleanTitle & ".md"
             
             -- Write to file
