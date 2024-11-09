@@ -57,7 +57,7 @@ def export_notes_to_markdown(export_path, folder_name=None, max_notes=None):
             set currentNote to item i of allNotes
             
             set noteTitle to the name of currentNote
-            set noteCreationDate to "<div></b>Creation Date</b> " & creation date of currentNote & "<br></div>"
+            set noteCreationDate to "<div></b>Creation Date:</b> " & creation date of currentNote & "<br></div>"
             set linebreaker to "<div><br></div>"
             set noteContent to the body of currentNote
             
