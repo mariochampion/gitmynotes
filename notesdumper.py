@@ -6,6 +6,7 @@ import argparse
 DEFAULT_EXPORT_PATH = "~/Documents/openai/notesdump"
 DEFAULT_NOTES_OUTERDIR = "macosnotes"
 DEFAULT_GITHUB_URL = "https://github.com/mariochampion/notesdump"
+DEFAULT_IGNORE_FOLDER = "ignore"
 
 
 
@@ -23,7 +24,7 @@ def setup_git_repo(repo_path, DEFAULT_GITHUB_URL):
 
        
 
-def export_notes_to_markdown(export_path, folder_name=None, max_notes=None):
+def export_notes_to_markdown(export_path, folder_name=None, max_notes=None, wrapper_dir=None):
     """Export Notes using osascript with folder and count limits"""
     applescript = f'''
     tell application "Notes"
@@ -31,14 +32,14 @@ def export_notes_to_markdown(export_path, folder_name=None, max_notes=None):
             try
                 set targetFolder to folder "{folder_name}"
                 set allNotes to every note in targetFolder
-                set export_path_full to "{export_path}/{DEFAULT_NOTES_OUTERDIR}/{folder_name}"
+                set export_path_full to "{export_path}/{wrapper_dir}/{folder_name}"
             on error
                 log "Folder {folder_name} not found"
                 return 0
             end try
         else
             set allNotes to every note
-            set export_path_full to "{export_path}/{DEFAULT_NOTES_OUTERDIR}"
+            set export_path_full to "{export_path}/{wrapper_dir}"
         end if
         
         set noteCount to (count of allNotes)
@@ -80,10 +81,10 @@ def export_notes_to_markdown(export_path, folder_name=None, max_notes=None):
         return 0
     return int(result.stdout.strip()) if result.stdout.strip() else 0
 
-def commit_and_push(repo_path, folder_name=None):
+def commit_and_push(repo_path, folder_name=None, wrapper_dir=None):
     """Commit changes and push to GitHub"""
     # Always operate from the git root directory
-    result_gitadd = subprocess.run(['git', 'add', f'{DEFAULT_NOTES_OUTERDIR}'], cwd=repo_path)
+    result_gitadd = subprocess.run(['git', 'add', f'{wrapper_dir}'], cwd=repo_path)
     if result_gitadd.returncode == 0:
         print(f"Successfully GIT ADDed to origin/main.")
     else:
@@ -123,19 +124,21 @@ def commit_and_push(repo_path, folder_name=None):
 def main():
     parser = argparse.ArgumentParser(description='Export Apple Notes to GitHub')
     parser.add_argument('--folder', type=str, default='',
-                      help='Specific Notes folder to export (default: all folders)')
+                      help='Specific Notes folder to export. (default: all folders)')
     parser.add_argument('--max-notes', type=int,
-                      help='Maximum number of notes to process')
+                      help=f'Maximum number of notes to process. (default: all notes)')
     parser.add_argument('--export-path', type=str, 
                       default=os.path.expanduser(f"{DEFAULT_EXPORT_PATH}"),
                       help=f'Path to export the notes (default: {DEFAULT_EXPORT_PATH})')
     parser.add_argument('--github-url', type=str,
     				  default=DEFAULT_GITHUB_URL,
-                      help='GitHub repository URL')
+                      help=f'GitHub repository URL. (default: {DEFAULT_GITHUB_URL})')
     parser.add_argument('--wrapper-dir', type=str,
     				  default=DEFAULT_NOTES_OUTERDIR,
-                      help='Outer directory to hold folders')                      
-                      
+                      help=f'Outer directory to hold folders. (default: {DEFAULT_NOTES_OUTERDIR})'),                      
+    parser.add_argument('--ignore-folder', type=str,
+    				  default=DEFAULT_IGNORE_FOLDER,
+                      help=f'The Notes folder to ignore and not process. (default: {DEFAULT_IGNORE_FOLDER})')                      
                       
                       
     
@@ -143,7 +146,7 @@ def main():
     
     os.makedirs(args.export_path, exist_ok=True)
     if args.folder:
-        export_path_w_folder = f"{args.export_path}/{DEFAULT_NOTES_OUTERDIR}/{args.folder}"
+        export_path_w_folder = f"{args.export_path}/{args.wrapper_dir}/{args.folder}"
         os.makedirs(export_path_w_folder, exist_ok=True)
     
     setup_git_repo(args.export_path, args.github_url)
@@ -151,7 +154,8 @@ def main():
     notes_processed = export_notes_to_markdown(
         args.export_path,
         args.folder,
-        args.max_notes
+        args.max_notes,
+        args.wrapper_dir
     )
     
     print(f"Processed {notes_processed} notes")
