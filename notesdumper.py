@@ -2,6 +2,7 @@ import subprocess
 import os
 from datetime import datetime
 import argparse
+import math
 
 DEFAULT_EXPORT_PATH = "~/Documents/openai/notesdump"
 DEFAULT_NOTES_OUTERDIR = "macosnotes"
@@ -23,7 +24,7 @@ def setup_git_repo(repo_path, DEFAULT_GITHUB_URL):
 
        
 
-def export_notes_to_markdown(export_path, folder_name=None, max_notes=None, batch_size=None, wrapper_dir=None):
+def export_notes_to_markdown(export_path, folder_name=None, max_notes=None, wrapper_dir=None):
     """Export Notes using osascript with folder and count limits"""
     applescript = f'''
     tell application "Notes"
@@ -126,7 +127,7 @@ def main():
                       help='Specific Notes folder to export. (default: all folders)')
     parser.add_argument('--max-notes', type=int,
                       help=f'Maximum number of notes to process. (default: all notes)')
-    parser.add_argument('--batch-size', type=str,
+    parser.add_argument('--batch-size', type=int,
     				  default=DEFAULT_BATCH_SIZE,
                       help=f'The number of notes to convert, and git add/commit/push per loop. Especially useful for initial GitNotes runs.(default: {DEFAULT_BATCH_SIZE})')  
     parser.add_argument('--export-path', type=str, 
@@ -137,10 +138,10 @@ def main():
                       help=f'GitHub repository URL. (default: {DEFAULT_GITHUB_URL})')
     parser.add_argument('--wrapper-dir', type=str,
     				  default=DEFAULT_NOTES_OUTERDIR,
-                      help=f'Outer directory to hold folders. (default: {DEFAULT_NOTES_OUTERDIR})'),                      
+                      help=f'Outer directory to hold folders. (default: {DEFAULT_NOTES_OUTERDIR})'),
     parser.add_argument('--ignore-folder', type=str,
     				  default=DEFAULT_IGNORE_FOLDER,
-                      help=f'The Notes folder to ignore and not process. (default: {DEFAULT_IGNORE_FOLDER})')                      
+                      help=f'The Notes folder to ignore and not process. (default: {DEFAULT_IGNORE_FOLDER})')
                        
                       
     
@@ -153,20 +154,22 @@ def main():
     
     setup_git_repo(args.export_path, args.github_url)
     
-    notes_processed = export_notes_to_markdown(
-        args.export_path,
-        args.folder,
-        args.max_notes,
-        args.batch_size,
-        args.wrapper_dir
-    )
     
-    print(f"Processed {notes_processed} notes")
-    
-    if notes_processed > 0:
-        commit_and_push(args.export_path, args.folder, args.wrapper_dir)
-    else:
-        print("No notes were processed, skipping git commit")
-
+    loop_count = math.ceil(args.max_notes / args.batch_size)
+    for x in range(loop_count): 
+        notes_processed = export_notes_to_markdown(
+            args.export_path,
+            args.folder,
+            args.batch_size,
+            args.wrapper_dir
+        )
+        
+        if notes_processed > 0:
+            print(f"Processed {notes_processed} notes")
+            commit_and_push(args.export_path, args.folder, args.wrapper_dir)
+        else:
+            print("No notes were processed, skipping git commit")
+            
+            
 if __name__ == "__main__":
     main()
