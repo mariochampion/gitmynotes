@@ -5,10 +5,9 @@ import argparse
 
 DEFAULT_EXPORT_PATH = "~/Documents/openai/notesdump"
 DEFAULT_NOTES_OUTERDIR = "macosnotes"
+DEFAULT_BATCH_SIZE = "10"
 DEFAULT_GITHUB_URL = "https://github.com/mariochampion/notesdump"
 DEFAULT_IGNORE_FOLDER = "ignore"
-
-
 
 def setup_git_repo(repo_path, DEFAULT_GITHUB_URL):
     """Initialize Git repo and set remote if not already set up"""
@@ -24,7 +23,7 @@ def setup_git_repo(repo_path, DEFAULT_GITHUB_URL):
 
        
 
-def export_notes_to_markdown(export_path, folder_name=None, max_notes=None, wrapper_dir=None):
+def export_notes_to_markdown(export_path, folder_name=None, max_notes=None, batch_size=None, wrapper_dir=None):
     """Export Notes using osascript with folder and count limits"""
     applescript = f'''
     tell application "Notes"
@@ -127,6 +126,9 @@ def main():
                       help='Specific Notes folder to export. (default: all folders)')
     parser.add_argument('--max-notes', type=int,
                       help=f'Maximum number of notes to process. (default: all notes)')
+    parser.add_argument('--batch-size', type=str,
+    				  default=DEFAULT_BATCH_SIZE,
+                      help=f'The number of notes to convert, and git add/commit/push per loop. Especially useful for initial GitNotes runs.(default: {DEFAULT_BATCH_SIZE})')  
     parser.add_argument('--export-path', type=str, 
                       default=os.path.expanduser(f"{DEFAULT_EXPORT_PATH}"),
                       help=f'Path to export the notes (default: {DEFAULT_EXPORT_PATH})')
@@ -139,7 +141,7 @@ def main():
     parser.add_argument('--ignore-folder', type=str,
     				  default=DEFAULT_IGNORE_FOLDER,
                       help=f'The Notes folder to ignore and not process. (default: {DEFAULT_IGNORE_FOLDER})')                      
-                      
+                       
                       
     
     args = parser.parse_args()
@@ -155,6 +157,7 @@ def main():
         args.export_path,
         args.folder,
         args.max_notes,
+        args.batch_size,
         args.wrapper_dir
     )
     
