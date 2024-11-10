@@ -161,7 +161,7 @@ def main():
     print(f"Processed {notes_processed} notes")
     
     if notes_processed > 0:
-        commit_and_push(args.export_path, args.folder)
+        commit_and_push(args.export_path, args.folder, args.wrapper_dir)
     else:
         print("No notes were processed, skipping git commit")
 
