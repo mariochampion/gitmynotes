@@ -155,6 +155,7 @@ def main():
     setup_git_repo(args.export_path, args.github_url)
     
     
+    """" Process in a loop of batches"""
     loop_count = math.ceil(args.max_notes / args.batch_size)
     for x in range(loop_count): 
         notes_processed = export_notes_to_markdown(
