@@ -25,7 +25,18 @@ def setup_git_repo(repo_path, DEFAULT_GITHUB_URL):
        
 
 def export_notes_to_markdown(export_path, folder_name=None, max_notes=None, wrapper_dir=None):
-    """Export Notes using osascript with folder and count limits"""
+    """Export Notes using applescript/osascript with folder and count limits"""
+    
+    if (max_notes > 0 and folder_name !="" and wrapper_dir !=""):
+        print(f"Starting export of {max_notes} Notes from '{folder_name}' into '{wrapper_dir}/{folder_name}'...")
+    elif (max_notes > 0 and folder_name !="" and wrapper_dir==None):
+        print(f"Starting export of {max_notes} Notes from '{folder_name}'...")
+    elif (max_notes > 0 and folder_name==None and wrapper_dir==None):
+        print(f"Starting export of {max_notes} Notes...")
+    elif (max_notes==None and folder_name==None and wrapper_dir==None):
+        print(f"Starting export of all Notes...")
+    
+    
     applescript = f'''
     tell application "Notes"
         if length of "{folder_name if folder_name else ''}" > 0 then
@@ -157,7 +168,11 @@ def main():
     
     """" Process in a loop of batches"""
     loop_count = math.ceil(args.max_notes / args.batch_size)
-    for x in range(loop_count): 
+    for x in range(1,loop_count+1): 
+        print(f"---------------------------")
+        print(f"Begin export of Notes with batch {x} of {loop_count}")
+        print(f" ")
+        
         notes_processed = export_notes_to_markdown(
             args.export_path,
             args.folder,
@@ -167,9 +182,11 @@ def main():
         
         if notes_processed > 0:
             print(f"Processed {notes_processed} notes")
+            print(f"---------------------------")
             commit_and_push(args.export_path, args.folder, args.wrapper_dir)
         else:
             print("No notes were processed, skipping git commit")
+            print(f"---------------------------")
             
             
 if __name__ == "__main__":
