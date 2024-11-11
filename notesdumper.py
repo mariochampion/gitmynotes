@@ -27,6 +27,7 @@ def setup_git_repo(repo_path, DEFAULT_GITHUB_URL):
 def export_notes_to_markdown(export_path, folder_name=None, max_notes=None, wrapper_dir=None):
     """Export Notes using applescript/osascript with folder and count limits"""
     
+    ## tell the people some information
     if (max_notes > 0 and folder_name !="" and wrapper_dir !=""):
         print(f"Starting export of {max_notes} Notes from '{folder_name}' into '{wrapper_dir}/{folder_name}'...")
     elif (max_notes > 0 and folder_name !="" and wrapper_dir==None):
