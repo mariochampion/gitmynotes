@@ -117,7 +117,7 @@ def export_notes_metadata(output_file=None, folder_name=None, max_notes=None):
             except ValueError:
                 formatted_date = mod_date
             
-            print(f"APPENDING: {title}, {quoted_title}, {formatted_date}")
+            print(f"APPENDING: {title}, {quoted_title}, {formatted_date} to {output_file}")
                 
             notes_data.append([title, quoted_title, formatted_date])
         
