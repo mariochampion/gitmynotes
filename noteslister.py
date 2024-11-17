@@ -21,9 +21,10 @@ import os
 import argparse
 
 DEFAULT_CSV_NAME = "notes_export.csv"
+DEFAULT_NEWLINE_DELIMITER = "|||"
 
 
-def export_notes_metadata(output_file=None, folder_name=None, max_notes=None):
+def export_notes_metadata(output_file=None, folder_name=None, max_notes=None, newline_delimiter=f"{DEFAULT_NEWLINE_DELIMITER}"):
     """
     Export macOS Notes metadata (title, quoted title, and modification date) to a CSV file.
     
@@ -31,12 +32,19 @@ def export_notes_metadata(output_file=None, folder_name=None, max_notes=None):
         output_file (str): Path to the output CSV file
         folder_name (str): Name of the folder to export notes from (None for all folders)
         max_notes (int): Maximum number of notes to export (None for all notes)
+        newline_delimiter (str): Default newline delimiter (|||)
     """
     # AppleScript to get notes information
+    print(f"newline_delimiter {newline_delimiter}")
+    
     applescript = '''
     tell application "Notes"
         set noteList to {}
         '''
+    
+    applescript += f'''
+    set custom_delimiter to "{newline_delimiter}"
+    '''
     
     if folder_name:
         output_file = f"{folder_name}.csv"
@@ -51,7 +59,6 @@ def export_notes_metadata(output_file=None, folder_name=None, max_notes=None):
         if targetFolder is null then
             return "Folder not found"
         end if
-        set theNotes to notes of targetFolder
         '''
     else:
         output_file = f"DEFAULT_CSV_NAME"
@@ -59,10 +66,19 @@ def export_notes_metadata(output_file=None, folder_name=None, max_notes=None):
         set theNotes to notes
         set 
         '''
+        
+    if max_notes:
+        applescript += '''
+        set theNotes to notes of targetFolder
+        '''
+    else:
+        applescript += '''
+        set theNotes to notes of targetFolder
+        '''        
     
     applescript += '''
         repeat with theNote in theNotes
-            set noteData to name of theNote as string &","& quoted form of (name of theNote as string) &","& modification date of theNote & "|||"
+            set noteData to name of theNote as string &","& quoted form of (name of theNote as string) &","& modification date of theNote & quoted form of custom_delimiter
             copy noteData to the end of noteList
         end repeat
         return noteList
@@ -76,7 +92,7 @@ def export_notes_metadata(output_file=None, folder_name=None, max_notes=None):
                                  stderr=subprocess.PIPE)
         stdout, stderr = process.communicate()
         
-        #print(f"process.stdout {stdout}")
+        print(f"process.stdout {stdout}")
         
         if stderr:
             raise Exception(f"AppleScript error: {stderr.decode('utf-8')}")
@@ -87,13 +103,13 @@ def export_notes_metadata(output_file=None, folder_name=None, max_notes=None):
             
         # Parse the output
         notes_data = []
-        raw_output = stdout_str.split('|||')
+        raw_output = stdout_str.split(f"{DEFAULT_NEWLINE_DELIMITER}")
         raw_output = raw_output[:-1]
         
         for line in raw_output:
             
             line = line.rstrip(",")
-            #print(f"line is:{line}")
+            print(f"line is:{line}")
             
             #Remove outer parentheses and split by commas
             if line.startswith(','): line = line[1:]
@@ -145,16 +161,24 @@ def export_notes_metadata(output_file=None, folder_name=None, max_notes=None):
 def main():
     parser = argparse.ArgumentParser(description='Export metadata from macOS Notes app')
     parser.add_argument('--folder-name', type=str, help='Name of the folder to export notes from')
+    
     parser.add_argument('--max-notes', type=int, help='Maximum number of notes to export')
-    parser.add_argument('--output-file', type=str, default='notes_export.csv',
-                        help='Output CSV file path (default: notes_export.csv)')
+    
+    parser.add_argument('--output-file', type=str, 
+    					default=DEFAULT_CSV_NAME,
+                        help=f'Output CSV file path (default: {DEFAULT_CSV_NAME})')
+                        
+    parser.add_argument('--newline-delimiter', type=str, 
+    					default=DEFAULT_NEWLINE_DELIMITER,
+                        help=f'Default CSV newline delimiter (default: {DEFAULT_NEWLINE_DELIMITER})')
     
     args = parser.parse_args()
     
     export_notes_metadata(
         output_file=args.output_file,
         folder_name=args.folder_name,
-        max_notes=args.max_notes
+        max_notes=args.max_notes,
+        newline_delimiter=args.newline_delimiter
     )
 
 if __name__ == '__main__':
