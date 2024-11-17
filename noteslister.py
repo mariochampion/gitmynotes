@@ -86,7 +86,7 @@ def export_notes_metadata(output_file=None, folder_name=None, max_notes=None, ne
             set noteTitle to do shell script "echo " & noteTitle & "| sed 's/,/-/'"
             -- Clean the title for use as filename
             set cleanTitle to do shell script "echo " & quoted form of noteTitle & " | sed 's/[^a-zA-Z0-9.]/-/g' | tr '[:upper:]' '[:lower:]'"
-            set noteData to noteTitle &","& cleanTitle &","& modification date of theNote & custom_delimiter
+            set noteData to noteTitle &","& cleanTitle & ".md" &","& modification date of theNote & custom_delimiter
             copy noteData to the end of noteList
         end repeat
         return noteList
