@@ -68,10 +68,11 @@ def export_notes_metadata(output_file=None, folder_name=None, max_notes=None, ne
         
     ''' Determine the number of repeats/ size of loop'''
     if max_notes:
-        applescript += '''
+        applescript += f'''
         set theNotes to notes of targetFolder
         
-        repeat with theNote in theNotes
+        repeat with i from 1 to {max_notes}
+            set theNote to item i of theNotes
             set noteData to name of theNote as string &","& quoted form of (name of theNote as string) &","& modification date of theNote & custom_delimiter
             copy noteData to the end of noteList
         end repeat
