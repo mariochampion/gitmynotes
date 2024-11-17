@@ -56,6 +56,8 @@ def export_notes_metadata(output_file=None, folder_name=None, max_notes=None, ne
                 exit repeat
             end if
         end repeat
+        set theNotes to notes of targetFolder
+        
         if targetFolder is null then
             return "Folder not found"
         end if
@@ -69,26 +71,16 @@ def export_notes_metadata(output_file=None, folder_name=None, max_notes=None, ne
     ''' Determine the number of repeats/ size of loop'''
     if max_notes:
         applescript += f'''
-        set theNotes to notes of targetFolder
-        
         repeat with i from 1 to {max_notes}
             set theNote to item i of theNotes
-            set noteTitle to name of theNote as string
-            -- clean noteTitle to not break on commas in noteTitle
-            set noteTitle to do shell script "echo " & noteTitle & "| sed 's/,/-/'"
-            -- Clean the title for use as filename
-            set cleanTitle to do shell script "echo " & quoted form of noteTitle & " | sed 's/[^a-zA-Z0-9.]/-/g' | tr '[:upper:]' '[:lower:]'"
-            set noteData to noteTitle &","& cleanTitle &","& modification date of theNote & custom_delimiter
-            copy noteData to the end of noteList
-        end repeat
         '''
-        
         
     else:
         applescript += '''
-        set theNotes to notes of targetFolder
-        
         repeat with theNote in theNotes
+        '''
+        
+    applescript += '''
             set noteTitle to name of theNote as string
             -- clean noteTitle to not break on commas in noteTitle
             set noteTitle to do shell script "echo " & noteTitle & "| sed 's/,/-/'"
@@ -97,9 +89,6 @@ def export_notes_metadata(output_file=None, folder_name=None, max_notes=None, ne
             set noteData to noteTitle &","& cleanTitle &","& modification date of theNote & custom_delimiter
             copy noteData to the end of noteList
         end repeat
-        '''
-        
-    applescript += '''
         return noteList
     end tell
     '''
