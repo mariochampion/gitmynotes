@@ -111,7 +111,7 @@ def export_notes_metadata(output_file=None, folder_name=None, max_notes=None, ne
                                  stderr=subprocess.PIPE)
         stdout, stderr = process.communicate()
         
-        print(f"process.stdout {stdout}")
+        #print(f"process.stdout {stdout}")
         
         if stderr:
             raise Exception(f"AppleScript error: {stderr.decode('utf-8')}")
@@ -128,7 +128,7 @@ def export_notes_metadata(output_file=None, folder_name=None, max_notes=None, ne
         for line in raw_output:
             
             line = line.rstrip(",")
-            print(f"line is:{line}")
+            #print(f"line is:{line}")
             
             #Remove outer parentheses and split by commas
             if line.startswith(','): line = line[1:]
