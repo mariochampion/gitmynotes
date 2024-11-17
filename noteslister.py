@@ -20,7 +20,11 @@ from datetime import datetime
 import os
 import argparse
 
-def export_notes_metadata(output_file='notes_export.csv', folder_name=None, max_notes=None):
+DEFAULT_CSV_NAME = "notes_export.csv"
+
+
+
+def export_notes_metadata(output_file=None, folder_name=None, max_notes=None):
     """
     Export macOS Notes metadata (title, quoted title, and modification date) to a CSV file.
     
@@ -36,6 +40,7 @@ def export_notes_metadata(output_file='notes_export.csv', folder_name=None, max_
         '''
     
     if folder_name:
+        output_file = f"{folder_name}.csv"
         applescript += f'''
         set targetFolder to null
         repeat with f in folders
@@ -50,8 +55,10 @@ def export_notes_metadata(output_file='notes_export.csv', folder_name=None, max_
         set theNotes to notes of targetFolder
         '''
     else:
+        output_file = f"DEFAULT_CSV_NAME"
         applescript += '''
         set theNotes to notes
+        set 
         '''
     
     applescript += '''
@@ -92,7 +99,7 @@ def export_notes_metadata(output_file='notes_export.csv', folder_name=None, max_
             #Remove outer parentheses and split by commas
             if line.startswith(','): line = line[1:]
             if line.endswith(','): line = line[:-1]
-#             title, quoted_title, mod_date = [item.strip() for item in line.split(',', 2)]
+
             line_items = line.split(',',2)
             title = line_items[0].strip()
             print(f"title : {title}")
@@ -136,6 +143,8 @@ def export_notes_metadata(output_file='notes_export.csv', folder_name=None, max_
     except Exception as e:
         print(f"Error exporting notes: {str(e)}")
 
+
+
 def main():
     parser = argparse.ArgumentParser(description='Export metadata from macOS Notes app')
     parser.add_argument('--folder-name', type=str, help='Name of the folder to export notes from')
@@ -153,3 +162,6 @@ def main():
 
 if __name__ == '__main__':
     main()
+    
+    
+    
