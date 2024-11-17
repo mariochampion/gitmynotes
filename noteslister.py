@@ -23,7 +23,6 @@ import argparse
 DEFAULT_CSV_NAME = "notes_export.csv"
 
 
-
 def export_notes_metadata(output_file=None, folder_name=None, max_notes=None):
     """
     Export macOS Notes metadata (title, quoted title, and modification date) to a CSV file.
@@ -77,7 +76,7 @@ def export_notes_metadata(output_file=None, folder_name=None, max_notes=None):
                                  stderr=subprocess.PIPE)
         stdout, stderr = process.communicate()
         
-        print(f"process.stdout {stdout}")
+        #print(f"process.stdout {stdout}")
         
         if stderr:
             raise Exception(f"AppleScript error: {stderr.decode('utf-8')}")
@@ -94,7 +93,7 @@ def export_notes_metadata(output_file=None, folder_name=None, max_notes=None):
         for line in raw_output:
             
             line = line.rstrip(",")
-            print(f"line is:{line}")
+            #print(f"line is:{line}")
             
             #Remove outer parentheses and split by commas
             if line.startswith(','): line = line[1:]
@@ -102,13 +101,13 @@ def export_notes_metadata(output_file=None, folder_name=None, max_notes=None):
 
             line_items = line.split(',',2)
             title = line_items[0].strip()
-            print(f"title : {title}")
+            #print(f"title : {title}")
             
             quoted_title = line_items[1].strip()
-            print(f"quoted_title : {quoted_title}")
+            #print(f"quoted_title : {quoted_title}")
             
             mod_date = line_items[2].strip()
-            print(f"mod_date : {mod_date}")
+            #print(f"mod_date : {mod_date}")
 
             
             # Convert date string to datetime object and format it
@@ -133,9 +132,7 @@ def export_notes_metadata(output_file=None, folder_name=None, max_notes=None):
             writer = csv.writer(f)
             if mode == 'w':  # Only write header for new files
                 writer.writerow(['Title', 'Quoted Title', 'Last Modified'])
-            
-            print(f"notes_data {notes_data}")
-            
+            #print(f"notes_data {notes_data}")
             writer.writerows(notes_data)
             
         print(f"Successfully exported {len(notes_data)} notes to {output_file}")
