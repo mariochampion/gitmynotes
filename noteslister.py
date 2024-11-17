@@ -73,7 +73,12 @@ def export_notes_metadata(output_file=None, folder_name=None, max_notes=None, ne
         
         repeat with i from 1 to {max_notes}
             set theNote to item i of theNotes
-            set noteData to name of theNote as string &","& quoted form of (name of theNote as string) &","& modification date of theNote & custom_delimiter
+            set noteTitle to name of theNote as string
+            -- clean noteTitle to not break on commas in noteTitle
+            set noteTitle to do shell script "echo " & noteTitle & "| sed 's/,/-/'"
+            -- Clean the title for use as filename
+            set cleanTitle to do shell script "echo " & quoted form of noteTitle & " | sed 's/[^a-zA-Z0-9.]/-/g' | tr '[:upper:]' '[:lower:]'"
+            set noteData to noteTitle &","& cleanTitle &","& modification date of theNote & custom_delimiter
             copy noteData to the end of noteList
         end repeat
         '''
@@ -156,7 +161,7 @@ def export_notes_metadata(output_file=None, folder_name=None, max_notes=None, ne
         with open(output_file, mode, newline='', encoding='utf-8') as f:
             writer = csv.writer(f)
             if mode == 'w':  # Only write header for new files
-                writer.writerow(['Folder', 'Title', 'Quoted Title', 'Last Modified'])
+                writer.writerow(['Folder', 'Original Title', 'Exported Title', 'Last Modified'])
             #print(f"notes_data {notes_data}")
             writer.writerows(notes_data)
             
