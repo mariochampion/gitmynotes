@@ -77,7 +77,7 @@ def export_notes_metadata(output_file=None, folder_name=None, max_notes=None, ne
     
     applescript += '''
         repeat with theNote in theNotes
-            set noteData to name of theNote as string &","& quoted form of (name of theNote as string) &","& modification date of theNote & quoted form of custom_delimiter
+            set noteData to name of theNote as string &","& quoted form of (name of theNote as string) &","& modification date of theNote & custom_delimiter
             copy noteData to the end of noteList
         end repeat
         return noteList
@@ -132,9 +132,9 @@ def export_notes_metadata(output_file=None, folder_name=None, max_notes=None, ne
             except ValueError:
                 formatted_date = mod_date
             
-            print(f"APPENDING: {title}, {quoted_title}, {formatted_date} to {output_file}")
+            print(f"APPENDING: {folder_name}, {title}, {quoted_title}, {formatted_date} to {output_file}")
                 
-            notes_data.append([title, quoted_title, formatted_date])
+            notes_data.append([folder_name, title, quoted_title, formatted_date])
         
         # Apply max_notes limit if specified
         if max_notes is not None:
@@ -146,7 +146,7 @@ def export_notes_metadata(output_file=None, folder_name=None, max_notes=None, ne
         with open(output_file, mode, newline='', encoding='utf-8') as f:
             writer = csv.writer(f)
             if mode == 'w':  # Only write header for new files
-                writer.writerow(['Title', 'Quoted Title', 'Last Modified'])
+                writer.writerow(['Folder', 'Title', 'Quoted Title', 'Last Modified'])
             #print(f"notes_data {notes_data}")
             writer.writerows(notes_data)
             
