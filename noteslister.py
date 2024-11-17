@@ -64,7 +64,6 @@ def export_notes_metadata(output_file=None, folder_name=None, max_notes=None, ne
         output_file = f"DEFAULT_CSV_NAME"
         applescript += '''
         set theNotes to notes
-        set 
         '''
         
     if max_notes:
