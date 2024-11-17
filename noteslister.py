@@ -66,20 +66,29 @@ def export_notes_metadata(output_file=None, folder_name=None, max_notes=None, ne
         set theNotes to notes
         '''
         
+    ''' Determine the number of repeats/ size of loop'''
     if max_notes:
         applescript += '''
         set theNotes to notes of targetFolder
-        '''
-    else:
-        applescript += '''
-        set theNotes to notes of targetFolder
-        '''        
-    
-    applescript += '''
+        
         repeat with theNote in theNotes
             set noteData to name of theNote as string &","& quoted form of (name of theNote as string) &","& modification date of theNote & custom_delimiter
             copy noteData to the end of noteList
         end repeat
+        '''
+        
+        
+    else:
+        applescript += '''
+        set theNotes to notes of targetFolder
+        
+        repeat with theNote in theNotes
+            set noteData to name of theNote as string &","& quoted form of (name of theNote as string) &","& modification date of theNote & custom_delimiter
+            copy noteData to the end of noteList
+        end repeat
+        '''
+        
+    applescript += '''
         return noteList
     end tell
     '''
@@ -159,7 +168,7 @@ def export_notes_metadata(output_file=None, folder_name=None, max_notes=None, ne
 
 def main():
     parser = argparse.ArgumentParser(description='Export metadata from macOS Notes app')
-    parser.add_argument('--folder-name', type=str, help='Name of the folder to export notes from')
+    parser.add_argument('--folder-name', type=str, help='Name of the folder of notes to export')
     
     parser.add_argument('--max-notes', type=int, help='Maximum number of notes to export')
     
