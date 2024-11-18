@@ -12,6 +12,9 @@
 ## Specify a custom output file
 #  python notes-export.py --folder-name="somefolder" --max-notes=10 --output-file="my_notes.csv"
 
+## Todo: 
+#  allow passng of comma separated list of folders to process, each onbe worked through to max notes
+#  move the processnotes to <folder_name>__GitNotes so that the bacthing can be non-duplicate notes, rather than check them
 
 
 import csv
@@ -22,6 +25,7 @@ import argparse
 
 DEFAULT_CSV_NAME = "notes_export.csv"
 DEFAULT_NEWLINE_DELIMITER = "|||"
+DEFAULT_PROCESSED_FOLDER_ENDING = "__GitNotes"
 
 
 def export_notes_metadata(output_file=None, folder_name=None, max_notes=None, newline_delimiter=f"{DEFAULT_NEWLINE_DELIMITER}"):
@@ -163,6 +167,17 @@ def export_notes_metadata(output_file=None, folder_name=None, max_notes=None, ne
         
     except Exception as e:
         print(f"Error exporting notes: {str(e)}")
+        
+    return notes_data
+
+
+def move_processed_notes(folder_source, folder_dest, processed_notes):
+	''' Move processed notes into <foldername>_GitNotes so wont process again -- until changed??'''
+	print(f"folder_source: {folder_source}")
+	print(f"folder_dest: {folder_dest}")
+	print(f"processed_notes count: {len(processed_notes)}")
+	
+	#move thisnote to newFolder
 
 
 
@@ -174,7 +189,7 @@ def main():
     
     parser.add_argument('--output-file', type=str, 
     					default=DEFAULT_CSV_NAME,
-                        help=f'Output CSV file path (default: {DEFAULT_CSV_NAME})')
+                        help=f'Output CSV file path (default: <folder_name>.csv)')
                         
     parser.add_argument('--newline-delimiter', type=str, 
     					default=DEFAULT_NEWLINE_DELIMITER,
@@ -182,12 +197,31 @@ def main():
     
     args = parser.parse_args()
     
-    export_notes_metadata(
+    processednotes_data = export_notes_metadata(
         output_file=args.output_file,
         folder_name=args.folder_name,
         max_notes=args.max_notes,
         newline_delimiter=args.newline_delimiter
     )
+    
+    print(f"================================")
+    print(f"     CSV JOB COMPLETED!")
+    print(f"================================")
+    print(f"Notes processed")
+    print(f"{processednotes_data}")        
+    
+    if processednotes_data:
+        move_processed_notes(
+            folder_source=args.folder_name,
+            folder_dest=f"{args.folder_name}{DEFAULT_PROCESSED_FOLDER_ENDING}",
+            processed_notes=processednotes_data
+        )
+    else:
+        print(f"No Notes to Move")
+    
+    
+    
+    
 
 if __name__ == '__main__':
     main()
