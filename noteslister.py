@@ -22,10 +22,12 @@ import subprocess
 from datetime import datetime
 import os
 import argparse
+from typing import Tuple
 
 DEFAULT_CSV_NAME = "notes_export.csv"
 DEFAULT_NEWLINE_DELIMITER = "|||"
 DEFAULT_PROCESSED_FOLDER_ENDING = "__GitNotes"
+DEFAULT_MAX_NOTES = 10
 
 
 def export_notes_metadata(output_file=None, folder_name=None, max_notes=None, newline_delimiter=f"{DEFAULT_NEWLINE_DELIMITER}"):
@@ -172,12 +174,76 @@ def export_notes_metadata(output_file=None, folder_name=None, max_notes=None, ne
 
 
 def move_processed_notes(folder_source, folder_dest, processed_notes):
-	''' Move processed notes into <foldername>_GitNotes so wont process again -- until changed??'''
-	print(f"folder_source: {folder_source}")
-	print(f"folder_dest: {folder_dest}")
-	print(f"processed_notes count: {len(processed_notes)}")
-	
-	#move thisnote to newFolder
+    ''' Move processed notes into <foldername>_GitNotes so wont process again -- until changed??'''
+    print(f"folder_source: {folder_source}")
+    print(f"folder_dest: {folder_dest}")
+    print(f"processed_notes count: {len(processed_notes)}")
+    #create_gitnotes_folder(folder_dest)
+    success, message = create_gitnotes_folder(folder_dest)
+    if success:
+        print(f"Success: {message}")
+    else:
+        print(f"Failed: {message}")
+
+
+
+def create_gitnotes_folder(folder_name: str) -> Tuple[bool, str]:
+    """
+    Create a folder in macOS Notes app under iCloud account.
+    
+    Args:
+        folder_name (str): Name of the folder to create
+        
+    Returns:
+        Tuple[bool, str]: (success status, message/error details)
+    """
+    print(f"Attempting to create Notes folder: {folder_name}")
+    
+    # Properly escape quotes in folder name for AppleScript
+    folder_name_escaped = folder_name.replace('"', '\\"')
+    
+    applescript = f'''
+    tell application "Notes"
+        try
+            set targetAccount to "iCloud"
+            tell account targetAccount
+                if not (exists folder "{folder_name_escaped}") then
+                    make new folder with properties {{name:"{folder_name_escaped}"}}
+                    return "Folder created successfully"
+                else
+                    return "Folder already exists"
+                end if
+            end tell
+        on error errMsg
+            return "Error: " & errMsg
+        end try
+    end tell
+    '''
+    
+    try:
+        result = subprocess.run(
+            ['osascript', '-e', applescript],
+            capture_output=True,
+            text=True,
+            check=True  # This will raise CalledProcessError if osascript fails
+        )
+        
+        # Check for any stderr output
+        if result.stderr:
+            return False, f"AppleScript Error: {result.stderr}"
+            
+        # Check the actual output
+        output = result.stdout.strip()
+        if "Error:" in output:
+            return False, output
+        else:
+            return True, output
+            
+    except subprocess.CalledProcessError as e:
+        return False, f"Process Error: {e.stderr}"
+    except Exception as e:
+        return False, f"Unexpected Error: {str(e)}"
+
 
 
 
@@ -185,7 +251,9 @@ def main():
     parser = argparse.ArgumentParser(description='Export metadata from macOS Notes app')
     parser.add_argument('--folder-name', type=str, help='Name of the folder of notes to export')
     
-    parser.add_argument('--max-notes', type=int, help='Maximum number of notes to export')
+    parser.add_argument('--max-notes', type=int,
+    					default=DEFAULT_MAX_NOTES,
+    					 help=f'Maximum number of notes to export. (default: {DEFAULT_MAX_NOTES})')
     
     parser.add_argument('--output-file', type=str, 
     					default=DEFAULT_CSV_NAME,
