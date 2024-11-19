@@ -101,77 +101,80 @@ def export_notes_metadata(output_file=None, folder_name=None, max_notes=None, ne
     end tell
     '''
     
-    try:
-        # Execute AppleScript and get the output
-        process = subprocess.Popen(['osascript', '-e', applescript],
-                                 stdout=subprocess.PIPE,
-                                 stderr=subprocess.PIPE)
-        stdout, stderr = process.communicate()
-        
-        #print(f"process.stdout {stdout}")
-        
-        if stderr:
-            raise Exception(f"AppleScript error: {stderr.decode('utf-8')}")
-        
-        stdout_str = stdout.decode('utf-8').strip()
-        if stdout_str == "Folder not found":
-            raise Exception(f"Folder '{folder_name}' not found in Notes app")
+    result,output = process_applescript(applescript)
+    
+    
+#     try:
+#         # Execute AppleScript and get the output
+#         process = subprocess.Popen(['osascript', '-e', applescript],
+#                                  stdout=subprocess.PIPE,
+#                                  stderr=subprocess.PIPE)
+#         stdout, stderr = process.communicate()
+#         
+#         #print(f"process.stdout {stdout}")
+#         
+#         if stderr:
+#             raise Exception(f"AppleScript error: {stderr.decode('utf-8')}")
+#         
+#         stdout_str = stdout.decode('utf-8').strip()
+#         if stdout_str == "Folder not found":
+#             raise Exception(f"Folder '{folder_name}' not found in Notes app")
             
         # Parse the output
-        notes_data = []
-        raw_output = stdout_str.split(f"{DEFAULT_NEWLINE_DELIMITER}")
-        raw_output = raw_output[:-1]
+    notes_data = []
+    raw_output = output.split(f"{DEFAULT_NEWLINE_DELIMITER}")
+    raw_output = raw_output[:-1]
+    
+    for line in raw_output:
         
-        for line in raw_output:
-            
-            line = line.rstrip(",")
-            #print(f"line is:{line}")
-            
-            #Remove outer parentheses and split by commas
-            if line.startswith(','): line = line[1:]
-            if line.endswith(','): line = line[:-1]
+        line = line.rstrip(",")
+        #print(f"line is:{line}")
+        
+        #Remove outer parentheses and split by commas
+        if line.startswith(','): line = line[1:]
+        if line.endswith(','): line = line[:-1]
 
-            line_items = line.split(',',2)
-            title = line_items[0].strip()
-            #print(f"title : {title}")
-            
-            quoted_title = line_items[1].strip()
-            #print(f"quoted_title : {quoted_title}")
-            
-            mod_date = line_items[2].strip()
-            #print(f"mod_date : {mod_date}")
+        line_items = line.split(',',2)
+        title = line_items[0].strip()
+        #print(f"title : {title}")
+        
+        quoted_title = line_items[1].strip()
+        #print(f"quoted_title : {quoted_title}")
+        
+        mod_date = line_items[2].strip()
+        #print(f"mod_date : {mod_date}")
 
-            
-            # Convert date string to datetime object and format it
-            try:
-                date_obj = datetime.strptime(mod_date, '%Y-%m-%d %H:%M:%S +0000')
-                formatted_date = date_obj.strftime('%Y-%m-%d %H:%M:%S')
-            except ValueError:
-                formatted_date = mod_date
-            
-            print(f"APPENDING: {folder_name}, {title}, {quoted_title}, {formatted_date} to {output_file}")
-                
-            notes_data.append([folder_name, title, quoted_title, formatted_date])
         
-        # Apply max_notes limit if specified
-        if max_notes is not None:
-            notes_data = notes_data[:max_notes]
-            # determine hwo many items in list, then loop thru and do writerow not writerowS
+        # Convert date string to datetime object and format it
+        try:
+            date_obj = datetime.strptime(mod_date, '%Y-%m-%d %H:%M:%S +0000')
+            formatted_date = date_obj.strftime('%Y-%m-%d %H:%M:%S')
+        except ValueError:
+            formatted_date = mod_date
         
+        print(f"APPENDING: {folder_name}, {title}, {quoted_title}, {formatted_date} to {output_file}")
+            
+        notes_data.append([folder_name, title, quoted_title, formatted_date])
+        
+#         # Apply max_notes limit if specified
+#         if max_notes is not None:
+#             notes_data = notes_data[:max_notes]
+#             # determine hwo many items in list, then loop thru and do writerow not writerowS
+#         
         # Write to CSV
-        mode = 'a' if os.path.exists(output_file) else 'w'
-        with open(output_file, mode, newline='', encoding='utf-8') as f:
-            writer = csv.writer(f)
-            if mode == 'w':  # Only write header for new files
-                writer.writerow(['Folder', 'Original Title', 'Exported Title', 'Last Modified'])
-            #print(f"notes_data {notes_data}")
-            writer.writerows(notes_data)
-            
-        print(f"Successfully exported {len(notes_data)} notes to {output_file}")
+    mode = 'a' if os.path.exists(output_file) else 'w'
+    with open(output_file, mode, newline='', encoding='utf-8') as f:
+        writer = csv.writer(f)
+        if mode == 'w':  # Only write header for new files
+            writer.writerow(['Folder', 'Original Title', 'Exported Title', 'Last Modified'])
+        #print(f"notes_data {notes_data}")
+        writer.writerows(notes_data)
         
-    except Exception as e:
-        print(f"Error exporting notes: {str(e)}")
-        
+    print(f"Successfully exported {len(notes_data)} notes to {output_file}")
+    
+#     except Exception as e:
+#         print(f"Error exporting notes: {str(e)}")
+#         
     return notes_data
 
 
@@ -231,6 +234,9 @@ def create_gitnotes_folder(folder_name: str) -> Tuple[bool, str]:
     
     
 def process_applescript(applescript):
+    ''' generic function to process applescript and return a result object'''
+    print(f"INSIDE process_applescript()")
+    
     try:
         result = subprocess.run(
             ['osascript', '-e', applescript],
