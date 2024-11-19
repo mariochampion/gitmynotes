@@ -43,7 +43,6 @@ def export_notes_metadata(output_file=None, folder_name=None, max_notes=None, ne
         newline_delimiter (str): Default newline delimiter (|||)
     """
     # AppleScript to get notes information
-    #print(f"newline_delimiter {newline_delimiter}")
     
     applescript = '''
     tell application "Notes"
@@ -103,24 +102,7 @@ def export_notes_metadata(output_file=None, folder_name=None, max_notes=None, ne
     
     result,output = process_applescript(applescript)
     
-    
-#     try:
-#         # Execute AppleScript and get the output
-#         process = subprocess.Popen(['osascript', '-e', applescript],
-#                                  stdout=subprocess.PIPE,
-#                                  stderr=subprocess.PIPE)
-#         stdout, stderr = process.communicate()
-#         
-#         #print(f"process.stdout {stdout}")
-#         
-#         if stderr:
-#             raise Exception(f"AppleScript error: {stderr.decode('utf-8')}")
-#         
-#         stdout_str = stdout.decode('utf-8').strip()
-#         if stdout_str == "Folder not found":
-#             raise Exception(f"Folder '{folder_name}' not found in Notes app")
-            
-        # Parse the output
+    # Parse the output
     notes_data = []
     raw_output = output.split(f"{DEFAULT_NEWLINE_DELIMITER}")
     raw_output = raw_output[:-1]
@@ -130,20 +112,15 @@ def export_notes_metadata(output_file=None, folder_name=None, max_notes=None, ne
         line = line.rstrip(",")
         #print(f"line is:{line}")
         
-        #Remove outer parentheses and split by commas
+        #Remove leading and trailing commas
         if line.startswith(','): line = line[1:]
         if line.endswith(','): line = line[:-1]
-
+        
         line_items = line.split(',',2)
         title = line_items[0].strip()
-        #print(f"title : {title}")
         
-        quoted_title = line_items[1].strip()
-        #print(f"quoted_title : {quoted_title}")
-        
+        quoted_title = line_items[1].strip()        
         mod_date = line_items[2].strip()
-        #print(f"mod_date : {mod_date}")
-
         
         # Convert date string to datetime object and format it
         try:
@@ -153,14 +130,9 @@ def export_notes_metadata(output_file=None, folder_name=None, max_notes=None, ne
             formatted_date = mod_date
         
         print(f"APPENDING: {folder_name}, {title}, {quoted_title}, {formatted_date} to {output_file}")
-            
+        
         notes_data.append([folder_name, title, quoted_title, formatted_date])
         
-#         # Apply max_notes limit if specified
-#         if max_notes is not None:
-#             notes_data = notes_data[:max_notes]
-#             # determine hwo many items in list, then loop thru and do writerow not writerowS
-#         
         # Write to CSV
     mode = 'a' if os.path.exists(output_file) else 'w'
     with open(output_file, mode, newline='', encoding='utf-8') as f:
@@ -172,10 +144,8 @@ def export_notes_metadata(output_file=None, folder_name=None, max_notes=None, ne
         
     print(f"Successfully exported {len(notes_data)} notes to {output_file}")
     
-#     except Exception as e:
-#         print(f"Error exporting notes: {str(e)}")
-#         
     return notes_data
+
 
 
 def move_processed_notes(folder_source, folder_dest, processed_notes):
@@ -292,8 +262,8 @@ def main():
     print(f"================================")
     print(f"     CSV JOB COMPLETED!")
     print(f"================================")
-    print(f"Notes processed")
-    print(f"{processednotes_data}")        
+    print(f" - Notes processed")
+    # print(f"{processednotes_data}")        
     
     if processednotes_data:
         move_processed_notes(
