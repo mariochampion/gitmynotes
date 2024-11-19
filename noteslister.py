@@ -149,10 +149,56 @@ def export_notes_metadata(output_file=None, folder_name=None, max_notes=None, ne
 
 
 def move_processed_notes(folder_source, folder_dest, max_notes):
+    ''' Move processed notes into destination folder '''
+    
+    print(f"Now to move {max_notes} notes from '{folder_source}' to '{folder_dest}'")
+    
+    # Escape any quotes in folder names
+    folder_source_escaped = folder_source.replace('"', '\\"')
+    folder_dest_escaped = folder_dest.replace('"', '\\"')
+    
+    applescript_movenote = f'''
+    tell application "Notes"
+        set targetAccount to "iCloud"
+        tell account targetAccount
+            try
+                set sourceFolder to folder "{folder_source_escaped}"
+                set destFolder to folder "{folder_dest_escaped}"
+                set theNotes to every note of sourceFolder
+                
+                -- Check if we have notes to move
+                if (count of theNotes) is 0 then
+                    return "No notes found in source folder"
+                end if
+                
+                -- Determine how many notes to actually move
+                --set notesToMove to minimum of (count of theNotes) and {max_notes}
+                set notesToMove to {max_notes}
+                
+                repeat with i from 1 to notesToMove
+                    try
+                        move item i of theNotes to destFolder
+                    on error errMsg
+                        return "Error moving note " & i & ": " & errMsg
+                    end try
+                end repeat
+                
+                return "Successfully moved " & notesToMove & " notes"
+            on error errMsg
+                return "Error: " & errMsg
+            end try
+        end tell
+    end tell
+    '''
+    
+    result_move, output_move = process_applescript(applescript_movenote)
+    print(f"applescript_movenote result: {result_move} {output_move}")
+    return result_move
+
+
+
+def move_processed_notes2(folder_source, folder_dest, max_notes):
     ''' Move processed notes into <foldername>_GitNotes so wont process again -- until changed??'''
-    print(f"folder_source: {folder_source}")
-    print(f"folder_dest: {folder_dest}")
-    print(f"processed_notes count: {max_notes}")
     
     # if processed_notes exists, then that stage was a success, so next step:
     # create_gitnotes_folder(folder_dest) so we have a place to move notes
@@ -165,37 +211,29 @@ def move_processed_notes(folder_source, folder_dest, max_notes):
     
     # do the actual move
     print(f"Now to move {max_notes} notes from '{folder_source}' to '{folder_dest}'")
-    applescript = '''
+    applescript_movenote = f'''
     tell application "Notes"
-        set noteList to {}
-    '''
-    applescript += f'''
         set destTargetFolder to "{folder_dest}"
-        set sourceTargetFolder to null
-        repeat with f in folders
-            if (name of f as string) is "{folder_source}" then
-                set sourceTargetFolder to f
-                exit repeat
-            end if
-        end repeat
+        set sourceTargetFolder to "{folder_source}"
         set theNotes to notes of sourceTargetFolder
-        
-        if sourceTargetFolder is null then
-            return "Folder not found"
-        end if
-        
-        -- Determine the number of repeats in loop
+        set targetAccount to "iCloud"
         
         repeat with i from 1 to max_notes
             set theNote to item i of theNotes
-            move theNote to folder destTargetFolder of account 'iCloud'
+            try
+                tell account targetAccount
+                    move theNote to folder destTargetFolder of account targetAccount
+                end tell
+            on error errMsg
+                return "Error: " & errMsg
+            end try
         end repeat
-        
-        return
     end tell
     '''
     
-    return process_applescript(applescript)
+    result_move,output_move = process_applescript(applescript_movenote)
+    print(f"applescript_movenote result: {result_move} {output_move}")
+    return result_move
     
 
 
@@ -248,6 +286,9 @@ def process_applescript(applescript):
             check=True  # This will raise CalledProcessError if osascript fails
         )
         
+        applescript = ""
+        print(f"applescript result: {result}")
+        
         # Check for any stderr output
         if result.stderr:
             return False, f"AppleScript Error: {result.stderr}"
@@ -292,14 +333,14 @@ def main():
         newline_delimiter=args.newline_delimiter
     )
     
-    print(f"================================")
+    print(f"--------------------------------")
     print(f"     CSV JOB COMPLETED!")
-    print(f"================================")
+    print(f"--------------------------------")
     print(f" - Notes processed")
     # print(f"{processednotes_data}")        
     
     if processednotes_data:
-        move_processed_notes(
+        move_result = move_processed_notes(
             folder_source=args.folder_name,
             folder_dest=f"{args.folder_name}{DEFAULT_PROCESSED_FOLDER_ENDING}",
             max_notes=args.max_notes
@@ -307,9 +348,14 @@ def main():
     else:
         print(f"No Notes to Move")
     
-    
-    
-    
+    if move_result:
+        print(f"================================")
+        print(f" MOVE to {args.folder_name}{DEFAULT_PROCESSED_FOLDER_ENDING} completed")
+        print(f"================================")
+    else:
+        print(f"================================")
+        print(f"  !!! FAILED to MOVE notes !!!")
+        print(f"================================")
 
 if __name__ == '__main__':
     main()
