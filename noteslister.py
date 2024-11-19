@@ -151,6 +151,15 @@ def export_notes_metadata(output_file=None, folder_name=None, max_notes=None, ne
 def move_processed_notes(folder_source, folder_dest, max_notes):
     ''' Move processed notes into destination folder '''
     
+    # if processed_notes exists, then that stage was a success, so next step:
+    # create_gitnotes_folder(folder_dest) so we have a place to move notes
+    success, message = create_gitnotes_folder(folder_dest)
+    if success:
+        print(f"Success: {message}")
+    else:
+        print(f"Failed: {message}")
+    
+    
     print(f"Now to move {max_notes} notes from '{folder_source}' to '{folder_dest}'")
     
     # Escape any quotes in folder names
@@ -232,7 +241,7 @@ def move_processed_notes2(folder_source, folder_dest, max_notes):
     '''
     
     result_move,output_move = process_applescript(applescript_movenote)
-    print(f"applescript_movenote result: {result_move} {output_move}")
+    print(f"applescript_movenote result: {output_move}")
     return result_move
     
 
@@ -287,7 +296,6 @@ def process_applescript(applescript):
         )
         
         applescript = ""
-        print(f"applescript result: {result}")
         
         # Check for any stderr output
         if result.stderr:
@@ -336,8 +344,8 @@ def main():
     print(f"--------------------------------")
     print(f"     CSV JOB COMPLETED!")
     print(f"--------------------------------")
-    print(f" - Notes processed")
-    # print(f"{processednotes_data}")        
+
+    #print(f"{processednotes_data}")        
     
     if processednotes_data:
         move_result = move_processed_notes(
@@ -346,6 +354,7 @@ def main():
             max_notes=args.max_notes
         )
     else:
+        move_result = 0
         print(f"No Notes to Move")
     
     if move_result:
