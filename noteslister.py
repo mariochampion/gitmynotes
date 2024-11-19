@@ -16,6 +16,8 @@
 #  allow passng of comma separated list of folders to process, each onbe worked through to max notes
 #  move the processnotes to <folder_name>__GitNotes so that the bacthing can be non-duplicate notes, rather than check them
 
+#. combine all .pys into one .py
+
 
 import csv
 import subprocess
@@ -178,12 +180,17 @@ def move_processed_notes(folder_source, folder_dest, processed_notes):
     print(f"folder_source: {folder_source}")
     print(f"folder_dest: {folder_dest}")
     print(f"processed_notes count: {len(processed_notes)}")
-    #create_gitnotes_folder(folder_dest)
+    
+    
+    # create_gitnotes_folder(folder_dest) so we have a place to move notes
     success, message = create_gitnotes_folder(folder_dest)
     if success:
         print(f"Success: {message}")
     else:
         print(f"Failed: {message}")
+    
+    
+    # do the actual move
 
 
 
@@ -220,6 +227,10 @@ def create_gitnotes_folder(folder_name: str) -> Tuple[bool, str]:
     end tell
     '''
     
+    return process_applescript(applescript)
+    
+    
+def process_applescript(applescript):
     try:
         result = subprocess.run(
             ['osascript', '-e', applescript],
