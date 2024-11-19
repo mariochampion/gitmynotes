@@ -188,8 +188,9 @@ def move_processed_notes(folder_source, folder_dest, max_notes):
         
         repeat with i from 1 to max_notes
             set theNote to item i of theNotes
-            move theNote to folder destTargetFolder
+            move theNote to folder destTargetFolder of account 'iCloud'
         end repeat
+        
         return
     end tell
     '''
