@@ -47,7 +47,7 @@ def export_notes_metadata(output_file=None, folder_name=None, max_notes=None, ne
     applescript = '''
     tell application "Notes"
         set noteList to {}
-        '''
+    '''
     
     applescript += f'''
     set custom_delimiter to "{newline_delimiter}"
@@ -148,13 +148,13 @@ def export_notes_metadata(output_file=None, folder_name=None, max_notes=None, ne
 
 
 
-def move_processed_notes(folder_source, folder_dest, processed_notes):
+def move_processed_notes(folder_source, folder_dest, max_notes):
     ''' Move processed notes into <foldername>_GitNotes so wont process again -- until changed??'''
     print(f"folder_source: {folder_source}")
     print(f"folder_dest: {folder_dest}")
-    print(f"processed_notes count: {len(processed_notes)}")
+    print(f"processed_notes count: {max_notes}")
     
-    
+    # if processed_notes exists, then that stage was a success, so next step:
     # create_gitnotes_folder(folder_dest) so we have a place to move notes
     success, message = create_gitnotes_folder(folder_dest)
     if success:
@@ -164,6 +164,38 @@ def move_processed_notes(folder_source, folder_dest, processed_notes):
     
     
     # do the actual move
+    print(f"Now to move {max_notes} notes from '{folder_source}' to '{folder_dest}'")
+    applescript = '''
+    tell application "Notes"
+        set noteList to {}
+    '''
+    applescript += f'''
+        set destTargetFolder to "{folder_dest}"
+        set sourceTargetFolder to null
+        repeat with f in folders
+            if (name of f as string) is "{folder_source}" then
+                set sourceTargetFolder to f
+                exit repeat
+            end if
+        end repeat
+        set theNotes to notes of sourceTargetFolder
+        
+        if sourceTargetFolder is null then
+            return "Folder not found"
+        end if
+        
+        -- Determine the number of repeats in loop
+        
+        repeat with i from 1 to max_notes
+            set theNote to item i of theNotes
+            move theNote to folder destTargetFolder
+        end repeat
+        return
+    end tell
+    '''
+    
+    return process_applescript(applescript)
+    
 
 
 
@@ -269,7 +301,7 @@ def main():
         move_processed_notes(
             folder_source=args.folder_name,
             folder_dest=f"{args.folder_name}{DEFAULT_PROCESSED_FOLDER_ENDING}",
-            processed_notes=processednotes_data
+            max_notes=args.max_notes
         )
     else:
         print(f"No Notes to Move")
