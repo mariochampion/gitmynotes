@@ -1,5 +1,5 @@
-# notesdump
-python and applescript to back up macOS notes
+# GitNotes
+Use GitHub to back up macOS Notes using python and applescript
 
 ## to do
 write real instructions
