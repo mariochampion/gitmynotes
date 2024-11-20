@@ -15,7 +15,7 @@
 
 
 
-#### ABOUT THIS SCRIPT
+#### USING THIS SCRIPT
 
 ## Export up to 10 notes from a specific folder
 #  python gitnotes.py --folder="somefolder" --max-notes=10
