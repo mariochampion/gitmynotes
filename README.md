@@ -53,13 +53,13 @@ TBD
 
 	-- REQUIRED: LEAVE AS-IS or CHANGE--
 
-	set `DEFAULT_PROCESSED_FOLDER_ENDING = "__GitNotes"`
+	`DEFAULT_PROCESSED_FOLDER_ENDING = "__GitNotes"`
 
-	set `DEFAULT_CSV_NAME = "notes_export.csv"`
+	`DEFAULT_CSV_NAME = "notes_export.csv"`
 
-	set `DEFAULT_NEWLINE_DELIMITER = "|||"`
+	`DEFAULT_NEWLINE_DELIMITER = "|||"`
 
-	set `DEFAULT_MAX_NOTES = 10`
+	`DEFAULT_MAX_NOTES = 10`
 	
 
     -- OPTIONAL --
@@ -67,7 +67,7 @@ TBD
     
 	set `DEFAULT_NOTES_OUTERDIR` to the 'wrapper' dir for folders (example: `DEFAULT_NOTES_OUTERDIR = "macosnotes"`)
 	
-	set `DEFAULT_BATCH_SIZE` (example: `DEFAULT_BATCH_SIZE = 10`)
+	set `DEFAULT_BATCH_SIZE` to run loops to reach --max-notes value (example: `DEFAULT_BATCH_SIZE = 10`)
 	
 	set `DEFAULT_IGNORE_FOLDER` to Notes folder to not backup to GitHub (example: `DEFAULT_IGNORE_FOLDER = "ignore"`)
 	
