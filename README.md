@@ -55,7 +55,7 @@ TBD
 
 	`DEFAULT_PROCESSED_FOLDER_ENDING = "__GitNotes"`
 
-	`DEFAULT_CSV_NAME = "notes_export.csv"`
+	`DEFAULT_CSV_NAME = "GitNotes.csv"`
 
 	`DEFAULT_NEWLINE_DELIMITER = "|||"`
 
