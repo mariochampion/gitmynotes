@@ -89,21 +89,29 @@ usage: gitnotes.py [-h] [--folder FOLDER] [--max-notes MAX_NOTES] [--batch-size 
 options:
   -h, --help            show this help message and exit
   --folder FOLDER       Specific Notes folder to export. (default: all folders)
+  
   --max-notes MAX_NOTES
                         Maximum number of notes to process. (default: all notes)
+  
   --batch-size BATCH_SIZE
                         The number of notes to convert, and git add/commit/push per loop. Especially useful for
                         initial GitNotes runs.(default: 10)
+  
   --export-path EXPORT_PATH
                         Path to export the notes (default: ~/Documents/gitnotes)
+  
   --github-url GITHUB_URL
                         GitHub repository URL. (default: https://github.com/mariochampion/gitnotes)
+  
   --wrapper-dir WRAPPER_DIR
                         Outer directory to hold folders. (default: macosnotes)
+  
   --ignore-folder IGNORE_FOLDER
                         The Notes folder to ignore and not process. (default: ignore)
+  
   --output-file OUTPUT_FILE
                         Output CSV file path (default: <folder>.csv)
+  
   --newline-delimiter NEWLINE_DELIMITER
                         Default CSV newline delimiter (default: |||)
 
