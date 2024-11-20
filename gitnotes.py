@@ -4,10 +4,10 @@ from datetime import datetime
 import argparse
 import math
 
-DEFAULT_EXPORT_PATH = "~/Documents/openai/notesdump"
+DEFAULT_EXPORT_PATH = "~/Documents/gitnotes"
 DEFAULT_NOTES_OUTERDIR = "macosnotes"
 DEFAULT_BATCH_SIZE = "10"
-DEFAULT_GITHUB_URL = "https://github.com/mariochampion/notesdump"
+DEFAULT_GITHUB_URL = "https://github.com/mariochampion/gitnotes"
 DEFAULT_IGNORE_FOLDER = "ignore"
 
 def setup_git_repo(repo_path, DEFAULT_GITHUB_URL):
