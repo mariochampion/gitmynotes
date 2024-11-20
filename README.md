@@ -16,6 +16,12 @@ Use GitHub to back up macOS Notes using python and applescript
 
 * allow comma separated list of folders at once
 
+* incorporate some values by env var instead of config
+
+* allow user to decide to keep <folder>__GitNotes bkup or move back to original
+
+* add DEFAULT folder name
+
 
 
 ## Usage
@@ -35,14 +41,26 @@ TBD
 
 2. cd into notesdump dir: `cd gitnotes`
 
-3. in file `gitnotes.py`, set required and optional configurations
+3. in file `gitnotes.py`, set required and optional configurations, or leave as shipped with these common sense defaults
 
-	-- REQUIRED --
+	-- REQUIRED TO CHANGE--
 	
 	
 	set `DEFAULT_EXPORT_PATH` to the export location (example: `DEFAULT_EXPORT_PATH = "~/Documents/<SomeFolder>"`)
 	
 	set `DEFAULT_GITHUB_URL` to the the repo where you want to store Notes (example: `DEFAULT_GITHUB_URL = "https://github.com/<myusername>/<myrepo>""`)
+	
+
+	-- REQUIRED: LEAVE AS-IS or CHANGE--
+
+	set `DEFAULT_PROCESSED_FOLDER_ENDING = "__GitNotes"`
+
+	set `DEFAULT_CSV_NAME = "notes_export.csv"`
+
+	set `DEFAULT_NEWLINE_DELIMITER = "|||"`
+
+	set `DEFAULT_MAX_NOTES = 10`
+	
 
     -- OPTIONAL --
     
