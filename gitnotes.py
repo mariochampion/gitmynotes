@@ -366,49 +366,7 @@ def move_processed_notes(folder_source, folder_dest, max_notes):
     result_move, output_move = process_applescript(applescript_movenote)
     print(f"applescript_movenote result: {result_move} {output_move}")
     return result_move
-
-
-
-##### Describe this function
-
-def move_processed_notes2(folder_source, folder_dest, max_notes):
-    ''' Move processed notes into <foldername>_GitNotes so wont process again -- until changed??'''
-    
-    # if processed_notes exists, then that stage was a success, so next step:
-    # create_gitnotes_folder(folder_dest) so we have a place to move notes
-    success, message = create_gitnotes_folder(folder_dest)
-    if success:
-        print(f"Success: {message}")
-    else:
-        print(f"Failed: {message}")
-    
-    
-    # do the actual move
-    print(f"Now to move {max_notes} notes from '{folder_source}' to '{folder_dest}'")
-    applescript_movenote = f'''
-    tell application "Notes"
-        set destTargetFolder to "{folder_dest}"
-        set sourceTargetFolder to "{folder_source}"
-        set theNotes to notes of sourceTargetFolder
-        set targetAccount to "iCloud"
-        
-        repeat with i from 1 to max_notes
-            set theNote to item i of theNotes
-            try
-                tell account targetAccount
-                    move theNote to folder destTargetFolder of account targetAccount
-                end tell
-            on error errMsg
-                return "Error: " & errMsg
-            end try
-        end repeat
-    end tell
-    '''
-    
-    result_move,output_move = process_applescript(applescript_movenote)
-    print(f"applescript_movenote result: {output_move}")
-    return result_move
-    
+   
 
 
 
