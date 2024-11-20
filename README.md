@@ -2,12 +2,17 @@
 Use GitHub to back up macOS Notes using python and applescript
 
 ## to do
-write real instructions
-consolidate scripts into one
-create config file
-use min of maxnotes and count of notes
-do some error catching (bad names, non numbers in maxnotes, etc)
-add image capability
+* write real instructions
+
+* consolidate scripts into one
+
+* create config file
+
+* use min of maxnotes and count of notes
+
+* do some error catching (bad names, non numbers in maxnotes, etc)
+
+* add image capability
 
 
 
