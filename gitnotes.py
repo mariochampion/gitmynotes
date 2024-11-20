@@ -29,11 +29,9 @@
 ## Specify a custom output file
 #  python notes-export.py --folder-name="somefolder" --max-notes=10 --output-file="my_notes.csv"
 
-## Todo: 
-#  allow passng of comma separated list of folders to process, each onbe worked through to max notes
-#  move the processnotes to <folder>__GitNotes so that the batching can be non-duplicate notes, rather than check them
 
-#. combine all .pys into one .py
+
+
 
 
 import subprocess
@@ -52,7 +50,7 @@ from typing import Tuple
 DEFAULT_EXPORT_PATH = "~/Documents/gitnotes"
 DEFAULT_GITHUB_URL = "https://github.com/mariochampion/gitnotes"
 DEFAULT_PROCESSED_FOLDER_ENDING = "__GitNotes"
-DEFAULT_CSV_NAME = "notes_export.csv"
+DEFAULT_CSV_NAME = "GitNotes.csv"
 DEFAULT_NEWLINE_DELIMITER = "|||"
 DEFAULT_MAX_NOTES = 10
 
@@ -62,6 +60,10 @@ DEFAULT_IGNORE_FOLDER = "ignore"
 DEFAULT_NOTES_OUTERDIR = "macosnotes"
 
 
+
+
+
+##### Describe this function
 def setup_git_repo(repo_path, DEFAULT_GITHUB_URL):
     """Initialize Git repo and set remote if not already set up"""
     if not os.path.exists(os.path.join(repo_path, '.git')):
@@ -76,6 +78,8 @@ def setup_git_repo(repo_path, DEFAULT_GITHUB_URL):
 
        
 
+
+##### Describe this function
 def export_notes_to_markdown(export_path, folder_name=None, max_notes=None, wrapper_dir=None):
     """Export Notes using applescript/osascript with folder and count limits"""
     
@@ -145,6 +149,9 @@ def export_notes_to_markdown(export_path, folder_name=None, max_notes=None, wrap
         return 0
     return int(result.stdout.strip()) if result.stdout.strip() else 0
 
+
+
+##### Describe this function
 def commit_and_push(repo_path, folder_name=None, wrapper_dir=None):
     """Commit changes and push to GitHub"""
     # Always operate from the git root directory
@@ -184,6 +191,9 @@ def commit_and_push(repo_path, folder_name=None, wrapper_dir=None):
         # result = subprocess.run(['git', 'push', '-f', 'origin', 'main'], cwd=repo_path, capture_output=True, text=True)
 
 
+
+
+##### Describe this function
 def export_notes_metadata(output_file=None, folder=None, max_notes=None, newline_delimiter=f"{DEFAULT_NEWLINE_DELIMITER}"):
     """
     Export macOS Notes metadata (title, quoted title, and modification date) to a CSV file.
@@ -300,6 +310,7 @@ def export_notes_metadata(output_file=None, folder=None, max_notes=None, newline
 
 
 
+##### Describe this function
 def move_processed_notes(folder_source, folder_dest, max_notes):
     ''' Move processed notes into destination folder '''
     
@@ -358,6 +369,9 @@ def move_processed_notes(folder_source, folder_dest, max_notes):
 
 
 
+
+##### Describe this function
+
 def move_processed_notes2(folder_source, folder_dest, max_notes):
     ''' Move processed notes into <foldername>_GitNotes so wont process again -- until changed??'''
     
@@ -399,6 +413,8 @@ def move_processed_notes2(folder_source, folder_dest, max_notes):
 
 
 
+##### Describe this function
+
 def create_gitnotes_folder(folder: str) -> Tuple[bool, str]:
     """
     Create a folder in macOS Notes app under iCloud account.
@@ -435,6 +451,9 @@ def create_gitnotes_folder(folder: str) -> Tuple[bool, str]:
     return process_applescript(applescript)
     
     
+    
+##### Describe this function
+    
 def process_applescript(applescript):
     ''' generic function to process applescript and return a result object'''
     print(f"INSIDE process_applescript()")
@@ -468,7 +487,7 @@ def process_applescript(applescript):
 
 
 
-
+##### Describe this function
 
 def main():
     parser = argparse.ArgumentParser(description='Export Apple Notes to GitHub')
