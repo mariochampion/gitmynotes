@@ -268,6 +268,7 @@ def export_notes_metadata(output_file=None, folder=None, max_notes=None, newline
     raw_output = output.split(f"{DEFAULT_NEWLINE_DELIMITER}")
     raw_output = raw_output[:-1]
     
+    current_datetime = datetime.now()
     for line in raw_output:
         
         line = line.rstrip(",")
@@ -290,16 +291,16 @@ def export_notes_metadata(output_file=None, folder=None, max_notes=None, newline
         except ValueError:
             formatted_date = mod_date
         
-        print(f"APPENDING: {folder}, {title}, {quoted_title}, {formatted_date} to {output_file}")
+        print(f"APPENDING: {folder}, {title}, {formatted_date}, {quoted_title}, {current_datetime} to {output_file}")
         
-        notes_data.append([folder, title, quoted_title, formatted_date])
+        notes_data.append([folder, title, formatted_date, quoted_title, current_datetime])
         
         # Write to CSV
     mode = 'a' if os.path.exists(output_file) else 'w'
     with open(output_file, mode, newline='', encoding='utf-8') as f:
         writer = csv.writer(f)
         if mode == 'w':  # Only write header for new files
-            writer.writerow(['Folder', 'Original Title', 'Exported Title', 'Last Modified'])
+            writer.writerow(['Folder', 'Original Title', 'Last Modified', 'Exported Title', 'Exported Date'])
         #print(f"notes_data {notes_data}")
         writer.writerows(notes_data)
         
