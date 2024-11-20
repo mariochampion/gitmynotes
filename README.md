@@ -35,14 +35,14 @@ TBD
 
 3. in file `gitnotes.py`, set required and optional configurations
 
-	####REQUIRED
+	-- REQUIRED --
 	
 	
 	set `DEFAULT_EXPORT_PATH` to the export location (example: `DEFAULT_EXPORT_PATH = "~/Documents/<SomeFolder>"`)
 	
 	set `DEFAULT_GITHUB_URL` to the the repo where you want to store Notes (example: `DEFAULT_GITHUB_URL = "https://github.com/<myusername>/<myrepo>""`)
 
-    ####OPTIONAL
+    -- OPTIONAL --
     
     
 	set `DEFAULT_NOTES_OUTERDIR` to the 'wrapper' dir for folders (example: `DEFAULT_NOTES_OUTERDIR = "macosnotes"`)
