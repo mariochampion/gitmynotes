@@ -3,14 +3,16 @@ Use GitHub to back up macOS Notes using python and applescript
 
 ## to do
 write real instructions
-
+consolidate scripts into one
+create config file
+use min of maxnotes and count of notes
+do some error catching (bad names, non numbers in maxnotes, etc)
 add image capability
 
-do some error catching (bad names, non numbers in maxnotes, etc)
 
 
 ## Usage
-
+TBD
 
 
 ## Getting Started
@@ -36,7 +38,7 @@ do some error catching (bad names, non numbers in maxnotes, etc)
 	
 4. open terminal and cd to `notesdump` dir
 
-5. run Ex: `python notesdumper.py --folder='<notesFolderName>' --max-notes <N> `
+5. run Ex: `python gitnotes.py --folder='<notesFolderName>' --max-notes <N> `
 
 ```
 Export Apple Notes to GitHub
