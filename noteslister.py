@@ -14,7 +14,7 @@
 
 ## Todo: 
 #  allow passng of comma separated list of folders to process, each onbe worked through to max notes
-#  move the processnotes to <folder_name>__GitNotes so that the bacthing can be non-duplicate notes, rather than check them
+#  move the processnotes to <folder>__GitNotes so that the batching can be non-duplicate notes, rather than check them
 
 #. combine all .pys into one .py
 
@@ -32,13 +32,13 @@ DEFAULT_PROCESSED_FOLDER_ENDING = "__GitNotes"
 DEFAULT_MAX_NOTES = 10
 
 
-def export_notes_metadata(output_file=None, folder_name=None, max_notes=None, newline_delimiter=f"{DEFAULT_NEWLINE_DELIMITER}"):
+def export_notes_metadata(output_file=None, folder=None, max_notes=None, newline_delimiter=f"{DEFAULT_NEWLINE_DELIMITER}"):
     """
     Export macOS Notes metadata (title, quoted title, and modification date) to a CSV file.
     
     Args:
         output_file (str): Path to the output CSV file
-        folder_name (str): Name of the folder to export notes from (None for all folders)
+        folder (str): Name of the folder to export notes from (None for all folders)
         max_notes (int): Maximum number of notes to export (None for all notes)
         newline_delimiter (str): Default newline delimiter (|||)
     """
@@ -53,12 +53,12 @@ def export_notes_metadata(output_file=None, folder_name=None, max_notes=None, ne
     set custom_delimiter to "{newline_delimiter}"
     '''
     
-    if folder_name:
-        output_file = f"{folder_name}.csv"
+    if folder:
+        output_file = f"{folder}.csv"
         applescript += f'''
         set targetFolder to null
         repeat with f in folders
-            if (name of f as string) is "{folder_name}" then
+            if (name of f as string) is "{folder}" then
                 set targetFolder to f
                 exit repeat
             end if
@@ -129,9 +129,9 @@ def export_notes_metadata(output_file=None, folder_name=None, max_notes=None, ne
         except ValueError:
             formatted_date = mod_date
         
-        print(f"APPENDING: {folder_name}, {title}, {quoted_title}, {formatted_date} to {output_file}")
+        print(f"APPENDING: {folder}, {title}, {quoted_title}, {formatted_date} to {output_file}")
         
-        notes_data.append([folder_name, title, quoted_title, formatted_date])
+        notes_data.append([folder, title, quoted_title, formatted_date])
         
         # Write to CSV
     mode = 'a' if os.path.exists(output_file) else 'w'
@@ -247,28 +247,28 @@ def move_processed_notes2(folder_source, folder_dest, max_notes):
 
 
 
-def create_gitnotes_folder(folder_name: str) -> Tuple[bool, str]:
+def create_gitnotes_folder(folder: str) -> Tuple[bool, str]:
     """
     Create a folder in macOS Notes app under iCloud account.
     
     Args:
-        folder_name (str): Name of the folder to create
+        folder (str): Name of the folder to create
         
     Returns:
         Tuple[bool, str]: (success status, message/error details)
     """
-    print(f"Attempting to create Notes folder: {folder_name}")
+    print(f"Attempting to create Notes folder: {folder}")
     
     # Properly escape quotes in folder name for AppleScript
-    folder_name_escaped = folder_name.replace('"', '\\"')
+    folder_escaped = folder.replace('"', '\\"')
     
     applescript = f'''
     tell application "Notes"
         try
             set targetAccount to "iCloud"
             tell account targetAccount
-                if not (exists folder "{folder_name_escaped}") then
-                    make new folder with properties {{name:"{folder_name_escaped}"}}
+                if not (exists folder "{folder_escaped}") then
+                    make new folder with properties {{name:"{folder_escaped}"}}
                     return "Folder created successfully"
                 else
                     return "Folder already exists"
@@ -318,7 +318,7 @@ def process_applescript(applescript):
 
 def main():
     parser = argparse.ArgumentParser(description='Export metadata from macOS Notes app')
-    parser.add_argument('--folder-name', type=str, help='Name of the folder of notes to export')
+    parser.add_argument('--folder', type=str, help='Name of the folder of notes to export')
     
     parser.add_argument('--max-notes', type=int,
     					default=DEFAULT_MAX_NOTES,
@@ -326,7 +326,7 @@ def main():
     
     parser.add_argument('--output-file', type=str, 
     					default=DEFAULT_CSV_NAME,
-                        help=f'Output CSV file path (default: <folder_name>.csv)')
+                        help=f'Output CSV file path (default: <folder>.csv)')
                         
     parser.add_argument('--newline-delimiter', type=str, 
     					default=DEFAULT_NEWLINE_DELIMITER,
@@ -336,7 +336,7 @@ def main():
     
     processednotes_data = export_notes_metadata(
         output_file=args.output_file,
-        folder_name=args.folder_name,
+        folder=args.folder,
         max_notes=args.max_notes,
         newline_delimiter=args.newline_delimiter
     )
@@ -349,8 +349,8 @@ def main():
     
     if processednotes_data:
         move_result = move_processed_notes(
-            folder_source=args.folder_name,
-            folder_dest=f"{args.folder_name}{DEFAULT_PROCESSED_FOLDER_ENDING}",
+            folder_source=args.folder,
+            folder_dest=f"{args.folder}{DEFAULT_PROCESSED_FOLDER_ENDING}",
             max_notes=args.max_notes
         )
     else:
@@ -359,7 +359,7 @@ def main():
     
     if move_result:
         print(f"================================")
-        print(f" MOVE to {args.folder_name}{DEFAULT_PROCESSED_FOLDER_ENDING} completed")
+        print(f" MOVE to {args.folder}{DEFAULT_PROCESSED_FOLDER_ENDING} completed")
         print(f"================================")
     else:
         print(f"================================")
