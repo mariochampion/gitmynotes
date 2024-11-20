@@ -30,10 +30,6 @@
 #  python notes-export.py --folder-name="somefolder" --max-notes=10 --output-file="my_notes.csv"
 
 
-
-
-
-
 import subprocess
 import os
 import argparse
@@ -41,8 +37,6 @@ import math
 import csv
 from datetime import datetime
 from typing import Tuple
-
-
 
 
 #### user configs
@@ -67,6 +61,7 @@ DEFAULT_NOTES_OUTERDIR = "macosnotes"
 
 
 ##### Describe this function
+
 def setup_git_repo(repo_path, DEFAULT_GITHUB_URL):
     """Initialize Git repo and set remote if not already set up"""
     if not os.path.exists(os.path.join(repo_path, '.git')):
@@ -79,10 +74,10 @@ def setup_git_repo(repo_path, DEFAULT_GITHUB_URL):
         except:
             print("No remote content to pull")
 
-       
 
 
 ##### Describe this function
+
 def export_notes_to_markdown(export_path, folder_name=None, max_notes=None, wrapper_dir=None):
     """Export Notes using applescript/osascript with folder and count limits"""
     
@@ -155,6 +150,7 @@ def export_notes_to_markdown(export_path, folder_name=None, max_notes=None, wrap
 
 
 ##### Describe this function
+
 def commit_and_push(repo_path, folder_name=None, wrapper_dir=None):
     """Commit changes and push to GitHub"""
     # Always operate from the git root directory
@@ -195,8 +191,8 @@ def commit_and_push(repo_path, folder_name=None, wrapper_dir=None):
 
 
 
-
 ##### Describe this function
+
 def export_notes_metadata(output_file=None, folder=None, max_notes=None, newline_delimiter=f"{DEFAULT_NEWLINE_DELIMITER}"):
     """
     Export macOS Notes metadata (title, quoted title, and modification date) to a CSV file.
@@ -314,6 +310,7 @@ def export_notes_metadata(output_file=None, folder=None, max_notes=None, newline
 
 
 ##### Describe this function
+
 def move_processed_notes(folder_source, folder_dest, max_notes):
     ''' Move processed notes into destination folder '''
     
@@ -369,7 +366,6 @@ def move_processed_notes(folder_source, folder_dest, max_notes):
     result_move, output_move = process_applescript(applescript_movenote)
     print(f"applescript_movenote result: {result_move} {output_move}")
     return result_move
-
 
 
 
@@ -456,7 +452,7 @@ def create_gitnotes_folder(folder: str) -> Tuple[bool, str]:
     
     
 ##### Describe this function
-    
+
 def process_applescript(applescript):
     ''' generic function to process applescript and return a result object'''
     print(f"INSIDE process_applescript()")
@@ -486,7 +482,6 @@ def process_applescript(applescript):
         return False, f"Process Error: {e.stderr}"
     except Exception as e:
         return False, f"Unexpected Error: {str(e)}"
-
 
 
 
