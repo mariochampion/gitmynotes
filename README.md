@@ -4,6 +4,8 @@ Use GitHub to back up macOS Notes using python and applescript
 ## to do
 * write real instructions
 
+* change audit file / csv
+
 * create config file
 
 * use min of maxnotes and count of notes
