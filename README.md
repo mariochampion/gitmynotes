@@ -57,10 +57,11 @@ TBD
 4. run Ex: `python gitnotes.py --folder='<notesFolderName>' --max-notes <N> `
 
 ```
-Export Apple Notes to GitHub
+Export Apple MacOS Notes and folders to GitHub repo and folders
+
 usage: gitnotes.py [-h] [--folder FOLDER] [--max-notes MAX_NOTES] [--batch-size BATCH_SIZE]
                    [--export-path EXPORT_PATH] [--github-url GITHUB_URL] [--wrapper-dir WRAPPER_DIR]
-                   [--ignore-folder IGNORE_FOLDER]
+                   [--ignore-folder IGNORE_FOLDER] [--output-file OUTPUT_FILE] [--newline-delimiter NEWLINE_DELIMITER]
 
 
 options:
@@ -72,13 +73,17 @@ options:
                         The number of notes to convert, and git add/commit/push per loop. Especially useful for
                         initial GitNotes runs.(default: 10)
   --export-path EXPORT_PATH
-                        Path to export the notes (default: ~/Documents/openai/notesdump)
+                        Path to export the notes (default: ~/Documents/gitnotes)
   --github-url GITHUB_URL
-                        GitHub repository URL. (default: https://github.com/mariochampion/notesdump)
+                        GitHub repository URL. (default: https://github.com/mariochampion/gitnotes)
   --wrapper-dir WRAPPER_DIR
                         Outer directory to hold folders. (default: macosnotes)
   --ignore-folder IGNORE_FOLDER
                         The Notes folder to ignore and not process. (default: ignore)
+  --output-file OUTPUT_FILE
+                        Output CSV file path (default: <folder>.csv)
+  --newline-delimiter NEWLINE_DELIMITER
+                        Default CSV newline delimiter (default: |||)
 
 ```
 
