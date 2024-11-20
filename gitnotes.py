@@ -174,10 +174,16 @@ def main():
         print(f"Begin export of Notes with batch {x} of {loop_count}")
         print(f" ")
         
+        
+        if loop_count == 1:
+            notestoexport = args.max_notes
+        else:
+            notestoexport = args.batch_size
+        
         notes_processed = export_notes_to_markdown(
             args.export_path,
             args.folder,
-            args.batch_size,
+            notestoexport,
             args.wrapper_dir
         )
         
