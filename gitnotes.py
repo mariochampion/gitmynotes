@@ -18,16 +18,16 @@
 #### ABOUT THIS SCRIPT
 
 ## Export up to 10 notes from a specific folder
-#  python notes-export.py --folder-name="somefolder" --max-notes=10
+#  python gitnotes.py --folder="somefolder" --max-notes=10
 
 ## Export all notes from a specific folder
-#  python notes-export.py --folder-name="somefolder"
+#  python gitnotes.py --folder="somefolder"
 
-## Export up to 10 notes from all folders
-#. python notes-export.py --max-notes=10
+## Export up to 17 notes from all folders
+#. python gitnotes.py --max-notes=17
 
 ## Specify a custom output file
-#  python notes-export.py --folder-name="somefolder" --max-notes=10 --output-file="my_notes.csv"
+#  python gitnotes.py --folder-name="somefolder" --max-notes=10 --output-file="some-other-folder.csv"
 
 
 import subprocess
