@@ -46,9 +46,12 @@ from typing import Tuple
 
 
 #### user configs
-##.  REQUIRED
+##.  REQUIRED TO CHANGE
 DEFAULT_EXPORT_PATH = "~/Documents/gitnotes"
 DEFAULT_GITHUB_URL = "https://github.com/mariochampion/gitnotes"
+
+
+##.  REQUIRED: LEAVE AS-IS or CHANGE--
 DEFAULT_PROCESSED_FOLDER_ENDING = "__GitNotes"
 DEFAULT_CSV_NAME = "GitNotes.csv"
 DEFAULT_NEWLINE_DELIMITER = "|||"
