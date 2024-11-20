@@ -33,13 +33,22 @@ TBD
 
 2. cd into notesdump dir: `cd gitnotes`
 
-3. in file `gitnotes.py`, 
+3. in file `gitnotes.py`, set required and optional configurations
 
+	###REQUIRED
 	set `DEFAULT_EXPORT_PATH` to the export location (example: `DEFAULT_EXPORT_PATH = "~/Documents/<SomeFolder>"`)
 	
+	set `DEFAULT_GITHUB_URL` to the the repo where you want to store Notes (example: `DEFAULT_GITHUB_URL = "https://github.com/<myusername>/<myrepo>""`)
+
+    ###OPTIONAL
 	set `DEFAULT_NOTES_OUTERDIR` to the 'wrapper' dir for folders (example: `DEFAULT_NOTES_OUTERDIR = "macosnotes"`)
 	
-	set `DEFAULT_GITHUB_URL` to the the repo where you want to store Notes (example: `DEFAULT_GITHUB_URL = "https://github.com/<myusername>/<myrepo>""`)
+	set `DEFAULT_BATCH_SIZE` (example: `DEFAULT_BATCH_SIZE = 10`)
+	
+	set `DEFAULT_IGNORE_FOLDER` to Notes folder to not backup to GitHub (example: `DEFAULT_IGNORE_FOLDER = "ignore"`)
+	
+	
+	
 
 4. run Ex: `python gitnotes.py --folder='<notesFolderName>' --max-notes <N> `
 
