@@ -1,10 +1,12 @@
 # GitNotes
-Use GitHub to back up macOS Notes using python and applescript
+Use GitHub to hold, backup, track revisions of your macOS Notes.
+
+A lightweight macOS utility using Python and AppleScript to sync your Apple Notes to GitHub, combining local backup with version control. This tool exports Notes to Markdown while preserving folder organization and formatting. It features incremental backup support, local audit logging, and secure GitHub integration. All processing happens on your machine, with GitHub as the only external service, ensuring complete data privacy through your own repository credentials.
+
+
 
 ## to do
 * write real instructions
-
-* change audit file / csv
 
 * create config file
 
@@ -22,12 +24,20 @@ Use GitHub to back up macOS Notes using python and applescript
 
 * allow user to decide to keep <folder>__GitNotes bkup or move back to original
 
-* add DEFAULT folder name
+* add DEFAULT folder name so doesnt try to do ALL NOTES?? if none specified
+
+
+# GitNotes Benefits 
+
+By automatically mirroring your macOS Notes to GitHub, you gain the power of version control, collaborative possibilities, and bulletproof backup – all while continuing to use the familiar Notes app. With secure GitHub authentication and local processing, your data privacy is guaranteed.
+
+Transform your macOS Notes into a version-controlled writer's archive on GitHub.
+This Python/AppleScript utility preserves the evolution of your writing by automatically backing up Notes to Markdown files, maintaining a complete history of every change. Watch your ideas grow from initial concepts to fully developed pieces, with every revision safely tracked and recoverable. Features folder organization matching your Notes structure, local audit logging, and secure GitHub integration - all processing happens on your machine, using only your GitHub credentials for repository access.
 
 
 
 ## Usage
-TBD
+`python gitnotes.py --folder='<notesFolderName>' --max-notes=<N>`
 
 
 ## Getting Started
@@ -36,6 +46,7 @@ TBD
 1. MacOS Notes app
 2. Python 3.x+
 3. Applescript (should be on all Macs)
+4. GitHub repo accessible from the Mac running this script (configured auth credentials, etc) 
 
 
 ## Steps
