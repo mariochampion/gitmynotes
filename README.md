@@ -29,11 +29,11 @@ TBD
 
 
 ## Steps
-1. clone the repo: `git clone https://github.com/mariochampion/notesdump.git`
+1. clone the repo: `git clone https://github.com/mariochampion/gitnotes.git`
 
-2. cd into notesdump dir: `cd notesdump`
+2. cd into notesdump dir: `cd gitnotes`
 
-3. in file `notesdumper.py`, 
+3. in file `gitnotes.py`, 
 
 	set `DEFAULT_EXPORT_PATH` to the export location (example: `DEFAULT_EXPORT_PATH = "~/Documents/<SomeFolder>"`)
 	
