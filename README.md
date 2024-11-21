@@ -16,7 +16,7 @@ Concerned about a fleet of macbooks, and all the useful, non-shareable, and non-
 
 
 `modern tech worker needs to be prepared`
-Concerned you'll be laid off and all personal notes be lost as well? Set up a free github repo and back up the folders that hold your personal notes
+No one can predict the future. Losing a job or a role shouldn't mean losing your personal macOS Notes as well. Set up a free GitHub repo and back up the folders that hold your personal notes.
 
 
 ## Usage
