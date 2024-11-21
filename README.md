@@ -27,8 +27,8 @@ No one can predict the future. Losing a job or a role shouldn't mean losing your
 
 ### Prerequisites
 1. MacOS with Notes app and AppleScript (ships with every Mac)
-2. Python 3.x+ (available here <tbd>)
-4. GitHub repo accessible from the Mac running this script (configured auth credentials, etc) 
+2. Python 3.x+ (available here `linkTBD`)
+4. GitHub repo accessible from the Mac running this script (public or private, configured auth credentials, etc) 
 
 
 ## Steps
