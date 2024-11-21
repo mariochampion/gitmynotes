@@ -4,39 +4,17 @@ GitNotes adds convenient version control, off-site backups, and optional collabo
 A lightweight macOS utility using Python and AppleScript to sync your macOS Notes to your public or private GitHub repos, the GitNotes solution exports Notes to Markdown while preserving folder organization and formatting. It features out-of-the-box common sense defaults or user-driven customization, a local audit trail with checkpoint features for interrupted backups, and secure GitHub integration. All processing happens on your machine, with the only external data transmission secured by your enterprise-grade GitHub authentication credentials.
 
 
-## to do
-* write real instructions
-
-* create config file
-
-* use min of maxnotes and count of notes
-
-* do some error catching (bad names, non numbers in maxnotes, etc)
-
-* add image capability
-
-* add colors!
-
-* allow comma separated list of folders at once
-
-* incorporate some values by env var instead of config
-
-* allow user to decide to keep <folder>__GitNotes bkup or move back to original
-
-* add DEFAULT folder name so doesnt try to do ALL NOTES?? if none specified
-
-
-# GitNotes Benefits 
-
-By automatically mirroring your macOS Notes to GitHub, you gain the power of version control, collaborative possibilities, and bulletproof backup – all while continuing to use the familiar Notes app. With secure GitHub authentication and local processing, your data privacy is guaranteed.
+# GitNotes is for me?
 
 <writer usecase>
 Transform your macOS Notes into a version-controlled writer's archive on GitHub.
 This Python/AppleScript utility preserves the evolution of your writing by automatically backing up Notes to Markdown files, maintaining a complete history of every change. Watch your ideas grow from initial concepts to fully developed pieces, with every revision safely tracked and recoverable. Features folder organization matching your Notes structure, local audit logging, and secure GitHub integration - all processing happens on your machine, using only your GitHub credentials for repository access.
 
 <IT usecase>
-Concerned about a fleet of macbooks, and all the useful, non-shareable, and non-collaborative notes just one cup of coffee away from disaster?
+Concerned about a fleet of macbooks, and all the useful, non-shareable, and non-collaborative notes just one cup of coffee away from disaster? 
 
+<modern tech worker>
+Concerned you'll be laid off and all personal notes be lost as well? Set up a free github repo and back up the folders that hold your personal notes
 
 ## Usage
 `python gitnotes.py --folder='<notesFolderName>' --max-notes=<N>`
@@ -132,6 +110,26 @@ options:
 
 
 
+## to do
+* write real instructions
+
+* create config file
+
+* use min of maxnotes and count of notes
+
+* do some error catching (bad names, non numbers in maxnotes, etc)
+
+* add image capability
+
+* add colors!
+
+* allow comma separated list of folders at once
+
+* incorporate some values by env var instead of config
+
+* allow user to decide to keep <folder>__GitNotes bkup or move back to original
+
+* add DEFAULT folder name so doesnt try to do ALL NOTES?? if none specified
 
 
 
