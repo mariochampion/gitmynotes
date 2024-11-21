@@ -26,16 +26,15 @@ No one can predict the future. Losing a job or a role shouldn't mean losing your
 ## Getting Started
 
 ### Prerequisites
-1. MacOS Notes app
-2. Python 3.x+
-3. Applescript (should be on all Macs)
+1. MacOS with Notes app and AppleScript (ships with every Mac)
+2. Python 3.x+ (available here <tbd>)
 4. GitHub repo accessible from the Mac running this script (configured auth credentials, etc) 
 
 
 ## Steps
 1. clone the repo: `git clone https://github.com/mariochampion/gitnotes.git`
 
-2. cd into notesdump dir: `cd gitnotes`
+2. cd into gitnotes dir: `cd gitnotes`
 
 3. in file `gitnotes.py`, set required and optional configurations, or leave as shipped with these common sense defaults
 
