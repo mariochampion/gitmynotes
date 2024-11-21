@@ -6,14 +6,16 @@ A lightweight macOS utility using Python and AppleScript to sync your macOS Note
 
 # GitNotes is for me?
 
-<writer usecase>
+`writers gonna write`
 Transform your macOS Notes into a version-controlled writer's archive on GitHub.
 This Python/AppleScript utility preserves the evolution of your writing by automatically backing up Notes to Markdown files, maintaining a complete history of every change. Watch your ideas grow from initial concepts to fully developed pieces, with every revision safely tracked and recoverable. Features folder organization matching your Notes structure, local audit logging, and secure GitHub integration - all processing happens on your machine, using only your GitHub credentials for repository access.
 
-<IT usecase>
+
+`IT team gotta keep copies`
 Concerned about a fleet of macbooks, and all the useful, non-shareable, and non-collaborative notes just one cup of coffee away from disaster? 
 
-<modern tech worker>
+
+`modern tech worker need to be prepared`
 Concerned you'll be laid off and all personal notes be lost as well? Set up a free github repo and back up the folders that hold your personal notes
 
 ## Usage
