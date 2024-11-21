@@ -1,8 +1,7 @@
 # GitNotes
-Use GitHub to hold, backup, track revisions of your macOS Notes.
+GitNotes adds convenient version control, off-site backups, and optional collaboration to your macOS Notes.
 
-A lightweight macOS utility using Python and AppleScript to sync your Apple Notes to GitHub, combining local backup with version control. This tool exports Notes to Markdown while preserving folder organization and formatting. It features incremental backup support, local audit logging, and secure GitHub integration. All processing happens on your machine, with GitHub as the only external service, ensuring complete data privacy through your own repository credentials.
-
+A lightweight macOS utility using Python and AppleScript to sync your macOS Notes to your public or private GitHub repos, the GitNotes solution exports Notes to Markdown while preserving folder organization and formatting. It features out-of-the-box common sense defaults or user-driven customization, a local audit trail with checkpoint features for interrupted backups, and secure GitHub integration. All processing happens on your machine, with the only external data transmission secured by your enterprise-grade GitHub authentication credentials.
 
 
 ## to do
@@ -31,9 +30,12 @@ A lightweight macOS utility using Python and AppleScript to sync your Apple Note
 
 By automatically mirroring your macOS Notes to GitHub, you gain the power of version control, collaborative possibilities, and bulletproof backup – all while continuing to use the familiar Notes app. With secure GitHub authentication and local processing, your data privacy is guaranteed.
 
+<writer usecase>
 Transform your macOS Notes into a version-controlled writer's archive on GitHub.
 This Python/AppleScript utility preserves the evolution of your writing by automatically backing up Notes to Markdown files, maintaining a complete history of every change. Watch your ideas grow from initial concepts to fully developed pieces, with every revision safely tracked and recoverable. Features folder organization matching your Notes structure, local audit logging, and secure GitHub integration - all processing happens on your machine, using only your GitHub credentials for repository access.
 
+<IT usecase>
+Concerned about a fleet of macbooks, and all the useful, non-shareable, and non-collaborative notes just one cup of coffee away from disaster?
 
 
 ## Usage
