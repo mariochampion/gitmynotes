@@ -15,7 +15,7 @@ This Python/AppleScript utility preserves the evolution of your writing by autom
 Concerned about a fleet of macbooks, and all the useful, non-shareable, and non-collaborative notes just one cup of coffee away from disaster? 
 
 
-`modern tech worker need to be prepared`
+`modern tech worker needs to be prepared`
 Concerned you'll be laid off and all personal notes be lost as well? Set up a free github repo and back up the folders that hold your personal notes
 
 ## Usage
