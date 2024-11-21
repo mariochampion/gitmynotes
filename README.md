@@ -15,7 +15,7 @@ Preserve your gems and most excellent lines, and track the full evolution of you
 Concerned about a fleet of macbooks, and all the useful, non-shareable, and non-collaborative notes just one cup of coffee away from disaster? 
 
 
-`modern tech worker needs to be prepared`
+`prepared tech workers win`
 No one can predict the future. Losing a job or a role shouldn't mean losing your personal macOS Notes as well. Set up a free GitHub repo and back up the folders that hold your personal notes.
 
 
