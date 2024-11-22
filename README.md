@@ -1,5 +1,5 @@
 # GitNotes
-GitNotes adds convenient version control, off-site backups, and optional collaboration to your macOS Notes.
+## GitNotes adds convenient version control, off-site backups, and optional collaboration to your macOS Notes.
 
 A lightweight macOS utility using Python and AppleScript to sync your macOS Notes to your public or private GitHub repos, the GitNotes solution exports Notes to Markdown while preserving folder organization and formatting. It features out-of-the-box common sense defaults or user-driven customization, a local audit trail with checkpoint features for interrupted backups, and secure GitHub integration. All processing happens on your machine, with the only external data transmission secured by your enterprise-grade GitHub authentication credentials.
 
