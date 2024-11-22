@@ -132,7 +132,7 @@ options:
 * write real instructions
 
 * there is some issue with loops and passing batch not original maxnotes, also when initial maxnotes 
-greater than batchnotes AND greater than folder notecount
+greater than batchnotes AND greater than folder notecount there is BUG!
 
 * allow optionally `git push` the audit file as well
 
