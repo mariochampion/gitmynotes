@@ -292,6 +292,7 @@ def export_notes_metadata(output_file=None, folder=None, max_notes=None, newline
             formatted_date = mod_date
         
         print(f"APPENDING: {folder}, {title}, {formatted_date}, {quoted_title}, {current_datetime} to {output_file}")
+        print(" ")
         
         notes_data.append([folder, title, formatted_date, quoted_title, current_datetime])
         
@@ -338,15 +339,19 @@ def move_processed_notes(folder_source, folder_dest, max_notes):
                 set sourceFolder to folder "{folder_source_escaped}"
                 set destFolder to folder "{folder_dest_escaped}"
                 set theNotes to every note of sourceFolder
+                set noteCount to (count of theNotes)
                 
                 -- Check if we have notes to move
-                if (count of theNotes) is 0 then
+                if noteCount is 0 then
                     return "No notes found in source folder"
                 end if
                 
                 -- Determine how many notes to actually move
-                --set notesToMove to minimum of (count of theNotes) and {max_notes}
-                set notesToMove to {max_notes}
+                if {max_notes} ≤ noteCount then
+                    set notesToMove to {max_notes}
+                else
+                    set notesToMove to noteCount
+                end if
                 
                 repeat with i from 1 to notesToMove
                     try
@@ -414,7 +419,8 @@ def create_gitnotes_folder(folder: str) -> Tuple[bool, str]:
 
 def process_applescript(applescript):
     ''' generic function to process applescript and return a result object'''
-    print(f"INSIDE process_applescript()")
+    print(f"Processing AppleScript...")
+    print(" ")
     
     try:
         result = subprocess.run(
