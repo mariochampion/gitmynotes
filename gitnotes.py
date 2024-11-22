@@ -162,7 +162,7 @@ def commit_and_push(repo_path, folder_name=None, wrapper_dir=None):
         print(result_gitadd)
     
     folder_info = f" from folder '{folder_name}'" if folder_name else ""
-    commit_message = f"Updated notes{folder_info} - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+    commit_message = f"Backed up {folder_info} - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
     print(f"repo_path:{repo_path}, folder_name:{folder_name}, commit_message:{commit_message}")
     
     result_gitcommit = subprocess.run(['git', 'commit', '-m', commit_message], cwd=repo_path)
