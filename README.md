@@ -23,12 +23,26 @@ No one can predict the future. Losing a job or a role shouldn't mean losing your
 `python gitnotes.py --folder='<notesFolderName>' --max-notes=<N>`
 
 
+#### Output Artifacts
+-- Locally --
+
+1. New Notes folder: `<notesFolderName>_GitNotes` to store processed notes
+2. New GitNotes audit file: `<notesFolderName>.csv` to track processed notes
+
+-- Remote --
+1. New GitHub folder: `DEFAULT_GITHUB_URL/DEFAULT_NOTES_OUTERDIR`
+2. New Github sub-folders mapped to Notes folders: `DEFAULT_GITHUB_URL/DEFAULT_NOTES_OUTERDIR/<<notesFolderName>>`
+3. OPTIONAL - GitNotes audit file: `<notesFolderName>.csv`
+
+
+
+
 ## Getting Started
 
 ### Prerequisites
 1. MacOS with Notes app and AppleScript (ships with every Mac)
 2. Python 3.x+ (available here `linkTBD`)
-4. GitHub repo accessible from the Mac running this script (public or private, configured auth credentials, etc) 
+3. GitHub repo accessible from the Mac running this script (public or private, configured auth credentials, etc) 
 
 
 ## Steps
@@ -118,6 +132,10 @@ options:
 * create config file
 
 * use min of maxnotes and count of notes
+
+* there is some issue with loops and passing batch not original maxnotes
+
+* need to optionally `git push` the audit file as well
 
 * do some error catching (bad names, non numbers in maxnotes, etc)
 
