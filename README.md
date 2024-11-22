@@ -8,7 +8,7 @@ A lightweight macOS utility using Python and AppleScript to sync your macOS Note
 
 `writers gonna write`
 Transform your macOS Notes into a version-controlled writer's archive on GitHub.
-Preserve your gems and most excellent lines, and track the full evolution of your work. Maintain a complete history of every change and watch your ideas grow from initial concepts to fully developed pieces, with every revision safely tracked and recoverable. Learn how to GitHub and branch and fork to explore your ideas, in trusted collabs, or on your own.
+Preserve your gems and most excellent lines, and track the full evolution of your work. Maintain a complete history of every change and trace back your ideas from current state and previous alternatives -- with every revision safely tracked and recoverable. Learn how to GitHub and branch and fork to explore your ideas, in trusted collabs, or on your own.
 
 
 `IT team gotta keep copies`
