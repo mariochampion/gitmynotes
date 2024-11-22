@@ -1,9 +1,10 @@
 <div><b>Creation Date:</b> Tuesday, November 19, 2024 at 9:11:38 PM<br></div>
-<div><b>Modification Date:</b> Wednesday, November 20, 2024 at 8:06:59 PM<br></div>
+<div><b>Modification Date:</b> Thursday, November 21, 2024 at 8:45:35 PM<br></div>
 <div><b><span style="font-size: 23px"><h1>Gitnotes PRODUCT blurbs</h1></span></b></div>
+<div><span style="font-size: 16px">2</span></div>
 <div><span style="font-size: 16px"><br></span></div>
 <div><span style="font-size: 16px"><br></span></div>
-<div><span style="font-size: 16px">winners:</span></div>
+<div><span style="font-size: 16px">winners: updated in readme</span></div>
 <div><span style="font-size: 16px"># GitNotes</span></div>
 <div><span style="font-size: 16px">GitNotes adds convenient version control, off-site backups, and optional collaboration to your macOS Notes.</span></div>
 <div><span style="font-size: 16px"><br></span></div>
