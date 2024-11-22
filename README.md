@@ -131,27 +131,29 @@ options:
 ## to do
 * write real instructions
 
-* create config file
-
-* use min of maxnotes and count of notes
-
 * there is some issue with loops and passing batch not original maxnotes
 
-* need to optionally `git push` the audit file as well
+* allow optionally `git push` the audit file as well
 
 * do some error catching (bad names, non numbers in maxnotes, etc)
 
-* add image capability
+* allow user to decide to keep <folder>__GitNotes bkup or move back to original
 
 * add colors!
 
+* create config file?
+
+* PRO? 
+
 * allow comma separated list of folders at once
 
-* incorporate some values by env var instead of config
+* pre-map some folders to some github repos
 
-* allow user to decide to keep <folder>__GitNotes bkup or move back to original
+* add DEFAULT folder name so doesnt try to do ALL NOTES?? if none specified?
 
-* add DEFAULT folder name so doesnt try to do ALL NOTES?? if none specified
+* help set up cron job?
+
+
 
 
 
