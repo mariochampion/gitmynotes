@@ -6,6 +6,10 @@ A lightweight macOS utility using Python and AppleScript to sync your macOS Note
 
 # GitNotes is for me?
 
+Do you use Notes? Do you use GitHub? Then undoubtedly yes!
+
+Do you use Notes and can [start with GitHub](https://docs.github.com/en/get-started/start-your-journey)? Then also yes!
+
 `writers gonna write`
 Transform your macOS Notes into a version-controlled writer's archive on GitHub.
 Preserve your gems and most excellent lines, and track the full evolution of your work. Maintain a complete history of every change and trace back your ideas from current state and previous alternatives -- with every revision safely tracked and recoverable. Learn how to GitHub and branch and fork to explore your ideas, in trusted collabs, or on your own.
@@ -130,6 +134,8 @@ options:
 
 ## to do
 * write real instructions
+
+* create a github for non-devs one-pager? video? 
 
 * there is some issue with loops and passing batch not original maxnotes, also when initial maxnotes 
 greater than batchnotes AND greater than folder notecount there is BUG!
