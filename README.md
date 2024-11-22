@@ -28,11 +28,13 @@ No one can predict the future. Losing a job or a role shouldn't mean losing your
 
 1. New Notes folder: `<notesFolderName>_GitNotes` to store processed notes
 2. New GitNotes audit file: `<notesFolderName>.csv` to track processed notes
+3. Markdown copy of Notes from folder: `DEFAULT_EXPORT_PATH/<a-note.md>`
 
 -- Remote --
-1. New GitHub folder: `DEFAULT_GITHUB_URL/DEFAULT_NOTES_OUTERDIR`
-2. New Github sub-folders mapped to Notes folders: `DEFAULT_GITHUB_URL/DEFAULT_NOTES_OUTERDIR/<<notesFolderName>>`
-3. OPTIONAL - GitNotes audit file: `<notesFolderName>.csv`
+1. New GitHub directory: `DEFAULT_GITHUB_URL/DEFAULT_NOTES_OUTERDIR`
+2. New Github sub-dir mapped to Notes folders: `DEFAULT_GITHUB_URL/DEFAULT_NOTES_OUTERDIR/<notesFolderName>`
+3. Github copy of Notes from folder: `DEFAULT_GITHUB_URL/DEFAULT_NOTES_OUTERDIR/<notesFolderName>/<a-note.md>`
+4. OPTIONAL - GitNotes audit file: `<notesFolderName>.csv`
 
 
 
