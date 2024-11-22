@@ -131,7 +131,8 @@ options:
 ## to do
 * write real instructions
 
-* there is some issue with loops and passing batch not original maxnotes
+* there is some issue with loops and passing batch not original maxnotes, also when initial maxnotes 
+greater than batchnotes AND greater than folder notecount
 
 * allow optionally `git push` the audit file as well
 
