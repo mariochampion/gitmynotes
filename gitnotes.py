@@ -156,22 +156,27 @@ def commit_and_push(repo_path, folder_name=None, wrapper_dir=None):
     # Always operate from the git root directory
     result_gitadd = subprocess.run(['git', 'add', f'{wrapper_dir}'], cwd=repo_path)
     if result_gitadd.returncode == 0:
-        print(f"Successfully GIT ADDed to origin/main.")
+        print(f"Successful GIT ADD to origin/main.")
+        print(result_gitadd)
+        print(" ")
     else:
         print(f"Error GIT ADD to origin/main:")
         print(result_gitadd)
+        print(" ")
     
     folder_info = f" from folder '{folder_name}'" if folder_name else ""
     commit_message = f"Backed up {folder_info} - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
     print(f"repo_path:{repo_path}, folder_name:{folder_name}, commit_message:{commit_message}")
     
     result_gitcommit = subprocess.run(['git', 'commit', '-m', commit_message], cwd=repo_path, capture_output=True, text=True)
-    print("past git commit")
     if result_gitcommit.returncode == 0:
-        print(f"Successfully COMMITed to origin/main.")
-    else:
-        print(f"Error COMMITing to origin/main:")
+        print(f"Successful GIT COMMIT to origin/main.")
         print(result_gitcommit)
+        print(" ")
+    else:
+        print(f"Error GIT COMMIT to origin/main:")
+        print(result_gitcommit)
+        print(" ")
     
     if result_gitcommit.returncode == 0:
 	    # Try to pull and rebase before pushing
@@ -183,10 +188,13 @@ def commit_and_push(repo_path, folder_name=None, wrapper_dir=None):
 	    result_push = subprocess.run(['git', 'push', 'origin', 'main'], cwd=repo_path, capture_output=True, text=True)
 	    
 	    if result_push.returncode == 0:
-	        print("Successfully pushed to origin/main.")
+	        print("Successful GIT PUSH to origin/main.")
+	        print(result_push)
+	        print(" ")
 	    else:
-	        print("Error pushing to origin/main:")
-	        print(result_push.stderr)
+	        print("Error GIT PUSH to origin/main:")
+	        print(result_push)
+	        print(" ")
 	        # Optionally, try force push if regular push fails
 	        # result = subprocess.run(['git', 'push', '-f', 'origin', 'main'], cwd=repo_path, capture_output=True, text=True)
     else:
