@@ -1,5 +1,5 @@
 <div><b>Creation Date:</b> Thursday, November 7, 2024 at 9:12:50 PM<br></div>
-<div><b>Modification Date:</b> Sunday, November 24, 2024 at 3:23:23 PM<br></div>
+<div><b>Modification Date:</b> Sunday, November 24, 2024 at 3:26:14 PM<br></div>
 <div><h1>Test with image</h1></div>
 <div><br></div>
 <div>Below is an image of a cute sub-ghost</div>
@@ -8,7 +8,4 @@
 <div><br></div>
 <div><br></div>
 <div>brought to you by the ghosts beneath the ghosts. </div>
-<div><br></div>
-<div><br></div>
-<div>Sfdksvfchjsdvb</div>
 
