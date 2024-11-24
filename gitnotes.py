@@ -448,6 +448,7 @@ def process_applescript(applescript):
             check=True  # This will raise CalledProcessError if osascript fails
         )
         
+        ## Set the applescript blank so process_applescript can be used repeatedly
         applescript = ""
         
         # Check for any stderr output
@@ -468,13 +469,48 @@ def process_applescript(applescript):
 
 
 
+def set_maxnotes_to_foldernotecount(folder=None):
+
+    if folder:
+        print(f"set_maxnotes_to_foldernotecount folder: {folder}")
+        # Properly escape quotes in folder name for AppleScript
+        folder_escaped = folder.replace('"', '\\"')
+        
+        applescript_notecount = f'''
+        tell application "Notes"
+            set targetAccount to "iCloud"
+            tell account targetAccount
+                if length of "{folder_escaped if folder_escaped else ''}" > 0 then
+                    try
+                        set folderToCount to folder "{folder_escaped}"
+                        set folderNotes to every note in folderToCount
+                        set folderNoteCount to (count of folderNotes)
+                        return folderNoteCount
+                    on error
+                        log "Folder {folder_escaped} not found"
+                        return 0
+                    end try
+                end if
+            end tell
+         end tell
+        '''
+        
+        result,output_count = process_applescript(applescript_notecount)
+        return int(output_count)
+        
+    else:
+        print("No folder set. ToDo: work thru defaults flow.")
+
+
+
+
 ##### Describe this function
 
 def main():
     parser = argparse.ArgumentParser(description='Export Apple Notes to GitHub')
     parser.add_argument('--folder', type=str, default='',
                       help='Specific Notes folder to export. (default: all folders)')
-    parser.add_argument('--max-notes', type=int,
+    parser.add_argument('--max-notes', type=int, default=0,
                       help=f'Maximum number of notes to process. (default: all notes)')
     parser.add_argument('--batch-size', type=int,
     				  default=DEFAULT_BATCH_SIZE,
@@ -510,8 +546,17 @@ def main():
     setup_git_repo(args.export_path, args.github_url)
     
     
-    """" Process in a loop of batches"""
-    loop_count = math.ceil(args.max_notes / args.batch_size)
+    
+    ''' if not max_notes, get a notecount value based on folder name '''
+    if args.max_notes == 0:
+        notes_to_process = set_maxnotes_to_foldernotecount(folder=args.folder)
+    else:
+        notes_to_process = args.max_notes
+    
+    print(f"notes_to_process {notes_to_process}")
+    
+    ''' Process in a loop of batches'''
+    loop_count = math.ceil(notes_to_process / args.batch_size)
     for x in range(1,loop_count+1): 
         print(f"---------------------------")
         print(f"Begin export of Notes with batch {x} of {loop_count}")
@@ -519,15 +564,15 @@ def main():
         
         
         if loop_count == 1:
-            notestoexport = args.max_notes
+            notes_to_export = notes_to_process
         else:
-            notestoexport = args.batch_size
+            notes_to_export = args.batch_size
         
         notes_processed = 0
         notes_processed = export_notes_to_markdown(
             args.export_path,
             args.folder,
-            notestoexport,
+            notes_to_export,
             args.wrapper_dir
         )
         
@@ -542,7 +587,7 @@ def main():
         ## if notes were process to git, then create the audit trail and move the notes
         if notes_processed > 0:
             print(f"NOTES PROCESSED > 0: {notes_processed}")
-            print(f"notestoexport {notestoexport}")
+            print(f"notes_to_export {notes_to_export}")
             processednotes_data = export_notes_metadata(
                 output_file=args.output_file,
                 folder=args.folder,
@@ -558,7 +603,7 @@ def main():
             move_result = move_processed_notes(
                 folder_source=args.folder,
                 folder_dest=f"{args.folder}{DEFAULT_PROCESSED_FOLDER_ENDING}",
-                max_notes=notestoexport
+                max_notes=notes_to_export
             )
             print(f"--------------------------------")
             print(f"     CSV JOB COMPLETED!")
