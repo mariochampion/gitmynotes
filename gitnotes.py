@@ -546,7 +546,7 @@ def main():
             processednotes_data = export_notes_metadata(
                 output_file=args.output_file,
                 folder=args.folder,
-                max_notes=notestoexport,
+                max_notes=notes_processed,
                 newline_delimiter=args.newline_delimiter
             )
         else:
