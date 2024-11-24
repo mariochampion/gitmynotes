@@ -165,29 +165,33 @@ def commit_and_push(repo_path, folder_name=None, wrapper_dir=None):
     commit_message = f"Backed up {folder_info} - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
     print(f"repo_path:{repo_path}, folder_name:{folder_name}, commit_message:{commit_message}")
     
-    result_gitcommit = subprocess.run(['git', 'commit', '-m', commit_message], cwd=repo_path)
+    result_gitcommit = subprocess.run(['git', 'commit', '-m', commit_message], cwd=repo_path, capture_output=True, text=True)
     print("past git commit")
     if result_gitcommit.returncode == 0:
         print(f"Successfully COMMITed to origin/main.")
     else:
         print(f"Error COMMITing to origin/main:")
-        print(result_gitcommit)
+        print(result_gitcommit.stderr)
     
-    # Try to pull and rebase before pushing
-    try:
-        subprocess.run(['git', 'pull', '--rebase', 'origin', 'main'], cwd=repo_path)
-    except:
-        print("No remote changes to pull")
-    
-    result = subprocess.run(['git', 'push', 'origin', 'main'], cwd=repo_path, capture_output=True, text=True)
-    
-    if result.returncode == 0:
-        print("Successfully pushed to origin/main.")
+    if result_gitcommit.returncode == 0:
+	    # Try to pull and rebase before pushing
+	    try:
+	        subprocess.run(['git', 'pull', '--rebase', 'origin', 'main'], cwd=repo_path, capture_output=True, text=True)
+	    except:
+	        print("No remote changes to pull")
+	    
+	    result_push = subprocess.run(['git', 'push', 'origin', 'main'], cwd=repo_path, capture_output=True, text=True)
+	    
+	    if result_push.returncode == 0:
+	        print("Successfully pushed to origin/main.")
+	    else:
+	        print("Error pushing to origin/main:")
+	        print(result_push.stderr)
+	        # Optionally, try force push if regular push fails
+	        # result = subprocess.run(['git', 'push', '-f', 'origin', 'main'], cwd=repo_path, capture_output=True, text=True)
     else:
-        print("Error pushing to origin/main:")
-        print(result.stderr)
-        # Optionally, try force push if regular push fails
-        # result = subprocess.run(['git', 'push', '-f', 'origin', 'main'], cwd=repo_path, capture_output=True, text=True)
+        print(f"Did not PUSH to origin/main:")
+        print(" ")
 
 
 
