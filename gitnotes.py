@@ -300,7 +300,9 @@ def export_notes_metadata(output_file=None, folder=None, max_notes=None, newline
         
         notes_data.append([folder, title, formatted_date, quoted_title, current_datetime])
         
-        # Write to CSV
+    # Write to CSV
+    print("-------  NOTES DATA -----------	-")
+    print(f"notes_data {notes_data}")    
     mode = 'a' if os.path.exists(output_file) else 'w'
     with open(output_file, mode, newline='', encoding='utf-8') as f:
         writer = csv.writer(f)
@@ -329,7 +331,7 @@ def move_processed_notes(folder_source, folder_dest, max_notes):
         print(f"Failed: {message}")
     
     
-    print(f"Now to move {max_notes} notes from '{folder_source}' to '{folder_dest}'")
+    print(f"Now to move up to {max_notes} notes from '{folder_source}' to '{folder_dest}'")
     
     # Escape any quotes in folder names
     folder_source_escaped = folder_source.replace('"', '\\"')
@@ -509,6 +511,7 @@ def main():
         else:
             notestoexport = args.batch_size
         
+        notes_processed = 0
         notes_processed = export_notes_to_markdown(
             args.export_path,
             args.folder,
@@ -529,9 +532,11 @@ def main():
             processednotes_data = export_notes_metadata(
                 output_file=args.output_file,
                 folder=args.folder,
-                max_notes=args.max_notes,
+                max_notes=notestoexport,
                 newline_delimiter=args.newline_delimiter
             )
+        else:
+            processednotes_data = 0	
             
             
             
@@ -539,7 +544,7 @@ def main():
             move_result = move_processed_notes(
                 folder_source=args.folder,
                 folder_dest=f"{args.folder}{DEFAULT_PROCESSED_FOLDER_ENDING}",
-                max_notes=args.max_notes
+                max_notes=notestoexport
             )
             print(f"--------------------------------")
             print(f"     CSV JOB COMPLETED!")
