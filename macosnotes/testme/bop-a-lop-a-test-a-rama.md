@@ -1,5 +1,5 @@
 <div><b>Creation Date:</b> Tuesday, November 19, 2024 at 6:44:29 PM<br></div>
-<div><b>Modification Date:</b> Sunday, November 24, 2024 at 3:23:13 PM<br></div>
+<div><b>Modification Date:</b> Sunday, November 24, 2024 at 3:34:31 PM<br></div>
 <div><h1>Bop a lop a test a rama</h1></div>
 <div><br></div>
 <div><br></div>
@@ -16,11 +16,5 @@
 <li>sdjkfghjdgfudgf</li>
 </ul>
 <div><br></div>
-<div><span style="font-size: 22px">Ergrfvgretbvertbv</span><br></div>
-<div>Rev. Yiryfiueryf iuer ft</div>
-<div><br></div>
-<div>And now an update</div>
-<div><br></div>
-<div>11</div>
-<div>Sudsasas</div>
+<div><span style="font-size: 22px">adsfdsfds</span></div>
 
