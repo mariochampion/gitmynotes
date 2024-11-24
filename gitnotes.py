@@ -215,6 +215,9 @@ def export_notes_metadata(output_file=None, folder=None, max_notes=None, newline
         max_notes (int): Maximum number of notes to export (None for all notes)
         newline_delimiter (str): Default newline delimiter (|||)
     """
+    print(f"INSIDE export_notes_metadata. max_notes: {max_notes}")
+    print(" ")
+    
     # AppleScript to get notes information
     
     applescript = '''
@@ -272,7 +275,7 @@ def export_notes_metadata(output_file=None, folder=None, max_notes=None, newline
         return noteList
     end tell
     '''
-    
+    print("about to hit process_applescript()")
     result,output = process_applescript(applescript)
     
     # Parse the output
@@ -538,6 +541,8 @@ def main():
             
         ## if notes were process to git, then create the audit trail and move the notes
         if notes_processed > 0:
+            print(f"NOTES PROCESSED > 0: {notes_processed}")
+            print(f"notestoexport {notestoexport}")
             processednotes_data = export_notes_metadata(
                 output_file=args.output_file,
                 folder=args.folder,
