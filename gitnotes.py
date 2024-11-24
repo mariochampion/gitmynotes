@@ -310,6 +310,7 @@ def export_notes_metadata(output_file=None, folder=None, max_notes=None, newline
         
     # Write to CSV
     print("-------  NOTES DATA -----------	-")
+    print(f"output_file {output_file}")
     print(f"notes_data {notes_data}")    
     mode = 'a' if os.path.exists(output_file) else 'w'
     with open(output_file, mode, newline='', encoding='utf-8') as f:
