@@ -171,7 +171,7 @@ def commit_and_push(repo_path, folder_name=None, wrapper_dir=None):
         print(f"Successfully COMMITed to origin/main.")
     else:
         print(f"Error COMMITing to origin/main:")
-        print(result_gitcommit.stderr)
+        print(result_gitcommit)
     
     if result_gitcommit.returncode == 0:
 	    # Try to pull and rebase before pushing
