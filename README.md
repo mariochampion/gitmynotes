@@ -144,6 +144,8 @@ options:
 
 * add colors!
 
+* woops, should work when maxnotes NOT specified. just batching through LL notes in folder
+
 * create config file?
 
 *  -- PRO -- 
