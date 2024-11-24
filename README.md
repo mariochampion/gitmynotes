@@ -133,6 +133,7 @@ options:
 
 
 ## to do
+
 * write real instructions
 
 * create a github for non-devs one-pager? video? 
@@ -150,7 +151,7 @@ greater than batchnotes AND greater than folder notecount there is BUG!
 
 * create config file?
 
-* PRO? 
+*  -- PRO -- 
 
 * allow comma separated list of folders at once
 
