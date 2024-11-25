@@ -118,8 +118,10 @@ options:
                         [str] Output CSV file path (default: '<folder>.csv)'
   --newline-delimiter NEWLINE_DELIMITER
                         [str] Default CSV newline delimiter (default: '|||')
-  --audit_file_ending AUDIT_FILE_ENDING
+  --audit-file-ending AUDIT_FILE_ENDING
                         [str] The audit file extension (default: '.csv')
+  --empty-source-folder EMPTY_SOURCE_FOLDER
+                        [str] If 'True', do not move backup notes from '<folder>___GitMyNotes' back into '<folder>' until 0 notes remain in source <folder>. If 'False', move the notes back to source <folder> after max_notes reached, even if other notes remain un-backed-up in source <folder>. (default: 'True')
 
 ```
 
