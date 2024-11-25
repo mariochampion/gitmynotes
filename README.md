@@ -144,8 +144,6 @@ options:
 
 * add colors!
 
-* woops, should work when maxnotes NOT specified. just batching through LL notes in folder
-
 * create config file?
 
 * do not fail entire job when this applescript error occurs: `execution error: Notes got an error: An error of type 100002 has occurred. (100002)`
