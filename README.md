@@ -127,9 +127,8 @@ options:
 
 ## to do
 
-* Massive rename... to what? gitmynotes
-
 * create self executing mac shell command to wrap around python script. 
+
 * oss users trigger/set this up via cron or... automator?
 
 * write real instructions
@@ -141,8 +140,6 @@ options:
 * allow optionally `git push` the audit file as well
 
 * get someone to write tests!!
-
-* add link at end to githb repo and audit files
 
 * create config file?
 
