@@ -65,14 +65,29 @@ DEFAULT_NOTES_OUTERDIR = "macosnotes"
 def setup_git_repo(repo_path, DEFAULT_GITHUB_URL):
     """Initialize Git repo and set remote if not already set up"""
     if not os.path.exists(os.path.join(repo_path, '.git')):
-        subprocess.run(['git', 'init'], cwd=repo_path)
-        subprocess.run(['git', 'remote', 'add', 'origin', DEFAULT_GITHUB_URL], cwd=repo_path)
-        subprocess.run(['git', 'branch', '-m', 'main'], cwd=repo_path)
+        try:
+            subprocess.run(['git', 'init'], cwd=repo_path)
+            colorprint(textcolor="green",msg=f"SUCCESS: GIT INIT with {cwd}")
+        except:
+            colorprint(textcolor="red",msg=f"ERROR: Did not GIT INIT {cwd}")
+        try:
+            subprocess.run(['git', 'remote', 'add', 'origin', DEFAULT_GITHUB_URL], cwd=repo_path)
+            colorprint(textcolor="green",msg=f"SUCCESS: GIT REMOTE ADD ORIGIN with {cwd}")
+        except:
+            colorprint(textcolor="RED",msg=f"ERROR: Did not GIT REMOTE ADD ORIGIN with {cwd}")
+        try:
+            subprocess.run(['git', 'branch', '-m', 'main'], cwd=repo_path)
+            colorprint(textcolor="green",msg=f"SUCCESS: GIT BRANCH -M MAIN with {cwd}")
+        except:
+            colorprint(textcolor="red",msg=f"ERROR: GIT BRANCH -M MAIN with {cwd}")
+            
+            
         # Add this to handle remote repository state
         try:
             subprocess.run(['git', 'pull', 'origin', 'main'], cwd=repo_path)
+            colorprint(textcolor="green",msg=f"Remote content pulled")
         except:
-            print("No remote content to pull")
+            colorprint(textcolor="magenta",msg=f"No remote content to pull")
 
 
 
@@ -200,7 +215,7 @@ def commit_and_push(repo_path, folder_name=None, wrapper_dir=None):
             # Optionally, try force push if regular push fails
 	        # result = subprocess.run(['git', 'push', '-f', 'origin', 'main'], cwd=repo_path, capture_output=True, text=True)
     else:
-        colorprint(textcolor="red",msg=f"Did not PUSH to origin/main:")
+        colorprint(textcolor="red",msg=f"No commit so no GIT PUSH to origin/main:")
         #print(" ")
 
 
@@ -516,7 +531,7 @@ def main():
     parser.add_argument('--max-notes', type=int, default=0,
                       help=f'Maximum number of notes to process. (default: all notes)')
     parser.add_argument('--batch-size', type=int,
-    				  default=DEFAULT_BATCH_SIZE,
+                      default=DEFAULT_BATCH_SIZE,
                       help=f'The number of notes to convert, and git add/commit/push per loop. Especially useful for initial GitNotes runs.(default: {DEFAULT_BATCH_SIZE})')  
     parser.add_argument('--export-path', type=str, 
                       default=os.path.expanduser(f"{DEFAULT_EXPORT_PATH}"),
@@ -542,8 +557,15 @@ def main():
     args = parser.parse_args()
     
     
-    colorprint(textcolor='cyan', msg=f"        Welcome, let's get started!", addseparator=True)
-    
+    colorprint(textcolor='cyan', msg=f"        Welcome, you GitNotes superfan!", addseparator=True)
+    if args.folder:
+        colorprint(textcolor='cyan', msg=f"  - folder: {args.folder}")
+    if args.max_notes:
+        colorprint(textcolor='cyan', msg=f"  - max-notes: {args.max_notes}")
+    if args.github_url:
+        colorprint(textcolor='cyan', msg=f"  - repo: {args.github_url}")
+        
+        
     os.makedirs(args.export_path, exist_ok=True)
     if args.folder:
         export_path_w_folder = f"{args.export_path}/{args.wrapper_dir}/{args.folder}"
