@@ -539,7 +539,7 @@ def main():
     args = parser.parse_args()
     
     
-    colorprint(textcolor='yellow', msg="Welcome, let's get started!", addseparator=True)
+    colorprint(textcolor='cyan', msg="Welcome, let's get started!", addseparator=True)
     
     os.makedirs(args.export_path, exist_ok=True)
     if args.folder:
