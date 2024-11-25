@@ -146,11 +146,15 @@ options:
 
 * create config file?
 
+* if not foldername, confirm that you want to do Notes, with count of X
+
 * do not fail entire job when this applescript error occurs: `execution error: Notes got an error: An error of type 100002 has occurred. (100002)`
 
 *  -- PRO -- 
 
 * allow comma separated list of folders at once
+
+* command to get list of folders and counts so you can decide what to do
 
 * pre-map some folders to some github repos
 
