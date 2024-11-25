@@ -83,13 +83,13 @@ def export_notes_to_markdown(export_path, folder_name=None, max_notes=None, wrap
     
     ## tell the people some information
     if (max_notes > 0 and folder_name !="" and wrapper_dir !=""):
-        print(f"Starting export of {max_notes} Notes from '{folder_name}' into '{wrapper_dir}/{folder_name}'...")
+        colorprint(textcolor="green",msg=f"Starting export of {max_notes} Notes from '{folder_name}' into '{wrapper_dir}/{folder_name}'...")
     elif (max_notes > 0 and folder_name !="" and wrapper_dir==None):
-        print(f"Starting export of {max_notes} Notes from '{folder_name}'...")
+        colorprint(textcolor="green",msg=f"Starting export of {max_notes} Notes from '{folder_name}'...")
     elif (max_notes > 0 and folder_name==None and wrapper_dir==None):
-        print(f"Starting export of {max_notes} Notes...")
+        colorprint(textcolor="green",msg=f"Starting export of {max_notes} Notes...")
     elif (max_notes==None and folder_name==None and wrapper_dir==None):
-        print(f"Starting export of all Notes...")
+        colorprint(textcolor="green",msg=f"Starting export of all Notes...")
     
     
     applescript = f'''
@@ -156,50 +156,52 @@ def commit_and_push(repo_path, folder_name=None, wrapper_dir=None):
     # Always operate from the git root directory
     result_gitadd = subprocess.run(['git', 'add', f'{wrapper_dir}'], cwd=repo_path)
     if result_gitadd.returncode == 0:
-        print(f"Successful GIT ADD to origin/main.")
-        print(result_gitadd)
-        print(" ")
+        colorprint(textcolor="green",msg=f"Successful GIT ADD to origin/main.")
+        #print(result_gitadd)
+        #print(" ")
     else:
-        print(f"Error GIT ADD to origin/main:")
+        colorprint(textcolor="red",msg=f"Error GIT ADD to origin/main:")
         print(result_gitadd)
-        print(" ")
+        #print(" ")
     
     folder_info = f" from folder '{folder_name}'" if folder_name else ""
     commit_message = f"Backed up {folder_info} - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
-    print(f"repo_path:{repo_path}, folder_name:{folder_name}, commit_message:{commit_message}")
+    colorprint(textcolor="white",msg=f" - repo_path:{repo_path}")
+    colorprint(textcolor="white",msg=f" - folder_name:{folder_name}")
+    colorprint(textcolor="white",msg=f" - commit_message:{commit_message}")
     
     result_gitcommit = subprocess.run(['git', 'commit', '-m', commit_message], cwd=repo_path, capture_output=True, text=True)
     if result_gitcommit.returncode == 0:
-        print(f"Successful GIT COMMIT to origin/main.")
-        print(result_gitcommit)
-        print(" ")
+        colorprint(textcolor="green",msg=f"Successful GIT COMMIT to origin/main.")
+        #print(result_gitcommit)
+        #print(" ")
     else:
-        print(f"Error GIT COMMIT to origin/main:")
+        colorprint(textcolor="red",msg=f"Error GIT COMMIT to origin/main:")
         print(result_gitcommit)
-        print(" ")
+        #print(" ")
     
     if result_gitcommit.returncode == 0:
-	    # Try to pull and rebase before pushing
-	    try:
-	        subprocess.run(['git', 'pull', '--rebase', 'origin', 'main'], cwd=repo_path, capture_output=True, text=True)
-	    except:
-	        print("No remote changes to pull")
-	    
-	    result_push = subprocess.run(['git', 'push', 'origin', 'main'], cwd=repo_path, capture_output=True, text=True)
-	    
-	    if result_push.returncode == 0:
-	        print("Successful GIT PUSH to origin/main.")
-	        print(result_push)
-	        print(" ")
-	    else:
-	        print("Error GIT PUSH to origin/main:")
-	        print(result_push)
-	        print(" ")
-	        # Optionally, try force push if regular push fails
+        # Try to pull and rebase before pushing
+        try:
+            subprocess.run(['git', 'pull', '--rebase', 'origin', 'main'], cwd=repo_path, capture_output=True, text=True)
+        except:
+            colorprint(textcolor="magenta",msg=f"No remote changes to pull")
+        
+        result_push = subprocess.run(['git', 'push', 'origin', 'main'], cwd=repo_path, capture_output=True, text=True)
+        
+        if result_push.returncode == 0:
+            colorprint(textcolor="green",msg=f"Successful GIT PUSH to origin/main.")
+            #print(result_push)
+            #print(" ")
+        else:
+            colorprint(textcolor="red",msg=f"Error GIT PUSH to origin/main:")
+            print(result_push)
+           # print(" ")
+            # Optionally, try force push if regular push fails
 	        # result = subprocess.run(['git', 'push', '-f', 'origin', 'main'], cwd=repo_path, capture_output=True, text=True)
     else:
-        print(f"Did not PUSH to origin/main:")
-        print(" ")
+        colorprint(textcolor="red",msg=f"Did not PUSH to origin/main:")
+        #print(" ")
 
 
 
@@ -215,8 +217,8 @@ def export_notes_metadata(output_file=None, folder=None, max_notes=None, newline
         max_notes (int): Maximum number of notes to export (None for all notes)
         newline_delimiter (str): Default newline delimiter (|||)
     """
-    print(f"INSIDE export_notes_metadata. max_notes: {max_notes}")
-    print(" ")
+    #print(f"INSIDE export_notes_metadata. max_notes: {max_notes}")
+    #print(" ")
     
     # AppleScript to get notes information
     
@@ -275,7 +277,7 @@ def export_notes_metadata(output_file=None, folder=None, max_notes=None, newline
         return noteList
     end tell
     '''
-    print("about to hit process_applescript()")
+    #print("about to hit process_applescript()")
     result,output = process_applescript(applescript)
     
     # Parse the output
@@ -306,15 +308,16 @@ def export_notes_metadata(output_file=None, folder=None, max_notes=None, newline
         except ValueError:
             formatted_date = mod_date
         
-        print(f"APPENDING: {folder}, {title}, {formatted_date}, {quoted_title}, {current_datetime} to {output_file}")
+        colorprint(textcolor="white",msg=f"APPENDING to {output_file}")
+        colorprint(textcolor="white",msg=f" - {folder}, {title}, {formatted_date}, {quoted_title}, {current_datetime}")
         print(" ")
         
         notes_data.append([folder, title, formatted_date, quoted_title, current_datetime])
         
     # Write to CSV
-    print("-------  NOTES DATA -----------	-")
-    print(f"output_file {output_file}")
-    print(f"notes_data {notes_data}")    
+    #print("-------  NOTES DATA -----------	-")
+    #print(f"output_file {output_file}")
+    #print(f"notes_data {notes_data}")    
     mode = 'a' if os.path.exists(output_file) else 'w'
     with open(output_file, mode, newline='', encoding='utf-8') as f:
         writer = csv.writer(f)
@@ -323,7 +326,7 @@ def export_notes_metadata(output_file=None, folder=None, max_notes=None, newline
         #print(f"notes_data {notes_data}")
         writer.writerows(notes_data)
         
-    print(f"Successfully exported {len(notes_data)} notes to {output_file}")
+    colorprint(textcolor="green",msg=f"Successfully exported {len(notes_data)} notes to {output_file}", addseparator=True)
     
     return notes_data
 
@@ -338,9 +341,9 @@ def move_processed_notes(folder_source, folder_dest, max_notes):
     # create_gitnotes_folder(folder_dest) so we have a place to move notes
     success, message = create_gitnotes_folder(folder_dest)
     if success:
-        print(f"Success: {message}")
+        colorprint(textcolor="green",msg=f"Success: {message}")
     else:
-        print(f"Failed: {message}")
+        colorprint(textcolor="red",msg=f"Failed: {message}")
     
     
     print(f"Now to move up to {max_notes} notes from '{folder_source}' to '{folder_dest}'")
@@ -388,7 +391,7 @@ def move_processed_notes(folder_source, folder_dest, max_notes):
     '''
     
     result_move, output_move = process_applescript(applescript_movenote)
-    print(f"applescript_movenote result: {result_move} {output_move}")
+    #print(f"applescript_movenote result: {result_move} {output_move}")
     return result_move
    
 
@@ -406,7 +409,7 @@ def create_gitnotes_folder(folder: str) -> Tuple[bool, str]:
     Returns:
         Tuple[bool, str]: (success status, message/error details)
     """
-    print(f"Attempting to create Notes folder: {folder}")
+    colorprint(textcolor="white",msg=f"Attempting to create Notes folder: {folder}")
     
     # Properly escape quotes in folder name for AppleScript
     folder_escaped = folder.replace('"', '\\"')
@@ -437,7 +440,7 @@ def create_gitnotes_folder(folder: str) -> Tuple[bool, str]:
 
 def process_applescript(applescript):
     ''' generic function to process applescript and return a result object'''
-    print(f"Processing AppleScript...")
+    colorprint(textcolor='white', msg=f"Processing AppleScript...")
     print(" ")
     
     try:
@@ -472,7 +475,7 @@ def process_applescript(applescript):
 def set_maxnotes_to_foldernotecount(folder=None):
 
     if folder:
-        print(f"set_maxnotes_to_foldernotecount folder: {folder}")
+        colorprint(textcolor="magenta",msg=f"No max-notes set. Using count of notes in folder: {folder}")
         # Properly escape quotes in folder name for AppleScript
         folder_escaped = folder.replace('"', '\\"')
         
@@ -539,7 +542,7 @@ def main():
     args = parser.parse_args()
     
     
-    colorprint(textcolor='cyan', msg="Welcome, let's get started!", addseparator=True)
+    colorprint(textcolor='cyan', msg=f"        Welcome, let's get started!", addseparator=True)
     
     os.makedirs(args.export_path, exist_ok=True)
     if args.folder:
@@ -556,14 +559,12 @@ def main():
     else:
         notes_to_process = args.max_notes
     
-    print(f"notes_to_process {notes_to_process}")
+    colorprint(textcolor="magenta",msg=f"Notes to process: {notes_to_process}")
     
     ''' Process in a loop of batches'''
     loop_count = math.ceil(notes_to_process / args.batch_size)
     for x in range(1,loop_count+1): 
-        print(f"---------------------------")
-        print(f"Begin export of Notes with batch {x} of {loop_count}")
-        print(f" ")
+        colorprint(textcolor="green",msg=f"Begin export of Notes with batch {x} of {loop_count}", addseparator=True)
         
         
         if loop_count == 1:
@@ -580,17 +581,17 @@ def main():
         )
         
         if notes_processed > 0:
-            print(f"Processed {notes_processed} notes")
-            print(f"---------------------------")
+            colorprint(textcolor="white",msg=f"Processed {notes_processed} notes")
+            #print(f"------------------------------------")
             commit_and_push(args.export_path, args.folder, args.wrapper_dir)
         else:
-            print("No notes were processed, skipping git commit")
-            print(f"---------------------------")
+            colorprint(textcolor="magenta",msg=f"No notes were processed, skipping git commit")
+            #print(f"------------------------------------")
             
         ## if notes were process to git, then create the audit trail and move the notes
         if notes_processed > 0:
-            print(f"NOTES PROCESSED > 0: {notes_processed}")
-            print(f"notes_to_export {notes_to_export}")
+            #print(f"NOTES PROCESSED > 0: {notes_processed}")
+            colorprint(textcolor="magenta",msg=f"Notes to export: {notes_to_export}")
             processednotes_data = export_notes_metadata(
                 output_file=args.output_file,
                 folder=args.folder,
@@ -608,22 +609,22 @@ def main():
                 folder_dest=f"{args.folder}{DEFAULT_PROCESSED_FOLDER_ENDING}",
                 max_notes=notes_to_export
             )
-            print(f"--------------------------------")
-            print(f"     CSV JOB COMPLETED!")
-            print(f"--------------------------------")
+            #print(f"--------------------------------")
+            colorprint(textcolor="green",msg=f"     CSV JOB COMPLETED!", addseparator=True)
+            #print(f"--------------------------------")
         
         else:
             move_result = 0
-            print(f"No Notes to Move")
+            colorprint(textcolor="magenta",msg=f"No Notes to Move")
         
         if move_result:
-            print(f"================================")
-            print(f" MOVE to {args.folder}{DEFAULT_PROCESSED_FOLDER_ENDING} completed")
-            print(f"================================")
+            #print(f"================================")
+            colorprint(textcolor="green",msg=f" MOVE to {args.folder}{DEFAULT_PROCESSED_FOLDER_ENDING} completed", addseparator=True)
+            #print(f"================================")
         else:
-            print(f"================================")
-            print(f"  !!! FAILED to MOVE notes !!!")
-            print(f"================================")
+            #print(f"================================")
+            colorprint(textcolor="red",msg=f"  !!! FAILED to MOVE notes !!!", addseparator=True)
+            #print(f"================================")
             
             
             
@@ -666,13 +667,13 @@ def colorprint(textcolor='white', msg=None, addseparator=False, textdefault='whi
     default_color = getattr(color, textdefault)
     
     if addseparator:
-        print(selected_color + "--------------------------------" + default_color)
+        print(selected_color + "------------------------------------------------" + default_color)
     
     # now the msg
     print(selected_color + f"{msg}" + default_color)
     
     if addseparator:
-        print(selected_color + "--------------------------------" + default_color)
+        print(selected_color + "------------------------------------------------" + default_color)
     
     print(f" ")
     return
