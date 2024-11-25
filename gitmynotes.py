@@ -173,27 +173,32 @@ def commit_and_push(repo_path, folder_name=None, wrapper_dir=None):
     if result_gitadd.returncode == 0:
         colorprint(textcolor="green",msg=f"Successful GIT ADD to origin/main.")
         #print(result_gitadd)
-        #print(" ")
+
     else:
         colorprint(textcolor="red",msg=f"Error GIT ADD to origin/main:")
         print(result_gitadd)
-        #print(" ")
     
     folder_info = f" from folder '{folder_name}'" if folder_name else ""
     commit_message = f"Backed up {folder_info} - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
-    colorprint(textcolor="white",msg=f" - repo_path:{repo_path}")
-    colorprint(textcolor="white",msg=f" - folder_name:{folder_name}")
-    colorprint(textcolor="white",msg=f" - commit_message:{commit_message}")
-    
+        
     result_gitcommit = subprocess.run(['git', 'commit', '-m', commit_message], cwd=repo_path, capture_output=True, text=True)
     if result_gitcommit.returncode == 0:
         colorprint(textcolor="green",msg=f"Successful GIT COMMIT to origin/main.")
-        #print(result_gitcommit)
-        #print(" ")
+        commit_print_msg = f'''    - repo path: {repo_path}
+    - folder name:{folder_name}
+    - commit message:{commit_message}
+    '''
+        colorprint(textcolor="white",msg=f"{commit_print_msg}")
     else:
         colorprint(textcolor="red",msg=f"Error GIT COMMIT to origin/main:")
+        commit_print_msg = f'''
+    - repo path: {repo_path}
+    - folder name:{folder_name}
+    - commit message:{commit_message}
+    '''
+        colorprint(textcolor="white",msg=f"{commit_print_msg}")
         print(result_gitcommit)
-        #print(" ")
+
     
     if result_gitcommit.returncode == 0:
         # Try to pull and rebase before pushing
@@ -456,7 +461,6 @@ def create_gitnotes_folder(folder: str) -> Tuple[bool, str]:
 def process_applescript(applescript):
     ''' generic function to process applescript and return a result object'''
     colorprint(textcolor='white', msg=f"Processing AppleScript...")
-    print(" ")
     
     try:
         result = subprocess.run(
@@ -528,16 +532,16 @@ def build_initial_msg(folder=None, max_notes=None, export_path=None, github_url=
 
 '''
     if folder:
-        initial_msg += f'''  - folder: {folder}
+        initial_msg += f'''    - folder: {folder}
 '''
     if max_notes:
-        initial_msg += f'''  - max-notes: {max_notes}
+        initial_msg += f'''    - max-notes: {max_notes}
 '''
     if export_path:
-        initial_msg += f'''  - export to: {export_path}
+        initial_msg += f'''    - export to: {export_path}
 '''
     if github_url:
-        initial_msg += f'''  - GitHub repo: {github_url}
+        initial_msg += f'''    - GitHub repo: {github_url}
 '''
     
     return initial_msg
@@ -603,12 +607,12 @@ def main():
     else:
         notes_to_process = args.max_notes
     
-    colorprint(textcolor="magenta",msg=f"Notes to process: {notes_to_process}")
+    colorprint(textcolor="white",msg=f"Notes to process: {notes_to_process}")
     
     ''' Process in a loop of batches'''
     loop_count = math.ceil(notes_to_process / args.batch_size)
     for x in range(1,loop_count+1): 
-        colorprint(textcolor="green",msg=f"Begin export of Notes with batch {x} of {loop_count}", addseparator=True)
+        colorprint(textcolor="cyan",msg=f"Begin export of Notes with batch {x} of {loop_count}", addseparator=True)
         
         
         if loop_count == 1:
@@ -635,7 +639,7 @@ def main():
         ## if notes were process to git, then create the audit trail and move the notes
         if notes_processed > 0:
             #print(f"NOTES PROCESSED > 0: {notes_processed}")
-            colorprint(textcolor="magenta",msg=f"Notes to export to markdown: {notes_to_export}")
+            colorprint(textcolor="white",msg=f"Notes to export to markdown: {notes_to_export}")
             processednotes_data = export_notes_metadata(
                 output_file=args.output_file,
                 folder=args.folder,
