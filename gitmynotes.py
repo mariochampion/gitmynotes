@@ -549,6 +549,29 @@ def build_initial_msg(folder=None, max_notes=None, export_path=None, github_url=
 
 
 
+def build_final_msg(gitnotes_url, audit_file, share_url):
+    # get some values for an initial msg
+    
+    final_msg = f'''    GitMyNotes actions complete!
+
+'''
+    if gitnotes_url:
+        final_msg += f'''    - Check your GitMyNotes: {gitnotes_url}
+'''
+    if audit_file:
+        final_msg += f'''    - Check your audit file: ./{audit_file}
+'''
+    if share_url:
+        final_msg += f'''    - Tell your friends, learn more:
+'''
+    if share_url:
+        final_msg += f'''      http://GitMyNotes.com/share?iam=872g2876g2
+'''
+    
+    return final_msg
+
+
+
 
 ##### Describe this function
 
@@ -680,19 +703,18 @@ def main():
             #print(f"================================")
             
     
+    ## Prep for final msg so user knows what happened
     if args.wrapper_dir:
         final_gitnotes_url = f"{args.github_url}/tree/main/{args.wrapper_dir}/{args.folder}"
     else:
         final_gitnotes_url = f"{args.github_url}/tree/main/{args.folder}"
     
     final_audit_file = f"./{args.folder}{DEFAULT_AUDIT_FILE_ENDING}"
+    share_url = "https://GitMyNotes.com/share?iam=123abc456"
     
-    finalmsg = f'''    GitMyNotes actions complete!
-    Check your GitMyNotes: {final_gitnotes_url}
-    Check the audit file: {final_audit_file}
-    Tell your friends, learn more:
-    http://GitMyNotes.com/share?iam=872g2876g2'''
-    colorprint(textcolor="cyan",msg=f"{finalmsg}", addseparator=True)
+    final_msg = build_final_msg(gitnotes_url=f"{final_gitnotes_url}", audit_file=f"{final_audit_file}", share_url=f"{share_url}")
+    
+    colorprint(textcolor="cyan",msg=f"{final_msg}", addseparator=True)
             
 
 ##### ADD SOME COLORs
