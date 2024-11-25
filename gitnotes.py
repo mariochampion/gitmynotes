@@ -538,6 +538,9 @@ def main():
     
     args = parser.parse_args()
     
+    
+    colorprint(textcolor='yellow', msg="Welcome, let's get started!", addseparator=True)
+    
     os.makedirs(args.export_path, exist_ok=True)
     if args.folder:
         export_path_w_folder = f"{args.export_path}/{args.wrapper_dir}/{args.folder}"
@@ -623,6 +626,59 @@ def main():
             print(f"================================")
             
             
+            
+
+##### ADD SOME COLORs
+# pinched and tweaked from https://github.com/impshum/Multi-Quote/blob/master/run.py
+class color:
+    white, cyan, blue, red, green, yellow, magenta, black, gray, bold = '\033[0m', '\033[96m','\033[94m', '\033[91m','\033[92m','\033[93m','\033[95m', '\033[30m', '\033[30m', "\033[1m"  
+
+
+# maybe add bks, bolds, etc from https://godoc.org/github.com/whitedevops/colors
+class bkcolor:
+  resetall = "\033[0m"
+  default      = "\033[49m"
+  black        = "\033[40m"
+  red          = "\033[41m"
+  green        = "\033[42m"
+  yellow       = "\033[43m"
+  blue         = "\033[44m"
+  magenta      = "\033[45m"
+  cyan         = "\033[46m"
+  lightgray    = "\033[47m"
+  darkgray     = "\033[100m"
+  lightred     = "\033[101m"
+  lightgreen   = "\033[102m"
+  lightyellow  = "\033[103m"
+  lightblue    = "\033[104m"
+  lightmagenta = "\033[105m"
+  lightcyan    = "\033[106m"
+  white        = "\033[107m"
+  
+  
+  
+  
+def colorprint(textcolor='white', msg=None, addseparator=False, textdefault='white', bkcolor=None):
+    '''Pass a NEW color, then a string to print and this function will set msg back to textdefault'''
+    
+    # Get color codes using getattr()
+    selected_color = getattr(color, textcolor)
+    default_color = getattr(color, textdefault)
+    
+    if addseparator:
+        print(selected_color + "--------------------------------" + default_color)
+    
+    # now the msg
+    print(selected_color + f"{msg}" + default_color)
+    
+    if addseparator:
+        print(selected_color + "--------------------------------" + default_color)
+    
+    print(f" ")
+    return
+
+
+
             
 if __name__ == "__main__":
     main()
