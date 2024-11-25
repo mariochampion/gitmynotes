@@ -127,7 +127,7 @@ options:
 
 ## to do
 
-* Massive rename... to what?
+* Massive rename... to what? gitmynotes
 
 * create self executing mac shell command to wrap around python script. 
 * oss users trigger/set this up via cron or... automator?
