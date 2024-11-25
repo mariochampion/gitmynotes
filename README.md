@@ -94,39 +94,32 @@ No one can predict the future. Losing a job or a role shouldn't mean losing your
 ```
 Export Apple MacOS Notes and folders to GitHub repo and folders
 
-usage: gitnotes.py [-h] [--folder FOLDER] [--max-notes MAX_NOTES] [--batch-size BATCH_SIZE]
-                   [--export-path EXPORT_PATH] [--github-url GITHUB_URL] [--wrapper-dir WRAPPER_DIR]
-                   [--ignore-folder IGNORE_FOLDER] [--output-file OUTPUT_FILE] [--newline-delimiter NEWLINE_DELIMITER]
+usage: gitnotes.py [-h] [--folder FOLDER] [--max-notes MAX_NOTES] [--batch-size BATCH_SIZE] [--export-path EXPORT_PATH] [--github-url GITHUB_URL]
+                   [--wrapper-dir WRAPPER_DIR] [--ignore-folder IGNORE_FOLDER] [--output-file OUTPUT_FILE] [--newline-delimiter NEWLINE_DELIMITER]
+                   [--audit_file_ending AUDIT_FILE_ENDING]
 
 
 options:
   -h, --help            show this help message and exit
-  --folder FOLDER       Specific Notes folder to export. (default: all folders)
-  
+  --folder FOLDER       [str] Specific Notes folder to export.(default: 'Notes')
   --max-notes MAX_NOTES
-                        Maximum number of notes to process. (default: all notes)
-  
+                        [int] Maximum number of notes to process. (default: count of all notes)
   --batch-size BATCH_SIZE
-                        The number of notes to convert, and git add/commit/push per loop. Especially useful for
-                        initial GitNotes runs.(default: 10)
-  
+                        [int] The number of notes to convert, and git add/commit/push per loop. Especially useful for initial runs.(default: 10)
   --export-path EXPORT_PATH
-                        Path to export the notes (default: ~/Documents/gitnotes)
-  
+                        [str] Path to export the notes (default: ~/Documents/gitnotes)
   --github-url GITHUB_URL
-                        GitHub repository URL. (default: https://github.com/mariochampion/gitnotes)
-  
+                        [str] GitHub repository URL. (default: https://github.com/mariochampion/gitnotes)
   --wrapper-dir WRAPPER_DIR
-                        Outer directory to hold folders. (default: macosnotes)
-  
+                        [str] Outer directory to hold folders. (default: 'macosnotes')
   --ignore-folder IGNORE_FOLDER
-                        The Notes folder to ignore and not process. (default: ignore)
-  
+                        [str] The Notes folder to ignore and not process. (default: 'ignore')
   --output-file OUTPUT_FILE
-                        Output CSV file path (default: <folder>.csv)
-  
+                        [str] Output CSV file path (default: '<folder>.csv)'
   --newline-delimiter NEWLINE_DELIMITER
-                        Default CSV newline delimiter (default: |||)
+                        [str] Default CSV newline delimiter (default: '|||')
+  --audit_file_ending AUDIT_FILE_ENDING
+                        [str] The audit file extension (default: '.csv')
 
 ```
 
