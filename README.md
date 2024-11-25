@@ -127,15 +127,20 @@ options:
 
 ## to do
 
+* Massive rename... to what?
+
+* create self executing mac shell command to wrap around python script. 
+* oss users trigger/set this up via cron or... automator?
+
 * write real instructions
+
+* allow user to decide to keep <folder>__GitNotes bkup or move back to original
 
 * create a github for non-devs one-pager? video? 
 
 * allow optionally `git push` the audit file as well
 
-* allow user to decide to keep <folder>__GitNotes bkup or move back to original
-
-* add colors!
+* get someone to write tests!!
 
 * add link at end to githb repo and audit files
 
