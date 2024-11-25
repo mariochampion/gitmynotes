@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 ## ===================================================================
-## GitNotes - LICENSE AND CREDITS
+## GitMyNotes - LICENSE AND CREDITS
 ## This app/collection of scripts at https://github.com/mariochampion/gitnotes
 ## released under the Apache License 2.0. (http://www.apache.org/licenses/LICENSE-2.0)
 ##
 ## 
-## GitNotes scripts crafted and copyright 2024 by mario champion (mariochampion.com) 
+## GitMyNotes scripts crafted and copyright 2024 by mario champion (mariochampion.com) 
 ##
 ## please open issues and pull requests and comments
 ## thanks and always remember: this robot loves you. 
@@ -47,8 +47,8 @@ DEFAULT_GITHUB_URL = "https://github.com/mariochampion/gitnotes"
 
 ##.  REQUIRED: LEAVE AS-IS or CHANGE--
 DEFAULT_NOTES_FOLDER = "Notes"
-DEFAULT_PROCESSED_FOLDER_ENDING = "__GitNotes"
-DEFAULT_CSV_NAME = "gitnotes.csv"
+DEFAULT_PROCESSED_FOLDER_ENDING = "__GitMyNotes"
+DEFAULT_CSV_NAME = "gitmynotes.csv"
 DEFAULT_NEWLINE_DELIMITER = "|||"
 
 ##.  OPTIONAL
@@ -353,7 +353,7 @@ def move_processed_notes(folder_source, folder_dest, max_notes):
     ''' Move processed notes into destination folder '''
     
     # if processed_notes exists, then that stage was a success, so next step:
-    # create_gitnotes_folder(folder_dest) so we have a place to move notes
+    # create_gitmynotes_folder(folder_dest) so we have a place to move notes
     success, message = create_gitnotes_folder(folder_dest)
     if success:
         colorprint(textcolor="green",msg=f"Success: {message}")
@@ -676,11 +676,11 @@ def main():
     
     final_audit_file = f"./{args.folder}{DEFAULT_AUDIT_FILE_ENDING}"
     
-    finalmsg = f'''    GitNotes actions complete!
-    Check your GitNotes: {final_gitnotes_url}
+    finalmsg = f'''    GitMyNotes actions complete!
+    Check your GitMyNotes: {final_gitnotes_url}
     Check the audit file: {final_audit_file}
     Tell your friends, learn more:
-    http://GitNotes.com/share?iam=872g2876g2'''
+    http://GitMyNotes.com/share?iam=872g2876g2'''
     colorprint(textcolor="cyan",msg=f"{finalmsg}", addseparator=True)
             
 
