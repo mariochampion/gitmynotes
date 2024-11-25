@@ -323,8 +323,8 @@ def export_notes_metadata(output_file=None, folder=None, max_notes=None, newline
         except ValueError:
             formatted_date = mod_date
         
-        colorprint(textcolor="white",msg=f"APPENDING to {output_file}")
-        colorprint(textcolor="white",msg=f" - {folder}, {title}, {formatted_date}, {quoted_title}, {current_datetime}")
+        colorprint(textcolor="white",msg=f"Adding row to audit file: {output_file}")
+        colorprint(textcolor="white",msg=f" - from Notes folder: '{folder}', Notes title:' {title}', ModDate: '{formatted_date}', Markdown title: '{quoted_title}', Exported Date: '{current_datetime}'")
         print(" ")
         
         notes_data.append([folder, title, formatted_date, quoted_title, current_datetime])
@@ -341,7 +341,7 @@ def export_notes_metadata(output_file=None, folder=None, max_notes=None, newline
         #print(f"notes_data {notes_data}")
         writer.writerows(notes_data)
         
-    colorprint(textcolor="green",msg=f"SUCCESS: Exported {len(notes_data)} notes to {output_file}", addseparator=True)
+    colorprint(textcolor="green",msg=f"SUCCESS: Exported {len(notes_data)} notes to '{output_file}'", addseparator=True)
     
     return notes_data
 
@@ -521,6 +521,29 @@ def set_maxnotes_to_foldernotecount(folder=None):
 
 
 
+def build_initial_msg(folder=None, max_notes=None, export_path=None, github_url=None):
+    # get some values for an initial msg
+    
+    initial_msg = f'''    Welcome, 'tis a good day to GitMyNotes
+
+'''
+    if folder:
+        initial_msg += f'''  - folder: {folder}
+'''
+    if max_notes:
+        initial_msg += f'''  - max-notes: {max_notes}
+'''
+    if export_path:
+        initial_msg += f'''  - export to: {export_path}
+'''
+    if github_url:
+        initial_msg += f'''  - GitHub repo: {github_url}
+'''
+    
+    return initial_msg
+
+
+
 
 ##### Describe this function
 
@@ -560,18 +583,11 @@ def main():
     
     args = parser.parse_args()
     
+    ## set up the initial msg to let people know setup details
+    initial_msg = build_initial_msg(folder=args.folder, max_notes=args.max_notes, export_path=args.export_path, github_url=args.github_url)
+    colorprint(textcolor='cyan', msg=f"{initial_msg}", addseparator=True)
     
-    colorprint(textcolor='cyan', msg=f"        Welcome, you GitNotes superfan!", addseparator=True)
-    if args.folder:
-        colorprint(textcolor='cyan', msg=f"  - folder: {args.folder}")
-    if args.max_notes:
-        colorprint(textcolor='cyan', msg=f"  - max-notes: {args.max_notes}")
-    if args.export_path:
-        colorprint(textcolor='cyan', msg=f"  - export to: {args.export_path}")
-    if args.github_url:
-        colorprint(textcolor='cyan', msg=f"  - GitHub repo: {args.github_url}")
-        
-        
+    
     os.makedirs(args.export_path, exist_ok=True)
     if args.folder:
         export_path_w_folder = f"{args.export_path}/{args.wrapper_dir}/{args.folder}"
@@ -619,7 +635,7 @@ def main():
         ## if notes were process to git, then create the audit trail and move the notes
         if notes_processed > 0:
             #print(f"NOTES PROCESSED > 0: {notes_processed}")
-            colorprint(textcolor="magenta",msg=f"Notes to export: {notes_to_export}")
+            colorprint(textcolor="magenta",msg=f"Notes to export to markdown: {notes_to_export}")
             processednotes_data = export_notes_metadata(
                 output_file=args.output_file,
                 folder=args.folder,
@@ -645,7 +661,7 @@ def main():
         
         if move_result:
             #print(f"================================")
-            colorprint(textcolor="green",msg=f" SUCCESS: Moved notes to Notes folder: {args.folder}{DEFAULT_PROCESSED_FOLDER_ENDING}", addseparator=True)
+            colorprint(textcolor="green",msg=f"SUCCESS: Moved notes to Notes folder: '{args.folder}{DEFAULT_PROCESSED_FOLDER_ENDING}'", addseparator=True)
             #print(f"================================")
         else:
             #print(f"================================")
