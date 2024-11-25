@@ -56,6 +56,7 @@ DEFAULT_BATCH_SIZE = "10"
 DEFAULT_IGNORE_FOLDER = "ignore"
 DEFAULT_NOTES_OUTERDIR = "macosnotes"
 DEFAULT_AUDIT_FILE_ENDING = ".csv"
+DEFAULT_EMPTY_SOURCE_FOLDER = True
 
 
 
@@ -581,9 +582,15 @@ def main():
                       default=DEFAULT_NEWLINE_DELIMITER,
                       help=f"[str] Default CSV newline delimiter (default: '{DEFAULT_NEWLINE_DELIMITER}')")
                       
-    parser.add_argument('--audit_file_ending', type=str, 
+    parser.add_argument('--audit-file-ending', type=str, 
                       default=DEFAULT_AUDIT_FILE_ENDING,
                       help=f"[str] The audit file extension (default: '{DEFAULT_AUDIT_FILE_ENDING}')")
+
+    parser.add_argument('--empty-source-folder', type=str, 
+                      default=DEFAULT_EMPTY_SOURCE_FOLDER,
+                      help=f"[str] If 'True', do not move backup notes from '<folder>_{DEFAULT_PROCESSED_FOLDER_ENDING}' back into '<folder>' until 0 notes remain in source <folder>. If 'False', move the notes back to source <folder> after max_notes reached, even if other notes remain un-backed-up in source <folder>. (default: '{DEFAULT_EMPTY_SOURCE_FOLDER}')")
+
+
     
     args = parser.parse_args()
     
