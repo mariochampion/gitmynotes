@@ -1,7 +1,8 @@
 <div><b>Creation Date:</b> Tuesday, November 19, 2024 at 9:11:50 PM<br></div>
-<div><b>Modification Date:</b> Tuesday, November 19, 2024 at 9:17:11 PM<br></div>
+<div><b>Modification Date:</b> Monday, November 25, 2024 at 9:16:23 AM<br></div>
 <div><b><span style="font-size: 23px"><h1>Gitnotes MARKETING blurbs</h1></span></b></div>
 <div><span style="font-size: 16px"><br></span></div>
+<div><span style="font-size: 16px">rename?</span></div>
 <div><span style="font-size: 16px"><br></span></div>
 <div><span style="font-size: 16px"><br></span></div>
 <div><span style="font-size: 16px">2. Marketing Paragraph:</span></div>
