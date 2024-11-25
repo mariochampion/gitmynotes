@@ -47,15 +47,14 @@ DEFAULT_GITHUB_URL = "https://github.com/mariochampion/gitnotes"
 
 ##.  REQUIRED: LEAVE AS-IS or CHANGE--
 DEFAULT_PROCESSED_FOLDER_ENDING = "__GitNotes"
-DEFAULT_CSV_NAME = "GitNotes.csv"
+DEFAULT_CSV_NAME = "gitnotes.csv"
 DEFAULT_NEWLINE_DELIMITER = "|||"
-DEFAULT_MAX_NOTES = 10
 
 ##.  OPTIONAL
 DEFAULT_BATCH_SIZE = "10"
 DEFAULT_IGNORE_FOLDER = "ignore"
 DEFAULT_NOTES_OUTERDIR = "macosnotes"
-
+DEFAULT_AUDIT_FILE_ENDING = ".csv"
 
 
 
@@ -98,13 +97,13 @@ def export_notes_to_markdown(export_path, folder_name=None, max_notes=None, wrap
     
     ## tell the people some information
     if (max_notes > 0 and folder_name !="" and wrapper_dir !=""):
-        colorprint(textcolor="green",msg=f"Starting export of {max_notes} Notes from '{folder_name}' into '{wrapper_dir}/{folder_name}'...")
+        colorprint(textcolor="white",msg=f"Starting export of {max_notes} Notes from '{folder_name}' into '{wrapper_dir}/{folder_name}'...")
     elif (max_notes > 0 and folder_name !="" and wrapper_dir==None):
-        colorprint(textcolor="green",msg=f"Starting export of {max_notes} Notes from '{folder_name}'...")
+        colorprint(textcolor="white",msg=f"Starting export of {max_notes} Notes from '{folder_name}'...")
     elif (max_notes > 0 and folder_name==None and wrapper_dir==None):
-        colorprint(textcolor="green",msg=f"Starting export of {max_notes} Notes...")
+        colorprint(textcolor="white",msg=f"Starting export of {max_notes} Notes...")
     elif (max_notes==None and folder_name==None and wrapper_dir==None):
-        colorprint(textcolor="green",msg=f"Starting export of all Notes...")
+        colorprint(textcolor="white",msg=f"Starting export of all Notes...")
     
     
     applescript = f'''
@@ -341,7 +340,7 @@ def export_notes_metadata(output_file=None, folder=None, max_notes=None, newline
         #print(f"notes_data {notes_data}")
         writer.writerows(notes_data)
         
-    colorprint(textcolor="green",msg=f"Successfully exported {len(notes_data)} notes to {output_file}", addseparator=True)
+    colorprint(textcolor="green",msg=f"SUCCESS: Exported {len(notes_data)} notes to {output_file}", addseparator=True)
     
     return notes_data
 
@@ -397,7 +396,7 @@ def move_processed_notes(folder_source, folder_dest, max_notes):
                     end try
                 end repeat
                 
-                return "Successfully moved " & notesToMove & " notes"
+                return "SUCCESS: Moved " & notesToMove & " notes"
             on error errMsg
                 return "Error: " & errMsg
             end try
@@ -562,8 +561,10 @@ def main():
         colorprint(textcolor='cyan', msg=f"  - folder: {args.folder}")
     if args.max_notes:
         colorprint(textcolor='cyan', msg=f"  - max-notes: {args.max_notes}")
+    if args.export_path:
+        colorprint(textcolor='cyan', msg=f"  - export to: {args.export_path}")
     if args.github_url:
-        colorprint(textcolor='cyan', msg=f"  - repo: {args.github_url}")
+        colorprint(textcolor='cyan', msg=f"  - GitHub repo: {args.github_url}")
         
         
     os.makedirs(args.export_path, exist_ok=True)
@@ -603,8 +604,8 @@ def main():
         )
         
         if notes_processed > 0:
-            colorprint(textcolor="white",msg=f"Processed {notes_processed} notes")
-            #print(f"------------------------------------")
+            colorprint(textcolor="green",msg=f"SUCCESS: Exported {notes_processed} Notes to local folder {args.export_path}")
+            
             commit_and_push(args.export_path, args.folder, args.wrapper_dir)
         else:
             colorprint(textcolor="magenta",msg=f"No notes were processed, skipping git commit")
@@ -631,9 +632,7 @@ def main():
                 folder_dest=f"{args.folder}{DEFAULT_PROCESSED_FOLDER_ENDING}",
                 max_notes=notes_to_export
             )
-            #print(f"--------------------------------")
-            colorprint(textcolor="green",msg=f"     CSV JOB COMPLETED!", addseparator=True)
-            #print(f"--------------------------------")
+        
         
         else:
             move_result = 0
@@ -641,14 +640,27 @@ def main():
         
         if move_result:
             #print(f"================================")
-            colorprint(textcolor="green",msg=f" MOVE to {args.folder}{DEFAULT_PROCESSED_FOLDER_ENDING} completed", addseparator=True)
+            colorprint(textcolor="green",msg=f" SUCCESS: Moved notes to Notes folder: {args.folder}{DEFAULT_PROCESSED_FOLDER_ENDING}", addseparator=True)
             #print(f"================================")
         else:
             #print(f"================================")
             colorprint(textcolor="red",msg=f"  !!! FAILED to MOVE notes !!!", addseparator=True)
             #print(f"================================")
             
-            
+    
+    if args.wrapper_dir:
+        final_gitnotes_url = f"{args.github_url}/tree/main/{args.wrapper_dir}/{args.folder}"
+    else:
+        final_gitnotes_url = f"{args.github_url}/tree/main/{args.folder}"
+    
+    final_audit_file = f"./{args.folder}{DEFAULT_AUDIT_FILE_ENDING}"
+    
+    finalmsg = f'''    GitNotes actions complete!
+    Check your GitNotes: {final_gitnotes_url}
+    Check the audit file: {final_audit_file}
+    Tell your friends, learn more:
+    http://GitNotes.com/share?iam=872g2876g2'''
+    colorprint(textcolor="cyan",msg=f"{finalmsg}", addseparator=True)
             
 
 ##### ADD SOME COLORs
