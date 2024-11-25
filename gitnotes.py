@@ -46,6 +46,7 @@ DEFAULT_GITHUB_URL = "https://github.com/mariochampion/gitnotes"
 
 
 ##.  REQUIRED: LEAVE AS-IS or CHANGE--
+DEFAULT_NOTES_FOLDER = "Notes"
 DEFAULT_PROCESSED_FOLDER_ENDING = "__GitNotes"
 DEFAULT_CSV_NAME = "gitnotes.csv"
 DEFAULT_NEWLINE_DELIMITER = "|||"
@@ -246,7 +247,7 @@ def export_notes_metadata(output_file=None, folder=None, max_notes=None, newline
     '''
     
     if folder:
-        output_file = f"{folder}.csv"
+        output_file = f"{folder}{DEFAULT_AUDIT_FILE_ENDING}"
         applescript += f'''
         set targetFolder to null
         repeat with f in folders
@@ -262,7 +263,7 @@ def export_notes_metadata(output_file=None, folder=None, max_notes=None, newline
         end if
         '''
     else:
-        output_file = f"DEFAULT_CSV_NAME"
+        output_file = f"{DEFAULT_CSV_NAME}"
         applescript += '''
         set theNotes to notes
         '''
@@ -525,33 +526,37 @@ def set_maxnotes_to_foldernotecount(folder=None):
 
 def main():
     parser = argparse.ArgumentParser(description='Export Apple Notes to GitHub')
-    parser.add_argument('--folder', type=str, default='',
-                      help='Specific Notes folder to export. (default: all folders)')
+    parser.add_argument('--folder', type=str, 
+                      default=DEFAULT_NOTES_FOLDER,
+                      help=f"[str] Specific Notes folder to export.(default: '{DEFAULT_NOTES_FOLDER}')")
     parser.add_argument('--max-notes', type=int, default=0,
-                      help=f'Maximum number of notes to process. (default: all notes)')
+                      help=f'[int] Maximum number of notes to process. (default: count of all notes)')
     parser.add_argument('--batch-size', type=int,
                       default=DEFAULT_BATCH_SIZE,
-                      help=f'The number of notes to convert, and git add/commit/push per loop. Especially useful for initial GitNotes runs.(default: {DEFAULT_BATCH_SIZE})')  
+                      help=f'[int] The number of notes to convert, and git add/commit/push per loop. Especially useful for initial runs.(default: {DEFAULT_BATCH_SIZE})')  
     parser.add_argument('--export-path', type=str, 
                       default=os.path.expanduser(f"{DEFAULT_EXPORT_PATH}"),
-                      help=f'Path to export the notes (default: {DEFAULT_EXPORT_PATH})')
+                      help=f'[str] Path to export the notes (default: {DEFAULT_EXPORT_PATH})')
     parser.add_argument('--github-url', type=str,
                       default=DEFAULT_GITHUB_URL,
-                      help=f'GitHub repository URL. (default: {DEFAULT_GITHUB_URL})')
+                      help=f'[str] GitHub repository URL. (default: {DEFAULT_GITHUB_URL})')
     parser.add_argument('--wrapper-dir', type=str,
                       default=DEFAULT_NOTES_OUTERDIR,
-                      help=f'Outer directory to hold folders. (default: {DEFAULT_NOTES_OUTERDIR})'),
+                      help=f"[str] Outer directory to hold folders. (default: '{DEFAULT_NOTES_OUTERDIR}')"),
     parser.add_argument('--ignore-folder', type=str,
                       default=DEFAULT_IGNORE_FOLDER,
-                      help=f'The Notes folder to ignore and not process. (default: {DEFAULT_IGNORE_FOLDER})')
+                      help=f"[str] The Notes folder to ignore and not process. (default: '{DEFAULT_IGNORE_FOLDER}')")
     parser.add_argument('--output-file', type=str, 
                       default=DEFAULT_CSV_NAME,
-                      help=f'Output CSV file path (default: <folder>.csv)')
+                      help=f"[str] Output CSV file path (default: '<folder>.csv)'")
                         
     parser.add_argument('--newline-delimiter', type=str, 
                       default=DEFAULT_NEWLINE_DELIMITER,
-                      help=f'Default CSV newline delimiter (default: {DEFAULT_NEWLINE_DELIMITER})')
+                      help=f"[str] Default CSV newline delimiter (default: '{DEFAULT_NEWLINE_DELIMITER}')")
                       
+    parser.add_argument('--audit_file_ending', type=str, 
+                      default=DEFAULT_AUDIT_FILE_ENDING,
+                      help=f"[str] The audit file extension (default: '{DEFAULT_AUDIT_FILE_ENDING}')")
     
     args = parser.parse_args()
     
