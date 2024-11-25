@@ -144,11 +144,17 @@ options:
 
 * add colors!
 
+* add link at end to githb repo and audit files
+
 * create config file?
+
+* try with NO wrapper outer dir
 
 * if not foldername, confirm that you want to do Notes, with count of X
 
 * do not fail entire job when this applescript error occurs: `execution error: Notes got an error: An error of type 100002 has occurred. (100002)`
+
+* add share code to track optional viralty?
 
 *  -- PRO -- 
 
