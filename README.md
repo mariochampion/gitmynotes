@@ -32,7 +32,7 @@ No one can predict the future. Losing a job or a role shouldn't mean losing your
 
 1. New Notes folder: `<notesFolderName>_GitMyNotes` to store processed notes
 2. New GitMyNotes audit file: `<notesFolderName>.csv` to track processed notes
-3. Markdown copy of Notes from folder: `DEFAULT_EXPORT_PATH/<a-note.md>`
+3. Markdown copy of Notes from folder: `DEFAULT_EXPORT_PATH/<my-exported-note.md>`
 
 -- Remote --
 1. New GitHub directory: `DEFAULT_GITHUB_URL/DEFAULT_NOTES_OUTERDIR`
