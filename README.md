@@ -1,10 +1,10 @@
-# GitNotes
-## GitNotes adds convenient version control, off-site backups, and optional collaboration to your macOS Notes.
+# GitMyNotes
+## GitMyNotes adds convenient version control, off-site backups, and optional collaboration to your macOS Notes.
 
-A lightweight macOS utility using Python and AppleScript to sync your macOS Notes to your public or private GitHub repos, the GitNotes solution exports Notes to Markdown while preserving folder organization and formatting. It features out-of-the-box common sense defaults or user-driven customization, a local audit trail with checkpoint features for interrupted backups, and secure GitHub integration. All processing happens on your machine, with the only external data transmission secured by your enterprise-grade GitHub authentication credentials.
+A lightweight macOS utility using Python and AppleScript to sync your macOS Notes to your public or private GitHub repos, the GitMyNotes solution exports Notes to Markdown while preserving folder organization and formatting. It features out-of-the-box common sense defaults or user-driven customization, a local audit trail with checkpoint features for interrupted backups, and secure GitHub integration. All processing happens on your machine, with the only external data transmission secured by your enterprise-grade GitHub authentication credentials.
 
 
-# GitNotes is for me?
+# GitMyNotes is for me?
 
 Do you use Notes? Do you use GitHub? Then undoubtedly yes!
 
@@ -30,15 +30,15 @@ No one can predict the future. Losing a job or a role shouldn't mean losing your
 #### Output Artifacts
 -- Locally --
 
-1. New Notes folder: `<notesFolderName>_GitNotes` to store processed notes
-2. New GitNotes audit file: `<notesFolderName>.csv` to track processed notes
+1. New Notes folder: `<notesFolderName>_GitMyNotes` to store processed notes
+2. New GitMyNotes audit file: `<notesFolderName>.csv` to track processed notes
 3. Markdown copy of Notes from folder: `DEFAULT_EXPORT_PATH/<a-note.md>`
 
 -- Remote --
 1. New GitHub directory: `DEFAULT_GITHUB_URL/DEFAULT_NOTES_OUTERDIR`
 2. New Github sub-dir mapped to Notes folders: `DEFAULT_GITHUB_URL/DEFAULT_NOTES_OUTERDIR/<notesFolderName>`
 3. Github copy of Notes from folder: `DEFAULT_GITHUB_URL/DEFAULT_NOTES_OUTERDIR/<notesFolderName>/<a-note.md>`
-4. OPTIONAL - GitNotes audit file: `<notesFolderName>.csv`
+4. OPTIONAL - GitMyNotes audit file: `<notesFolderName>.csv`
 
 
 
@@ -68,9 +68,9 @@ No one can predict the future. Losing a job or a role shouldn't mean losing your
 
 	-- REQUIRED: LEAVE AS-IS or CHANGE--
 
-	`DEFAULT_PROCESSED_FOLDER_ENDING = "__GitNotes"`
+	`DEFAULT_PROCESSED_FOLDER_ENDING = "__GitMyNotes"`
 
-	`DEFAULT_CSV_NAME = "GitNotes.csv"`
+	`DEFAULT_CSV_NAME = "GitMyNotes.csv"`
 
 	`DEFAULT_NEWLINE_DELIMITER = "|||"`
 
@@ -109,7 +109,7 @@ options:
   --export-path EXPORT_PATH
                         [str] Path to export the notes (default: ~/Documents/gitnotes)
   --github-url GITHUB_URL
-                        [str] GitHub repository URL. (default: https://github.com/mariochampion/gitnotes)
+                        [str] GitHub repository URL. (default: https://github.com/mygitgitusername/gitmynotes)
   --wrapper-dir WRAPPER_DIR
                         [str] Outer directory to hold folders. (default: 'macosnotes')
   --ignore-folder IGNORE_FOLDER
@@ -134,7 +134,7 @@ options:
 
 * write real instructions
 
-* allow user to decide to keep <folder>__GitNotes bkup or move back to original
+* allow user to decide to keep <folder>__GitMyNotes bkup or move back to original
 
 * create a github for non-devs one-pager? video? 
 
