@@ -492,7 +492,7 @@ def process_applescript(applescript):
 
 
 
-def set_maxnotes_to_foldernotecount(folder=None):
+def get_foldernotecount(folder=None):
 
     if folder:
         colorprint(textcolor="magenta",msg=f"No max-notes set. Using count of notes in folder: {folder}")
@@ -523,6 +523,26 @@ def set_maxnotes_to_foldernotecount(folder=None):
         
     else:
         print("No folder set. ToDo: work thru defaults flow.")
+
+
+
+def restore_source_foldernote(folder_source, folder_bkup):
+    ## if count of notes in folder_source is 0, and count of folder_dest is > 0
+    ## then move all the notes from dest back to source. (as it was in the beginning, so shall...)
+    
+    source_count = get_foldernotecount(folder_source)
+    bkup_count = get_foldernotecount(folder_bkup)    
+    print(f"source_count: {source_count} and bkup_count:{bkup_count}")
+    
+    if source_count == 0:
+        if bkup_count > 0:
+            print(f"about to move {bkup_count} Notes from {folder_bkup} into original source folder: {folder_source}")
+            
+            restore_result = move_processed_notes(folder_bkup, folder_source, bkup_count)
+            return restore_result
+            
+    else:
+        print(f"Source folder {folder_source} not empty! Contains {source_count} un-backed-up notes.")
 
 
 
@@ -633,7 +653,7 @@ def main():
     
     ''' if not max_notes, get a notecount value based on folder name '''
     if args.max_notes == 0:
-        notes_to_process = set_maxnotes_to_foldernotecount(folder=args.folder)
+        notes_to_process = get_foldernotecount(folder=args.folder)
     else:
         notes_to_process = args.max_notes
     
@@ -680,11 +700,12 @@ def main():
             processednotes_data = 0	
             
             
-            
+        folder_source=args.folder
+        folder_dest=f"{args.folder}{DEFAULT_PROCESSED_FOLDER_ENDING}",
         if processednotes_data:
             move_result = move_processed_notes(
-                folder_source=args.folder,
-                folder_dest=f"{args.folder}{DEFAULT_PROCESSED_FOLDER_ENDING}",
+                folder_source,
+                folder_dest,
                 max_notes=notes_to_export
             )
         
@@ -701,7 +722,25 @@ def main():
             #print(f"================================")
             colorprint(textcolor="red",msg=f"  !!! FAILED to MOVE notes !!!", addseparator=True)
             #print(f"================================")
-            
+    
+    ## check for empty-source-folder to decide what to do with contents of folder_GitMyNotes backup folders
+    empty_source_folder = args.empty_source_folder
+    print(f"Option to empty the source folder is {empty_source_folder}")
+    
+    restore_result = 0
+    if args.empty_source_folder:
+        (print(f"On the TRUE path")
+        restore_result = restore_source_foldernote(folder_source, folder_dest)
+        
+    else:
+        (print(f"On the FALSE path")
+    
+    if restore_result:
+        colorprint(textcolor="green",msg=f"SUCCESS: RESTORED notes to {folder_source} from {folder_dest}", addseparator=True)
+    
+    else:
+        colorprint(textcolor="red",msg=f"  !!! FAILED to RESTORE notes !!!", addseparator=True)
+    
     
     ## Prep for final msg so user knows what happened
     if args.wrapper_dir:
@@ -715,7 +754,15 @@ def main():
     final_msg = build_final_msg(gitnotes_url=f"{final_gitnotes_url}", audit_file=f"{final_audit_file}", share_url=f"{share_url}")
     
     colorprint(textcolor="cyan",msg=f"{final_msg}", addseparator=True)
-            
+    
+    
+    
+    
+    
+############# END OF MAIN
+
+
+
 
 ##### ADD SOME COLORs
 # pinched and tweaked from https://github.com/impshum/Multi-Quote/blob/master/run.py
