@@ -24,7 +24,7 @@ No one can predict the future. Losing a job or a role shouldn't mean losing your
 
 
 ## Usage
-`python gitnotes.py --folder='<notesFolderName>' --max-notes=<N>`
+`python gitmynotes.py --folder='<notesFolderName>' --max-notes=<N>`
 
 
 #### Output Artifacts
@@ -52,11 +52,11 @@ No one can predict the future. Losing a job or a role shouldn't mean losing your
 
 
 ## Steps
-1. clone the repo: `git clone https://github.com/mariochampion/gitnotes.git`
+1. clone the repo: `git clone https://github.com/mariochampion/gitmynotes.git`
 
-2. cd into gitnotes dir: `cd gitnotes`
+2. cd into gitmynotes dir: `cd gitmynotes`
 
-3. in file `gitnotes.py`, set required and optional configurations, or leave as shipped with these common sense defaults
+3. in file `gitmynotes.py`, set required and optional configurations, or leave as shipped with these common sense defaults
 
 	-- REQUIRED TO CHANGE--
 	
@@ -89,12 +89,12 @@ No one can predict the future. Losing a job or a role shouldn't mean losing your
 	
 	
 
-4. run Ex: `python gitnotes.py --folder='<notesFolderName>' --max-notes <N> `
+4. run Ex: `python gitmynotes.py --folder='<notesFolderName>' --max-notes <N> `
 
 ```
 Export Apple MacOS Notes and folders to GitHub repo and folders
 
-usage: gitnotes.py [-h] [--folder FOLDER] [--max-notes MAX_NOTES] [--batch-size BATCH_SIZE] [--export-path EXPORT_PATH] [--github-url GITHUB_URL]
+usage: gitmynotes.py [-h] [--folder FOLDER] [--max-notes MAX_NOTES] [--batch-size BATCH_SIZE] [--export-path EXPORT_PATH] [--github-url GITHUB_URL]
                    [--wrapper-dir WRAPPER_DIR] [--ignore-folder IGNORE_FOLDER] [--output-file OUTPUT_FILE] [--newline-delimiter NEWLINE_DELIMITER]
                    [--audit_file_ending AUDIT_FILE_ENDING]
 
@@ -107,7 +107,7 @@ options:
   --batch-size BATCH_SIZE
                         [int] The number of notes to convert, and git add/commit/push per loop. Especially useful for initial runs.(default: 10)
   --export-path EXPORT_PATH
-                        [str] Path to export the notes (default: ~/Documents/gitnotes)
+                        [str] Path to export the notes (default: ~/Documents/gitmynotes)
   --github-url GITHUB_URL
                         [str] GitHub repository URL. (default: https://github.com/mygitgitusername/gitmynotes)
   --wrapper-dir WRAPPER_DIR
