@@ -57,7 +57,7 @@ DEFAULT_IGNORE_FOLDER = cfg['DEFAULT_IGNORE_FOLDER']
 DEFAULT_NOTES_OUTERDIR = cfg['DEFAULT_NOTES_OUTERDIR']
 DEFAULT_AUDIT_FILE_ENDING = cfg['DEFAULT_AUDIT_FILE_ENDING']
 DEFAULT_RESTORE_NOTES = cfg['DEFAULT_RESTORE_NOTES']
-
+DEFAULT_NOTES_FOLDER_FORCE = cfg['DEFAULT_NOTES_FOLDER_FORCE']
 
 
 
@@ -617,6 +617,9 @@ def main():
     parser.add_argument('--folder', type=str, 
                       default=DEFAULT_NOTES_FOLDER,
                       help=f"[str] Specific Notes folder to export.(default: '{DEFAULT_NOTES_FOLDER}')")
+    parser.add_argument('--force', type=bool, 
+                      default=DEFAULT_NOTES_FOLDER_FORCE,
+                      help=f"[bool] Option: 'True'. Only set this to 'True' (do not set to 'False') to over-ride to the user confirmation to the full count of Notes in the specified folder when it exceed 5x the batch size -- which could be hundreds of notes and could take a looooong time.(default: '{DEFAULT_NOTES_FOLDER_FORCE}')")
     parser.add_argument('--max-notes', type=int, default=0,
                       help=f'[int] Maximum number of notes to process. (default: count of all notes)')
     parser.add_argument('--batch-size', type=int,
@@ -648,7 +651,7 @@ def main():
 
     parser.add_argument('--restore-notes', type=str, 
                       default=DEFAULT_RESTORE_NOTES,
-                      help=f"[str] Options: 'empty' or 'always'  Determines when to move notes from '<folder>_{DEFAULT_PROCESSED_FOLDER_ENDING}' back to their original sourve Notes folder. The option 'empty' will not restore notes until notecount is 0 in source folder, while 'always' will restore at the end of each max-notes run. (default: '{DEFAULT_RESTORE_NOTES}')")
+                      help=f"[str] Options: 'empty' or 'always'  Determines when to move notes from '<folder>_{DEFAULT_PROCESSED_FOLDER_ENDING}' back to their original source Notes folder. The option 'empty' will not restore notes until notecount is 0 in source folder, while 'always' will restore at the end of each max-notes run. Set to 'never' to never move notes back to source folder. (default: '{DEFAULT_RESTORE_NOTES}')")
 
 
     
@@ -666,11 +669,30 @@ def main():
     
     setup_git_repo(args.export_path, args.github_url)
     
+    ''' if args.folder not set (and defaults to Notes) or set to Notes, the warn user based on count'''
+    if args.folder == "Notes":
+        NotesFolder_count = get_foldernotecount(args.folder)
+        print(f"NotesFolder_count: {NotesFolder_count}")
+        
+    else:
+        NotesFolder_count = 0
+    
+    if NotesFolder_count > (args.batch_size * 5):
+        if args.force:
+            print(f"--force was set, so go on without confirm...")
+            return
+        else:
+            print(f"--force not set, and MORE than 5 batches required, must confirm")
+    else:
+        print(f"LESS than 5 batches required, go on...")
     
     
-    ''' if not max_notes, get a notecount value based on folder name '''
+    sys.exit(1)
+    
+    
+    ''' if args.max_notes note set, get a notecount value based on folder name '''
     if args.max_notes == 0:
-        notes_to_process = get_foldernotecount(folder=args.folder)
+        notes_to_process = get_foldernotecount(args.folder)
     else:
         notes_to_process = args.max_notes
     
