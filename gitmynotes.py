@@ -56,7 +56,7 @@ DEFAULT_BATCH_SIZE = "10"
 DEFAULT_IGNORE_FOLDER = "ignore"
 DEFAULT_NOTES_OUTERDIR = "macosnotes"
 DEFAULT_AUDIT_FILE_ENDING = ".csv"
-DEFAULT_RESTORE_EMPTY_SOURCE_FOLDER = True
+DEFAULT_RESTORE_NOTES = "empty"
 
 
 
@@ -528,24 +528,38 @@ def get_foldernotecount(folder=None):
 
 
 
-def restore_source_foldernote(folder_source, folder_bkup):
+def restore_source_foldernote(folder_source, folder_bkup, restore_notes):
     ## if count of notes in folder_source is 0, and count of folder_dest is > 0
     ## then move all the notes from dest back to source. (as it was in the beginning, so shall...)
     
-    source_count = get_foldernotecount(folder_source)
-    bkup_count = get_foldernotecount(folder_bkup)    
-    print(f"source_count: {source_count} and bkup_count:{bkup_count}")
+    if restore_notes != 'empty' or restore_notes != 'always':
+        return
     
-    if source_count == 0:
+    
+    source_count = get_foldernotecount(folder_source)
+    bkup_count = get_foldernotecount(folder_bkup)
+    print(f"'{folder_source}' notecount: {source_count}")
+    print(f"'{folder_bkup}' notecount: {bkup_count}")
+    
+    if restore_notes == 'empty':
+       if source_count == 0:
+            if bkup_count > 0:
+                print(f"Source folder {folder_source} is empty!")
+                print(f"Moving {bkup_count} Notes from {folder_bkup} into original source folder: {folder_source}")
+                restore_result = move_processed_notes(folder_bkup, folder_source, bkup_count, create=False)
+                
+                return restore_result
+            
+    if restore_notes == 'always':
         if bkup_count > 0:
-            print(f"about to move {bkup_count} Notes from {folder_bkup} into original source folder: {folder_source}")
-            
+            print(f"Source folder {folder_source} not empty! Contains {source_count} un-backed-up notes.")
+            print(f"Option --restore-notes={restore_notes} so processed notes in {folder_bkup} will be moved back.")
+            print(f"WARNING: This non-'empty' setting can cause some notes to never be backed up.")
             restore_result = move_processed_notes(folder_bkup, folder_source, bkup_count, create=False)
+                
             return restore_result
-            
     else:
-        print(f"Source folder {folder_source} not empty! Contains {source_count} un-backed-up notes.")
-
+        return
 
 
 def build_initial_msg(folder=None, max_notes=None, export_path=None, github_url=None):
@@ -631,9 +645,9 @@ def main():
                       default=DEFAULT_AUDIT_FILE_ENDING,
                       help=f"[str] The audit file extension (default: '{DEFAULT_AUDIT_FILE_ENDING}')")
 
-    parser.add_argument('--restore-empty-source-folder', type=bool, 
-                      default=DEFAULT_RESTORE_EMPTY_SOURCE_FOLDER,
-                      help=f"[bool] If 'True', do not move backup notes from '<folder>_{DEFAULT_PROCESSED_FOLDER_ENDING}' back into '<folder>' until 0 notes remain in source <folder>. If 'False', move the notes back to source <folder> after max_notes reached, even if other notes remain un-backed-up in source <folder>. (default: '{DEFAULT_RESTORE_EMPTY_SOURCE_FOLDER}')")
+    parser.add_argument('--restore-notes', type=str, 
+                      default=DEFAULT_RESTORE_NOTES,
+                      help=f"[str] Options: 'empty' or 'always'  Determines when to move notes from '<folder>_{DEFAULT_PROCESSED_FOLDER_ENDING}' back to their original sourve Notes folder. The option 'empty' will not restore notes until notecount is 0 in source folder, while 'always' will restore at the end of each max-notes run. (default: '{DEFAULT_RESTORE_NOTES}')")
 
 
     
@@ -724,23 +738,18 @@ def main():
             #print(f"================================")
     
     ## check for restore-empty-source-folder to decide what to do with contents of folder_GitMyNotes backup folders
-    print(f"Option to empty the source folder is {args.restore_empty_source_folder}")
+    print(f"Option to empty the source folder is '{args.restore_notes}'")
     
     restore_result = 0
-    if args.restore_empty_source_folder:
-        print(f"On the TRUE path")
-        restore_result = restore_source_foldernote(folder_source=args.folder, folder_bkup=f"{args.folder}{DEFAULT_PROCESSED_FOLDER_ENDING}")
+    restore_result = restore_source_foldernote(folder_source=args.folder, folder_bkup=f"{args.folder}{DEFAULT_PROCESSED_FOLDER_ENDING}", restore_notes=args.restore_notes)
         
-    else:
-        print(f"On the FALSE path")
-    
     if restore_result:
         colorprint(textcolor="green",msg=f"SUCCESS: RESTORED notes to {args.folder} from {args.folder}{DEFAULT_PROCESSED_FOLDER_ENDING}", addseparator=True)
     
     else:
         restore_declined_msg = f'''    DECLINED! Notes not restored to '{args.folder}' 
-    Set --restore-empty-source-folder=True to restore 
-    notes when '{args.folder}' is empty !!!'''
+    Set --restore-notes=empty to move notes back to '{args.folder}' when notecount is 0
+    Set --restore-notes=always to move notes back to '{args.folder}' after backup'''
         colorprint(textcolor="red",msg=f"{restore_declined_msg}", addseparator=True)
     
     
