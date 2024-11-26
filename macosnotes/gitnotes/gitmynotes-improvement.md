@@ -1,8 +1,8 @@
 <div><b>Creation Date:</b> Saturday, November 9, 2024 at 1:44:45 PM<br></div>
-<div><b>Modification Date:</b> Monday, November 25, 2024 at 11:06:41 AM<br></div>
+<div><b>Modification Date:</b> Monday, November 25, 2024 at 6:11:09 PM<br></div>
 <div><h1>GitMyNotes Improvement</h1></div>
 <div><br></div>
-<div><span style="font-size: 16px">rename done</span><br></div>
+<div><span style="font-size: 16px">rename Assad</span><br></div>
 <div><br></div>
 <div>Auto create TOC with ai driven one line summaries</div>
 <div>And ai driven thematic groupings and finally ai driven gaps ( based on explicit and implied semantic threading/webbing)</div>
