@@ -692,7 +692,7 @@ def main():
   [Or 'enter' for all {args_folder_count} notes, or 'x' to eXit] : '''
             
             confirm_num = input(f"{confirm_msg}") or f"{args_folder_count}"
-            if confirm_num == 'x': 
+            if confirm_num == 'x' or confirm_num == '0': 
                 colorprint(textcolor='red', msg="    Exiting GitMyNotes...", addseparator=True)
                 sys.exit(1)
             confirm_num = int(confirm_num)
