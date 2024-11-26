@@ -688,10 +688,13 @@ def main():
             confirm_warn = f'''WHOA. {args_folder_count} notes to process in 'Notes' folder!
         Confirmation Required.'''
             colorprint(textcolor='magenta', msg=f"{confirm_warn}", addseparator=True)
-            confirm_msg = f''' Enter a number up to {args_folder_count} to process.
-  [Or 'enter' for all {args_folder_count} notes] : '''
+            confirm_msg = f''' Enter a number up to {args_folder_count} of notes to process.
+  [Or 'enter' for all {args_folder_count} notes, or 'x' to eXit] : '''
             
             confirm_num = input(f"{confirm_msg}") or f"{args_folder_count}"
+            if confirm_num == 'x': 
+                colorprint(textcolor='red', msg="    Exiting GitMyNotes...", addseparator=True)
+                sys.exit(1)
             confirm_num = int(confirm_num)
             if confirm_num > args_folder_count:
                 confirm_num = args_folder_count 
