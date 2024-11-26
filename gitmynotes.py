@@ -58,7 +58,7 @@ DEFAULT_NOTES_OUTERDIR = cfg['DEFAULT_NOTES_OUTERDIR']
 DEFAULT_AUDIT_FILE_ENDING = cfg['DEFAULT_AUDIT_FILE_ENDING']
 DEFAULT_RESTORE_NOTES = cfg['DEFAULT_RESTORE_NOTES']
 DEFAULT_NOTES_FOLDER_FORCE = cfg['DEFAULT_NOTES_FOLDER_FORCE']
-
+DEFAULT_NOTECOUNT_BEFORE_CONFIRM = cfg['DEFAULT_NOTECOUNT_BEFORE_CONFIRM']
 
 
 
@@ -669,24 +669,35 @@ def main():
     
     setup_git_repo(args.export_path, args.github_url)
     
+    
+    
+    ######## ----  check for 5x batch size in arg.folder    ---- #######
+    
     ''' if args.folder not set (and defaults to Notes) or set to Notes, the warn user based on count'''
-    if args.folder == "Notes":
+    if args.folder:
         NotesFolder_count = get_foldernotecount(args.folder)
         print(f"NotesFolder_count: {NotesFolder_count}")
         
     else:
         NotesFolder_count = 0
     
-    if NotesFolder_count > (args.batch_size * 5):
+    if NotesFolder_count > (args.batch_size * DEFAULT_NOTECOUNT_BEFORE_CONFIRM):
         if args.force:
             print(f"--force was set, so go on without confirm...")
             return
         else:
             print(f"--force not set, and MORE than 5 batches required, must confirm")
+            confirm_msg = f'''WHOA. {NotesFolder_count} notes to process in 'Notes' folder!
+        '''
+            colorprint(textcolor='magenta', f"{confirm_msg}", addseparator=True)
+            confirm = input(f"Confirmation Required")
+    
     else:
         print(f"LESS than 5 batches required, go on...")
+
+
     
-    
+    print(f"temp stop!")
     sys.exit(1)
     
     
