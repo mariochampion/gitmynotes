@@ -56,7 +56,7 @@ DEFAULT_BATCH_SIZE = "10"
 DEFAULT_IGNORE_FOLDER = "ignore"
 DEFAULT_NOTES_OUTERDIR = "macosnotes"
 DEFAULT_AUDIT_FILE_ENDING = ".csv"
-DEFAULT_EMPTY_SOURCE_FOLDER = True
+DEFAULT_RESTORE_EMPTY_SOURCE_FOLDER = True
 
 
 
@@ -598,7 +598,7 @@ def build_final_msg(gitnotes_url, audit_file, share_url):
 ##### Describe this function
 
 def main():
-    parser = argparse.ArgumentParser(description='Export Apple Notes to GitHub')
+    parser = argparse.ArgumentParser(description='Export macOS Notes to GitHub')
     parser.add_argument('--folder', type=str, 
                       default=DEFAULT_NOTES_FOLDER,
                       help=f"[str] Specific Notes folder to export.(default: '{DEFAULT_NOTES_FOLDER}')")
@@ -631,9 +631,9 @@ def main():
                       default=DEFAULT_AUDIT_FILE_ENDING,
                       help=f"[str] The audit file extension (default: '{DEFAULT_AUDIT_FILE_ENDING}')")
 
-    parser.add_argument('--empty-source-folder', type=str, 
-                      default=DEFAULT_EMPTY_SOURCE_FOLDER,
-                      help=f"[str] If 'True', do not move backup notes from '<folder>_{DEFAULT_PROCESSED_FOLDER_ENDING}' back into '<folder>' until 0 notes remain in source <folder>. If 'False', move the notes back to source <folder> after max_notes reached, even if other notes remain un-backed-up in source <folder>. (default: '{DEFAULT_EMPTY_SOURCE_FOLDER}')")
+    parser.add_argument('--restore-empty-source-folder', type=bool, 
+                      default=DEFAULT_RESTORE_EMPTY_SOURCE_FOLDER,
+                      help=f"[bool] If 'True', do not move backup notes from '<folder>_{DEFAULT_PROCESSED_FOLDER_ENDING}' back into '<folder>' until 0 notes remain in source <folder>. If 'False', move the notes back to source <folder> after max_notes reached, even if other notes remain un-backed-up in source <folder>. (default: '{DEFAULT_RESTORE_EMPTY_SOURCE_FOLDER}')")
 
 
     
@@ -723,12 +723,11 @@ def main():
             colorprint(textcolor="red",msg=f"    !!! FAILED to MOVE notes !!!", addseparator=True)
             #print(f"================================")
     
-    ## check for empty-source-folder to decide what to do with contents of folder_GitMyNotes backup folders
-    empty_source_folder = args.empty_source_folder
-    print(f"Option to empty the source folder is {empty_source_folder}")
+    ## check for restore-empty-source-folder to decide what to do with contents of folder_GitMyNotes backup folders
+    print(f"Option to empty the source folder is {args.restore_empty_source_folder}")
     
     restore_result = 0
-    if empty_source_folder == True:
+    if args.restore_empty_source_folder:
         print(f"On the TRUE path")
         restore_result = restore_source_foldernote(folder_source=args.folder, folder_bkup=f"{args.folder}{DEFAULT_PROCESSED_FOLDER_ENDING}")
         
@@ -740,7 +739,7 @@ def main():
     
     else:
         restore_declined_msg = f'''    DECLINED! Notes not restored to '{args.folder}' 
-    Set --empty-source-folder=True to restore 
+    Set --restore-empty-source-folder=True to restore 
     notes when '{args.folder}' is empty !!!'''
         colorprint(textcolor="red",msg=f"{restore_declined_msg}", addseparator=True)
     
