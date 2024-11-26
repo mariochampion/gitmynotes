@@ -53,7 +53,6 @@ DEFAULT_PROCESSED_FOLDER_ENDING = cfg['DEFAULT_PROCESSED_FOLDER_ENDING']
 DEFAULT_CSV_NAME = cfg['DEFAULT_CSV_NAME']
 DEFAULT_NEWLINE_DELIMITER = cfg['DEFAULT_NEWLINE_DELIMITER']
 DEFAULT_BATCH_SIZE = cfg['DEFAULT_BATCH_SIZE']
-DEFAULT_IGNORE_FOLDER = cfg['DEFAULT_IGNORE_FOLDER']
 DEFAULT_NOTES_OUTERDIR = cfg['DEFAULT_NOTES_OUTERDIR']
 DEFAULT_AUDIT_FILE_ENDING = cfg['DEFAULT_AUDIT_FILE_ENDING']
 DEFAULT_RESTORE_NOTES = cfg['DEFAULT_RESTORE_NOTES']
@@ -634,9 +633,6 @@ def main():
     parser.add_argument('--wrapper-dir', type=str,
                       default=DEFAULT_NOTES_OUTERDIR,
                       help=f"[str] Outer directory to hold folders. (default: '{DEFAULT_NOTES_OUTERDIR}')"),
-    parser.add_argument('--ignore-folder', type=str,
-                      default=DEFAULT_IGNORE_FOLDER,
-                      help=f"[str] The Notes folder to ignore and not process. (default: '{DEFAULT_IGNORE_FOLDER}')")
     parser.add_argument('--output-file', type=str, 
                       default=DEFAULT_CSV_NAME,
                       help=f"[str] Output CSV file path (default: '<folder>.csv)'")

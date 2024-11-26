@@ -51,6 +51,8 @@
 
 * help set up cron job?
 
+* default ignore folder, so when user selects "all folder" it gets skipped
+
 
 
 
