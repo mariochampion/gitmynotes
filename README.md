@@ -28,7 +28,7 @@ No one can predict the future. Losing a job or a role shouldn't mean losing your
 
 
 #### Output Artifacts
--- Locally --
+-- Local --
 
 1. New Notes folder: `<notesFolderName>_GitMyNotes` to store processed notes
 2. New GitMyNotes audit file: `<notesFolderName>.csv` to track processed notes
