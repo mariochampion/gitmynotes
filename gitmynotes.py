@@ -657,8 +657,10 @@ def main():
     
     args = parser.parse_args()
     
+    args_max_notes = args.max_notes
+    
     ## set up the initial msg to let people know setup details
-    initial_msg = build_initial_msg(folder=args.folder, max_notes=args.max_notes, export_path=args.export_path, github_url=args.github_url)
+    initial_msg = build_initial_msg(folder=args.folder, max_notes=args_max_notes, export_path=args.export_path, github_url=args.github_url)
     colorprint(textcolor='cyan', msg=f"{initial_msg}", addseparator=True)
     
     
@@ -698,22 +700,22 @@ def main():
             if confirm_num > NotesFolder_count:
                 confirm_num = NotesFolder_count 
             print(f"Notes to process: {confirm_num}")
+            args_max_notes = confirm_num
             
-    
     else:
         print(f"LESS than 5 batches required, go on...")
+        args_max_notes = NotesFolder_count
 
-
     
-    print(f"temp stop!")
-    sys.exit(1)
+    print(f"args_max_notes = {args_max_notes}")
+    # sys.exit(1)
     
     
-    ''' if args.max_notes note set, get a notecount value based on folder name '''
-    if args.max_notes == 0:
+    ''' if args_max_notes note set, get a notecount value based on folder name '''
+    if args_max_notes == 0:
         notes_to_process = get_foldernotecount(args.folder)
     else:
-        notes_to_process = args.max_notes
+        notes_to_process = args_max_notes
     
     colorprint(textcolor="white",msg=f"Notes to process: {notes_to_process}")
     
