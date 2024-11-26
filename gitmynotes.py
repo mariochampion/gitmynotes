@@ -616,36 +616,36 @@ def main():
     parser.add_argument('--folder', type=str, 
                       default=DEFAULT_NOTES_FOLDER,
                       help=f"[str] Specific Notes folder to export.(default: '{DEFAULT_NOTES_FOLDER}')")
-    parser.add_argument('--force', type=bool, 
+    parser.add_argument('--force', action='store_true',
                       default=DEFAULT_NOTES_FOLDER_FORCE,
-                      help=f"[bool] Option: 'True'. Only set this to 'True' (do not set to 'False') to over-ride to the user confirmation to the full count of Notes in the specified folder when it exceed 5x the batch size -- which could be hundreds of notes and could take a looooong time.(default: '{DEFAULT_NOTES_FOLDER_FORCE}')")
-    parser.add_argument('--max-notes', type=int, default=0,
+                      help=f"[bool] Use as '--force' (no 'true' or 'false' value allowed) to over-ride to the default required user confirmation to process the full count of Notes in the specified folder when it exceed 5x the batch size -- which could be hundreds of notes and could take a looooong time.(default: confirmation will be required)")
+    parser.add_argument('--max-notes', '-maxnotes', type=int, default=0,
                       help=f'[int] Maximum number of notes to process. (default: count of all notes)')
     parser.add_argument('--batch-size', type=int,
                       default=DEFAULT_BATCH_SIZE,
                       help=f'[int] The number of notes to convert, and git add/commit/push per loop. Especially useful for initial runs.(default: {DEFAULT_BATCH_SIZE})')  
-    parser.add_argument('--export-path', type=str, 
+    parser.add_argument('--export-path', '--exportpath',type=str, 
                       default=os.path.expanduser(f"{DEFAULT_EXPORT_PATH}"),
                       help=f'[str] Path to export the notes (default: {DEFAULT_EXPORT_PATH})')
-    parser.add_argument('--github-url', type=str,
+    parser.add_argument('--github-url','--githuburl', type=str,
                       default=DEFAULT_GITHUB_URL,
                       help=f'[str] GitHub repository URL. (default: {DEFAULT_GITHUB_URL})')
-    parser.add_argument('--wrapper-dir', type=str,
+    parser.add_argument('--wrapper-dir','--wrapperdir',  type=str,
                       default=DEFAULT_NOTES_OUTERDIR,
                       help=f"[str] Outer directory to hold folders. (default: '{DEFAULT_NOTES_OUTERDIR}')"),
-    parser.add_argument('--output-file', type=str, 
+    parser.add_argument('--output-file', '--outputfile',type=str, 
                       default=DEFAULT_CSV_NAME,
                       help=f"[str] Output CSV file path (default: '<folder>.csv)'")
                         
-    parser.add_argument('--newline-delimiter', type=str, 
+    parser.add_argument('--newline-delimiter', '--newlinedelimiter',type=str, 
                       default=DEFAULT_NEWLINE_DELIMITER,
                       help=f"[str] Default CSV newline delimiter (default: '{DEFAULT_NEWLINE_DELIMITER}')")
                       
-    parser.add_argument('--audit-file-ending', type=str, 
+    parser.add_argument('--audit-file-ending','--auditfileending', type=str, 
                       default=DEFAULT_AUDIT_FILE_ENDING,
                       help=f"[str] The audit file extension (default: '{DEFAULT_AUDIT_FILE_ENDING}')")
 
-    parser.add_argument('--restore-notes', type=str, 
+    parser.add_argument('--restore-notes','--restorenotes', type=str, 
                       default=DEFAULT_RESTORE_NOTES,
                       help=f"[str] Options: 'empty' or 'always'  Determines when to move notes from '<folder>_{DEFAULT_PROCESSED_FOLDER_ENDING}' back to their original source Notes folder. The option 'empty' will not restore notes until notecount is 0 in source folder, while 'always' will restore at the end of each max-notes run. Set to 'never' to never move notes back to source folder. (default: '{DEFAULT_RESTORE_NOTES}')")
 
@@ -705,7 +705,8 @@ def main():
         print(f"LESS than 5 batches required, go on...")
         args_max_notes = args_folder_count
     ######## ----  END check for 5x batch size in arg.folder    ---- #######
-    
+    print("temp stop")
+    sys.exit(1)
     
     ''' if args_max_notes note set, get a notecount value based on folder name '''
     if args_max_notes == 0:
