@@ -532,7 +532,7 @@ def restore_source_foldernote(folder_source, folder_bkup, restore_notes):
     ## if count of notes in folder_source is 0, and count of folder_dest is > 0
     ## then move all the notes from dest back to source. (as it was in the beginning, so shall...)
     
-    if restore_notes != 'empty' or restore_notes != 'always':
+    if restore_notes != 'empty' and restore_notes != 'always':
         return
     
     
