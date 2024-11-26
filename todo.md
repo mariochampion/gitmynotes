@@ -4,7 +4,7 @@
 
 ### bugs
 
-* if not foldername, confirm that you want to do Notes, with count of X
+* if not foldername, confirm that you want to do Notes, with count of X 00 make sure to work thro --true/false and fake bool of argparse
 
 * try with NO wrapper outer dir
 
@@ -17,8 +17,6 @@
 
 * allow optionally `git push` the audit file as well
 
-* write real instructions
-
 * add share code to track optional viralty?
 
 * create self executing mac shell command to wrap around python script. 
@@ -26,7 +24,15 @@
 * oss users trigger/set this up via cron or... automator?
 
 
+### prep for release (technical)
 
+* final names for everything
+
+* make sure the .gitignore is correct
+
+* remove 'mariochampion' from config values 
+
+* write some measure of real instructions
 
 
 ### pro?
