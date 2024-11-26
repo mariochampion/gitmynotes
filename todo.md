@@ -4,7 +4,7 @@
 
 ### bugs
 
-* if not foldername, confirm that you want to do Notes, with count of X 00 make sure to work thro --true/false and fake bool of argparse
+* work through --true/false and fake bool of argparse for --force
 
 * try with NO wrapper outer dir
 
