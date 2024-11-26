@@ -135,8 +135,6 @@ options:
 
 * write real instructions
 
-* allow user to decide to keep <folder>__GitMyNotes bkup or move back to original
-
 * create a github for non-devs one-pager? video? 
 
 * allow optionally `git push` the audit file as well
