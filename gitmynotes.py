@@ -595,7 +595,7 @@ def build_final_msg(gitnotes_url, audit_file, share_url):
         final_msg += f'''    - Check your GitMyNotes: {gitnotes_url}
 '''
     if audit_file:
-        final_msg += f'''    - Check your audit file: ./{audit_file}
+        final_msg += f'''    - Check your audit file: {audit_file}
 '''
     if share_url:
         final_msg += f'''    - Tell your friends, learn more:
@@ -738,7 +738,7 @@ def main():
             #print(f"================================")
     
     ## check for restore-empty-source-folder to decide what to do with contents of folder_GitMyNotes backup folders
-    print(f"Option to empty the source folder is '{args.restore_notes}'")
+    print(f"Option to restore the source folder is '{args.restore_notes}'")
     
     restore_result = 0
     restore_result = restore_source_foldernote(folder_source=args.folder, folder_bkup=f"{args.folder}{DEFAULT_PROCESSED_FOLDER_ENDING}", restore_notes=args.restore_notes)
