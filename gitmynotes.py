@@ -736,7 +736,7 @@ def main():
         print(f"On the FALSE path")
     
     if restore_result:
-        colorprint(textcolor="green",msg=f"SUCCESS: RESTORED notes to {folder_source} from {folder_dest}", addseparator=True)
+        colorprint(textcolor="green",msg=f"SUCCESS: RESTORED notes to {args.folder} from {args.folder}{DEFAULT_PROCESSED_FOLDER_ENDING}", addseparator=True)
     
     else:
         colorprint(textcolor="red",msg=f"  !!! FAILED to RESTORE notes !!!", addseparator=True)
