@@ -355,12 +355,15 @@ def export_notes_metadata(output_file=None, folder=None, max_notes=None, newline
 
 ##### Describe this function
 
-def move_processed_notes(folder_source, folder_dest, max_notes):
+def move_processed_notes(folder_source, folder_dest, max_notes, create=False):
     ''' Move processed notes into destination folder '''
     
     # if processed_notes exists, then that stage was a success, so next step:
     # create_gitmynotes_folder(folder_dest) so we have a place to move notes
-    success, message = create_gitnotes_folder(folder_dest)
+    if create:
+        success, message = create_gitnotes_folder(folder_dest)
+    
+    
     if success:
         colorprint(textcolor="green",msg=f"Success: {message}")
     else:
@@ -454,9 +457,9 @@ def create_gitnotes_folder(folder: str) -> Tuple[bool, str]:
     '''
     
     return process_applescript(applescript)
-    
-    
-    
+
+
+
 ##### Describe this function
 
 def process_applescript(applescript):
@@ -538,7 +541,7 @@ def restore_source_foldernote(folder_source, folder_bkup):
         if bkup_count > 0:
             print(f"about to move {bkup_count} Notes from {folder_bkup} into original source folder: {folder_source}")
             
-            restore_result = move_processed_notes(folder_bkup, folder_source, bkup_count)
+            restore_result = move_processed_notes(folder_bkup, folder_source, bkup_count, create=False)
             return restore_result
             
     else:
@@ -701,7 +704,7 @@ def main():
             
             
         folder_source=args.folder
-        folder_dest=f"{args.folder}{DEFAULT_PROCESSED_FOLDER_ENDING}",
+        folder_dest=f"{folder_source}{DEFAULT_PROCESSED_FOLDER_ENDING}",
         if processednotes_data:
             move_result = move_processed_notes(
                 folder_source,
@@ -729,11 +732,11 @@ def main():
     
     restore_result = 0
     if args.empty_source_folder:
-        (print(f"On the TRUE path")
+        print(f"On the TRUE path")
         restore_result = restore_source_foldernote(folder_source, folder_dest)
         
     else:
-        (print(f"On the FALSE path")
+        print(f"On the FALSE path")
     
     if restore_result:
         colorprint(textcolor="green",msg=f"SUCCESS: RESTORED notes to {folder_source} from {folder_dest}", addseparator=True)
