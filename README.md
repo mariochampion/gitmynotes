@@ -10,9 +10,8 @@ Do you use Notes? Do you use GitHub? Then undoubtedly yes!
 
 Do you use Notes and can [start with GitHub](https://docs.github.com/en/get-started/start-your-journey)? Then also yes!
 
-`writers gonna write`
-Transform your macOS Notes into a version-controlled writer's archive on GitHub.
-Preserve your gems and most excellent lines, and track the full evolution of your work. Maintain a complete history of every change and trace back your ideas from current state and previous alternatives -- with every revision safely tracked and recoverable. Learn how to GitHub and branch and fork to explore your ideas, in trusted collabs, or on your own.
+`writing is re-writing`
+Transform your macOS Notes into a version-controlled archive on GitHub. Preserve your most excellent lines via versions to track the full evolution of your work. Use GitMyNotes to maintain a complete history of every change and trace back your ideas from current state and previous alternatives -- with every revision safely tracked and recoverable. Learn how to GitHub and branch and fork to explore your ideas, in trusted collabs, or on your own.
 
 
 `IT team gotta keep copies`
@@ -24,7 +23,9 @@ No one can predict the future. Losing a job or a role shouldn't mean losing your
 
 
 ## Usage
-`python gitmynotes.py --folder='<notesFolderName>' --max-notes=<N>`
+`python gitmynotes.py` or set some parameters with
+
+`python gitmynotes.py [--folder='<notesFolderName>' --max-notes=<N>]`
 
 
 #### Output Artifacts
