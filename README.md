@@ -60,14 +60,13 @@ No one can predict the future. Losing a job or a role shouldn't mean losing your
 
 	-- REQUIRED TO CHANGE--
 	
-	
-	set `DEFAULT_EXPORT_PATH` to the export location (example: `DEFAULT_EXPORT_PATH = "~/Documents/<SomeFolder>"`)
-	
 	set `DEFAULT_GITHUB_URL` to the the repo where you want to store Notes (example: `DEFAULT_GITHUB_URL = "https://github.com/<myusername>/<myrepo>""`)
 	
 
 	-- REQUIRED: LEAVE AS-IS or CHANGE--
 
+	set `DEFAULT_EXPORT_PATH` to the export location (example: `DEFAULT_EXPORT_PATH = "~/Documents/gitmynotes"`)
+	
 	`DEFAULT_PROCESSED_FOLDER_ENDING = "__GitMyNotes"`
 
 	`DEFAULT_CSV_NAME = "GitMyNotes.csv"`
@@ -120,7 +119,7 @@ options:
                         [str] Default CSV newline delimiter (default: '|||')
   --audit-file-ending AUDIT_FILE_ENDING
                         [str] The audit file extension (default: '.csv')
-  --empty-source-folder EMPTY_SOURCE_FOLDER
+  --restore-empty-source-folder EMPTY_SOURCE_FOLDER
                         [str] If 'True', do not move backup notes from '<folder>___GitMyNotes' back into '<folder>' until 0 notes remain in source <folder>. If 'False', move the notes back to source <folder> after max_notes reached, even if other notes remain un-backed-up in source <folder>. (default: 'True')
 
 ```
