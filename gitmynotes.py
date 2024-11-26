@@ -53,7 +53,7 @@ DEFAULT_PROCESSED_FOLDER_ENDING = cfg['DEFAULT_PROCESSED_FOLDER_ENDING']
 DEFAULT_CSV_NAME = cfg['DEFAULT_CSV_NAME']
 DEFAULT_NEWLINE_DELIMITER = cfg['DEFAULT_NEWLINE_DELIMITER']
 DEFAULT_BATCH_SIZE = cfg['DEFAULT_BATCH_SIZE']
-DEFAULT_NOTES_OUTERDIR = cfg['DEFAULT_NOTES_OUTERDIR']
+DEFAULT_NOTES_WRAPPERDIR = cfg['DEFAULT_NOTES_WRAPPERDIR']
 DEFAULT_AUDIT_FILE_ENDING = cfg['DEFAULT_AUDIT_FILE_ENDING']
 DEFAULT_RESTORE_NOTES = cfg['DEFAULT_RESTORE_NOTES']
 DEFAULT_NOTES_FOLDER_FORCE = cfg['DEFAULT_NOTES_FOLDER_FORCE']
@@ -630,9 +630,9 @@ def main():
     parser.add_argument('--github-url','--githuburl', type=str,
                       default=DEFAULT_GITHUB_URL,
                       help=f'[str] GitHub repository URL. (default: {DEFAULT_GITHUB_URL})')
-    parser.add_argument('--wrapper-dir','--wrapperdir',  type=str,
-                      default=DEFAULT_NOTES_OUTERDIR,
-                      help=f"[str] Outer directory to hold folders. (default: '{DEFAULT_NOTES_OUTERDIR}')"),
+#     parser.add_argument('--wrapper-dir','--wrapperdir',  type=str,
+#                       default=DEFAULT_NOTES_WRAPPERDIR,
+#                       help=f"[str] Outer directory to hold folders. (default: '{DEFAULT_NOTES_WRAPPERDIR}')"),
     parser.add_argument('--output-file', '--outputfile',type=str, 
                       default=DEFAULT_CSV_NAME,
                       help=f"[str] Output CSV file path (default: '<folder>.csv)'")
@@ -655,6 +655,7 @@ def main():
     
     args_max_notes = args.max_notes
     args_folder = args.folder
+    args_wrapper_dir = DEFAULT_NOTES_WRAPPERDIR
     
     ## set up the initial msg to let people know setup details
     initial_msg = build_initial_msg(folder=args.folder, max_notes=args_max_notes, export_path=args.export_path, github_url=args.github_url)
@@ -663,7 +664,7 @@ def main():
     
     os.makedirs(args.export_path, exist_ok=True)
     if args.folder:
-        export_path_w_folder = f"{args.export_path}/{args.wrapper_dir}/{args.folder}"
+        export_path_w_folder = f"{args.export_path}/{args_wrapper_dir}/{args.folder}"
         os.makedirs(export_path_w_folder, exist_ok=True)
     
     setup_git_repo(args.export_path, args.github_url)
@@ -705,8 +706,8 @@ def main():
         print(f"LESS than 5 batches required, go on...")
         args_max_notes = args_folder_count
     ######## ----  END check for 5x batch size in arg.folder    ---- #######
-    print("temp stop")
-    sys.exit(1)
+    
+    
     
     ''' if args_max_notes note set, get a notecount value based on folder name '''
     if args_max_notes == 0:
@@ -732,13 +733,13 @@ def main():
             args.export_path,
             args.folder,
             notes_to_export,
-            args.wrapper_dir
+            args_wrapper_dir
         )
         
         if notes_processed > 0:
             colorprint(textcolor="green",msg=f"SUCCESS: Exported {notes_processed} Notes to local folder {args.export_path}")
             
-            commit_and_push(args.export_path, args.folder, args.wrapper_dir)
+            commit_and_push(args.export_path, args.folder, args_wrapper_dir)
         else:
             colorprint(textcolor="magenta",msg=f"No notes were processed, skipping git commit")
             #print(f"------------------------------------")
@@ -795,8 +796,8 @@ def main():
     
     
     ## Prep for final msg so user knows what happened
-    if args.wrapper_dir:
-        final_gitnotes_url = f"{args.github_url}/tree/main/{args.wrapper_dir}/{args.folder}"
+    if args_wrapper_dir:
+        final_gitnotes_url = f"{args.github_url}/tree/main/{args_wrapper_dir}/{args.folder}"
     else:
         final_gitnotes_url = f"{args.github_url}/tree/main/{args.folder}"
     
