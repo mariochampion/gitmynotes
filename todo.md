@@ -4,8 +4,6 @@
 
 ### bugs
 
-* handle a 0 input for confirm msg, or max-notes=0
-
 * work through --true/false and fake bool of argparse for --force
 
 * try with NO wrapper outer dir
