@@ -31,32 +31,32 @@
 
 
 import subprocess
-import os
+import os, sys
 import argparse
 import math
 import csv
 from datetime import datetime
 from typing import Tuple
+import yaml
 
 
-#### user configs
-##.  REQUIRED TO CHANGE
-DEFAULT_EXPORT_PATH = "~/Documents/gitmynotes"
-DEFAULT_GITHUB_URL = "https://github.com/mariochampion/gitmynotes"
+#### USER CONFIGS
+##   get user configs from file ./gmn_config.yaml
 
+cfg = yaml.safe_load(open("gmn_config.yaml"))
 
-##.  REQUIRED: LEAVE AS-IS or CHANGE--
-DEFAULT_NOTES_FOLDER = "Notes"
-DEFAULT_PROCESSED_FOLDER_ENDING = "__GitMyNotes"
-DEFAULT_CSV_NAME = "gitmynotes.csv"
-DEFAULT_NEWLINE_DELIMITER = "|||"
+DEFAULT_EXPORT_PATH = cfg['DEFAULT_EXPORT_PATH']
+DEFAULT_GITHUB_URL = cfg['DEFAULT_GITHUB_URL']
+DEFAULT_NOTES_FOLDER = cfg['DEFAULT_NOTES_FOLDER']
+DEFAULT_PROCESSED_FOLDER_ENDING = cfg['DEFAULT_PROCESSED_FOLDER_ENDING']
+DEFAULT_CSV_NAME = cfg['DEFAULT_CSV_NAME']
+DEFAULT_NEWLINE_DELIMITER = cfg['DEFAULT_NEWLINE_DELIMITER']
+DEFAULT_BATCH_SIZE = cfg['DEFAULT_BATCH_SIZE']
+DEFAULT_IGNORE_FOLDER = cfg['DEFAULT_IGNORE_FOLDER']
+DEFAULT_NOTES_OUTERDIR = cfg['DEFAULT_NOTES_OUTERDIR']
+DEFAULT_AUDIT_FILE_ENDING = cfg['DEFAULT_AUDIT_FILE_ENDING']
+DEFAULT_RESTORE_NOTES = cfg['DEFAULT_RESTORE_NOTES']
 
-##.  OPTIONAL
-DEFAULT_BATCH_SIZE = "10"
-DEFAULT_IGNORE_FOLDER = "ignore"
-DEFAULT_NOTES_OUTERDIR = "macosnotes"
-DEFAULT_AUDIT_FILE_ENDING = ".csv"
-DEFAULT_RESTORE_NOTES = "empty"
 
 
 

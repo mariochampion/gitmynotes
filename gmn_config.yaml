@@ -1,0 +1,38 @@
+## ===================================================================
+## GitMyNotes - LICENSE AND CREDITS
+## This app/collection of scripts at https://github.com/mariochampion/gitnotes
+## released under the Apache License 2.0. (http://www.apache.org/licenses/LICENSE-2.0)
+##
+## 
+## GitMyNotes scripts crafted and copyright 2024 by mario champion (mariochampion.com) 
+##
+## please open issues and pull requests and comments
+## thanks and always remember: this robot loves you. 
+## boop boop!!!
+## ===================================================================
+
+
+####
+##  IMPORTANT: Any ADDITIONAL configs added to this file must be also added to gitmynotes.py
+##  in the 'USER CONFIGS' section atop that file
+
+
+#### user configs
+##.  REQUIRED TO CHANGE
+'DEFAULT_GITHUB_URL': 'https://github.com/mariochampion/gitmynotes'
+
+
+##.  REQUIRED: LEAVE AS-IS or CHANGE--
+'DEFAULT_NOTES_FOLDER': 'Notes'
+'DEFAULT_EXPORT_PATH': '~/Documents/gitmynotes'
+'DEFAULT_PROCESSED_FOLDER_ENDING': '__GitMyNotes'
+'DEFAULT_CSV_NAME': 'gitmynotes.csv'
+'DEFAULT_NEWLINE_DELIMITER': '|||'
+
+##.  OPTIONAL
+'DEFAULT_BATCH_SIZE': '10'
+'DEFAULT_IGNORE_FOLDER': 'ignore'
+'DEFAULT_NOTES_OUTERDIR': 'macosnotes'
+'DEFAULT_AUDIT_FILE_ENDING': '.csv'
+'DEFAULT_RESTORE_NOTES': 'empty'
+
