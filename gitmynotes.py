@@ -355,7 +355,7 @@ def export_notes_metadata(output_file=None, folder=None, max_notes=None, newline
 
 ##### Describe this function
 
-def move_processed_notes(folder_source, folder_dest, max_notes, create=False):
+def move_processed_notes(folder_source, folder_dest, max_notes, create=True):
     ''' Move processed notes into destination folder '''
     
     # if processed_notes exists, then that stage was a success, so next step:
@@ -363,11 +363,10 @@ def move_processed_notes(folder_source, folder_dest, max_notes, create=False):
     if create:
         success, message = create_gitnotes_folder(folder_dest)
     
-    
-    if success:
-        colorprint(textcolor="green",msg=f"Success: {message}")
-    else:
-        colorprint(textcolor="red",msg=f"Failed: {message}")
+        if success:
+            colorprint(textcolor="green",msg=f"Success: {message}")
+        else:
+            colorprint(textcolor="red",msg=f"Failed: {message}")
     
     
     print(f"Now to move up to {max_notes} notes from '{folder_source}' to '{folder_dest}'")
@@ -703,12 +702,10 @@ def main():
             processednotes_data = 0	
             
             
-        folder_source=args.folder
-        folder_dest=f"{folder_source}{DEFAULT_PROCESSED_FOLDER_ENDING}",
         if processednotes_data:
             move_result = move_processed_notes(
-                folder_source,
-                folder_dest,
+                folder_source=args.folder,
+                folder_dest=f"{args.folder}{DEFAULT_PROCESSED_FOLDER_ENDING}",
                 max_notes=notes_to_export
             )
         
@@ -733,7 +730,7 @@ def main():
     restore_result = 0
     if args.empty_source_folder:
         print(f"On the TRUE path")
-        restore_result = restore_source_foldernote(folder_source, folder_dest)
+        restore_result = restore_source_foldernote(folder_source=args.folder, folder_bkup=f"{args.folder}{DEFAULT_PROCESSED_FOLDER_ENDING}")
         
     else:
         print(f"On the FALSE path")
