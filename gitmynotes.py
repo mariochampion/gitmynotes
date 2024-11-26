@@ -673,10 +673,10 @@ def main():
     
     ######## ----  check for 5x batch size in arg.folder    ---- #######
     
-    ''' if args.folder not set (and defaults to Notes) or set to Notes, the warn user based on count'''
+    ''' if args.folder not set (and defaults to Notes) or set to folder with 5xBatch notes, warn user'''
     if args.folder:
         NotesFolder_count = get_foldernotecount(args.folder)
-        print(f"NotesFolder_count: {NotesFolder_count}")
+        print(f"{args.folder} count: {NotesFolder_count}")
         
     else:
         NotesFolder_count = 0
@@ -687,10 +687,18 @@ def main():
             return
         else:
             print(f"--force not set, and MORE than 5 batches required, must confirm")
-            confirm_msg = f'''WHOA. {NotesFolder_count} notes to process in 'Notes' folder!
-        '''
-            colorprint(textcolor='magenta', f"{confirm_msg}", addseparator=True)
-            confirm = input(f"Confirmation Required")
+            confirm_warn = f'''WHOA. {NotesFolder_count} notes to process in 'Notes' folder!
+        Confirmation Required.'''
+            colorprint(textcolor='magenta', msg=f"{confirm_warn}", addseparator=True)
+            confirm_msg = f''' Enter a number up to {NotesFolder_count} to process.
+  [Or 'enter' for all {NotesFolder_count} notes] : '''
+            
+            confirm_num = input(f"{confirm_msg}") or f"{NotesFolder_count}"
+            confirm_num = int(confirm_num)
+            if confirm_num > NotesFolder_count:
+                confirm_num = NotesFolder_count 
+            print(f"Notes to process: {confirm_num}")
+            
     
     else:
         print(f"LESS than 5 batches required, go on...")
