@@ -654,6 +654,7 @@ def main():
     args = parser.parse_args()
     
     args_max_notes = args.max_notes
+    args_folder = args.folder
     
     ## set up the initial msg to let people know setup details
     initial_msg = build_initial_msg(folder=args.folder, max_notes=args_max_notes, export_path=args.export_path, github_url=args.github_url)
@@ -670,41 +671,37 @@ def main():
     
     
     ######## ----  check for 5x batch size in arg.folder    ---- #######
-    
-    ''' if args.folder not set (and defaults to Notes) or set to folder with 5xBatch notes, warn user'''
-    if args.folder:
-        NotesFolder_count = get_foldernotecount(args.folder)
-        print(f"{args.folder} count: {NotesFolder_count}")
+    ''' if args_folder not set (and defaults to Notes) or set to folder with 5xBatch notes, warn user'''
+    if args_folder:
+        args_folder_count = get_foldernotecount(args_folder)
+        print(f"{args_folder} count: {args_folder_count}")
         
     else:
-        NotesFolder_count = 0
+        args_folder_count = 0
     
-    if NotesFolder_count > (args.batch_size * DEFAULT_NOTECOUNT_BEFORE_CONFIRM):
+    if args_folder_count > (args.batch_size * DEFAULT_NOTECOUNT_BEFORE_CONFIRM):
         if args.force:
             print(f"--force was set, so go on without confirm...")
             return
         else:
             print(f"--force not set, and MORE than 5 batches required, must confirm")
-            confirm_warn = f'''WHOA. {NotesFolder_count} notes to process in 'Notes' folder!
+            confirm_warn = f'''WHOA. {args_folder_count} notes to process in 'Notes' folder!
         Confirmation Required.'''
             colorprint(textcolor='magenta', msg=f"{confirm_warn}", addseparator=True)
-            confirm_msg = f''' Enter a number up to {NotesFolder_count} to process.
-  [Or 'enter' for all {NotesFolder_count} notes] : '''
+            confirm_msg = f''' Enter a number up to {args_folder_count} to process.
+  [Or 'enter' for all {args_folder_count} notes] : '''
             
-            confirm_num = input(f"{confirm_msg}") or f"{NotesFolder_count}"
+            confirm_num = input(f"{confirm_msg}") or f"{args_folder_count}"
             confirm_num = int(confirm_num)
-            if confirm_num > NotesFolder_count:
-                confirm_num = NotesFolder_count 
+            if confirm_num > args_folder_count:
+                confirm_num = args_folder_count 
             print(f"Notes to process: {confirm_num}")
             args_max_notes = confirm_num
             
     else:
         print(f"LESS than 5 batches required, go on...")
-        args_max_notes = NotesFolder_count
-
-    
-    print(f"args_max_notes = {args_max_notes}")
-    # sys.exit(1)
+        args_max_notes = args_folder_count
+    ######## ----  END check for 5x batch size in arg.folder    ---- #######
     
     
     ''' if args_max_notes note set, get a notecount value based on folder name '''
