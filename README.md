@@ -66,7 +66,7 @@ No one can predict the future. Losing a job or a role shouldn't mean losing your
 
 	-- REQUIRED: LEAVE AS-IS or CHANGE--
 
-	set `DEFAULT_EXPORT_PATH` to the export location (example: `DEFAULT_EXPORT_PATH = "~/Documents/gitmynotes"`)
+	`DEFAULT_EXPORT_PATH` to the export location (example: `DEFAULT_EXPORT_PATH = "~/Documents/gitmynotes"`)
 	
 	`DEFAULT_PROCESSED_FOLDER_ENDING = "__GitMyNotes"`
 
@@ -76,15 +76,9 @@ No one can predict the future. Losing a job or a role shouldn't mean losing your
 
 	`DEFAULT_MAX_NOTES = 10`
 	
-
-    -- OPTIONAL --
-    
-    
-	set `DEFAULT_NOTES_OUTERDIR` to the 'wrapper' dir for folders (example: `DEFAULT_NOTES_OUTERDIR = "macosnotes"`)
+	`DEFAULT_BATCH_SIZE` to run loops to reach --max-notes value (example: `DEFAULT_BATCH_SIZE = 10`)
 	
-	set `DEFAULT_BATCH_SIZE` to run loops to reach --max-notes value (example: `DEFAULT_BATCH_SIZE = 10`)
-	
-	set `DEFAULT_IGNORE_FOLDER` to Notes folder to not backup to GitHub (example: `DEFAULT_IGNORE_FOLDER = "ignore"`)
+	`DEFAULT_IGNORE_FOLDER` to Notes folder to not backup to GitHub (example: `DEFAULT_IGNORE_FOLDER = "ignore"`)
 	
 	
 	
@@ -92,36 +86,35 @@ No one can predict the future. Losing a job or a role shouldn't mean losing your
 4. run Ex: `python gitmynotes.py --folder='<notesFolderName>' --max-notes <N> `
 
 ```
-Export Apple MacOS Notes and folders to GitHub repo and folders
+Export macOS Notes to GitHub
 
-usage: gitmynotes.py [-h] [--folder FOLDER] [--max-notes MAX_NOTES] [--batch-size BATCH_SIZE] [--export-path EXPORT_PATH] [--github-url GITHUB_URL]
-                   [--wrapper-dir WRAPPER_DIR] [--ignore-folder IGNORE_FOLDER] [--output-file OUTPUT_FILE] [--newline-delimiter NEWLINE_DELIMITER]
-                   [--audit_file_ending AUDIT_FILE_ENDING]
-
+usage: gitmynotes.py [-h] [--folder FOLDER] [--force] [--max-notes MAX_NOTES] [--batch-size BATCH_SIZE] [--export-path EXPORT_PATH] [--github-url GITHUB_URL] [--output-file OUTPUT_FILE]
+                     [--newline-delimiter NEWLINE_DELIMITER] [--audit-file-ending AUDIT_FILE_ENDING] [--restore-notes RESTORE_NOTES]
+                     
 
 options:
   -h, --help            show this help message and exit
   --folder FOLDER       [str] Specific Notes folder to export.(default: 'Notes')
-  --max-notes MAX_NOTES
+  --force               [bool] Use as '--force' (no 'true' or 'false' value allowed) to over-ride to the default required user confirmation to process the full count of Notes in the specified
+                        folder when it exceed 5x the batch size -- which could be hundreds of notes and could take a looooong time.(default: confirmation will be required)
+  --max-notes MAX_NOTES, -maxnotes MAX_NOTES
                         [int] Maximum number of notes to process. (default: count of all notes)
   --batch-size BATCH_SIZE
                         [int] The number of notes to convert, and git add/commit/push per loop. Especially useful for initial runs.(default: 10)
-  --export-path EXPORT_PATH
+  --export-path EXPORT_PATH, --exportpath EXPORT_PATH
                         [str] Path to export the notes (default: ~/Documents/gitmynotes)
-  --github-url GITHUB_URL
-                        [str] GitHub repository URL. (default: https://github.com/mygitgitusername/gitmynotes)
-  --wrapper-dir WRAPPER_DIR
-                        [str] Outer directory to hold folders. (default: 'macosnotes')
-  --ignore-folder IGNORE_FOLDER
-                        [str] The Notes folder to ignore and not process. (default: 'ignore')
-  --output-file OUTPUT_FILE
+  --github-url GITHUB_URL, --githuburl GITHUB_URL
+                        [str] GitHub repository URL. (default: https://github.com/mariochampion/gitmynotes)
+  --output-file OUTPUT_FILE, --outputfile OUTPUT_FILE
                         [str] Output CSV file path (default: '<folder>.csv)'
-  --newline-delimiter NEWLINE_DELIMITER
+  --newline-delimiter NEWLINE_DELIMITER, --newlinedelimiter NEWLINE_DELIMITER
                         [str] Default CSV newline delimiter (default: '|||')
-  --audit-file-ending AUDIT_FILE_ENDING
+  --audit-file-ending AUDIT_FILE_ENDING, --auditfileending AUDIT_FILE_ENDING
                         [str] The audit file extension (default: '.csv')
-  --restore-empty-source-folder EMPTY_SOURCE_FOLDER
-                        [str] If 'True', do not move backup notes from '<folder>___GitMyNotes' back into '<folder>' until 0 notes remain in source <folder>. If 'False', move the notes back to source <folder> after max_notes reached, even if other notes remain un-backed-up in source <folder>. (default: 'True')
+  --restore-notes RESTORE_NOTES, --restorenotes RESTORE_NOTES
+                        [str] Options: 'empty' or 'always' Determines when to move notes from '<folder>___GitMyNotes' back to their original source Notes folder. The option 'empty' will not
+                        restore notes until notecount is 0 in source folder, while 'always' will restore at the end of each max-notes run. Set to 'never' to never move notes back to source
+                        folder. (default: 'empty')
 
 ```
 
