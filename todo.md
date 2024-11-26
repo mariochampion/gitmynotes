@@ -15,8 +15,6 @@
 
 ### enhancements
 
-* create config file?
-
 * allow optionally `git push` the audit file as well
 
 * write real instructions
