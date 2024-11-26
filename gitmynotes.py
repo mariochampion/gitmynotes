@@ -664,7 +664,7 @@ def main():
     ''' Process in a loop of batches'''
     loop_count = math.ceil(notes_to_process / args.batch_size)
     for x in range(1,loop_count+1): 
-        colorprint(textcolor="cyan",msg=f"Begin export of Notes with batch {x} of {loop_count}", addseparator=True)
+        colorprint(textcolor="cyan",msg=f"    Begin export of Notes with batch {x} of {loop_count}", addseparator=True)
         
         
         if loop_count == 1:
@@ -720,7 +720,7 @@ def main():
             #print(f"================================")
         else:
             #print(f"================================")
-            colorprint(textcolor="red",msg=f"  !!! FAILED to MOVE notes !!!", addseparator=True)
+            colorprint(textcolor="red",msg=f"    !!! FAILED to MOVE notes !!!", addseparator=True)
             #print(f"================================")
     
     ## check for empty-source-folder to decide what to do with contents of folder_GitMyNotes backup folders
@@ -728,7 +728,7 @@ def main():
     print(f"Option to empty the source folder is {empty_source_folder}")
     
     restore_result = 0
-    if args.empty_source_folder:
+    if empty_source_folder == True:
         print(f"On the TRUE path")
         restore_result = restore_source_foldernote(folder_source=args.folder, folder_bkup=f"{args.folder}{DEFAULT_PROCESSED_FOLDER_ENDING}")
         
@@ -739,7 +739,10 @@ def main():
         colorprint(textcolor="green",msg=f"SUCCESS: RESTORED notes to {args.folder} from {args.folder}{DEFAULT_PROCESSED_FOLDER_ENDING}", addseparator=True)
     
     else:
-        colorprint(textcolor="red",msg=f"  !!! FAILED to RESTORE notes !!!", addseparator=True)
+        restore_declined_msg = f'''    DECLINED! Notes not restored to '{args.folder}' 
+    Set --empty-source-folder=True to restore 
+    notes when '{args.folder}' is empty !!!'''
+        colorprint(textcolor="red",msg=f"{restore_declined_msg}", addseparator=True)
     
     
     ## Prep for final msg so user knows what happened
