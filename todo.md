@@ -8,11 +8,14 @@
 
 * when 1st run is WITHOUT a github repo, which is then made later, and thenyou run again, the git push will not happen, because it doesnt happen without a commit. BUT if the notes havent changed then no commit, so no push... CONUNDRUM. temp workaround: go change notes so testing can resume.
 
-* improve msg about access rights including steps for GH PAT and implementing it on mac
+
 
 
 
 ### enhancements
+
+* improve msg about access rights including steps for GH PAT and implementing it on mac. 
+* Use config file to include usage count, so I can offer INIT advice for first time, like has a GitHub set up, etc
 
 * get someone to write tests!!
 
