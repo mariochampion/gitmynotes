@@ -59,6 +59,9 @@ DEFAULT_RESTORE_NOTES = cfg['DEFAULT_RESTORE_NOTES']
 DEFAULT_NOTES_FOLDER_FORCE = cfg['DEFAULT_NOTES_FOLDER_FORCE']
 DEFAULT_NOTECOUNT_BEFORE_CONFIRM = cfg['DEFAULT_NOTECOUNT_BEFORE_CONFIRM']
 
+USAGE_GITMYNOTES_TOTAL = cfg['USAGE_GITMYNOTES_TOTAL']
+USAGE_NOTES_PROCESSED = cfg['USAGE_NOTES_PROCESSED']
+USAGE_FOLDERS_PROCESSED = cfg['USAGE_FOLDERS_PROCESSED']
 
 
 ##### Describe this function
@@ -662,11 +665,35 @@ def main():
     colorprint(textcolor='cyan', msg=f"{initial_msg}", addseparator=True)
     
     
+    ######## ----  Do INIT work, ensure DEFAULT_GITHUB_URL has been changed    ---- #######    
+    if USAGE_GITMYNOTES_TOTAL == 0:
+        print("Welcome first timer!")
+        substring = 'mariochampion'
+        if substring in DEFAULT_GITHUB_URL:
+            print(f"WHOA, the 'DEFAULT_GITHUB_URL' setting in 'gmn.config.yaml' has not been updated to your Github username")
+            usage_github_username = input("Please enter your GitHub username: ")
+            print(f"The 'DEFAULT_GITHUB_URL' will be updated to 'https://github.com/{usage_github_username}/gitmynotes'")
+            
+        
+        
+        print("temp stop")
+        sys.exit(1)
+
+
+
+    ######## ----  END of do INIT work   ---- #######    
+    
+    
+    
+    ######## ----  BUILD initial dirs per args and DEFAULTS    ---- #######
     os.makedirs(args.export_path, exist_ok=True)
     if args.folder:
         export_path_w_folder = f"{args.export_path}/{args_wrapper_dir}/{args.folder}"
         os.makedirs(export_path_w_folder, exist_ok=True)
     
+
+
+    ######## ----  Setup the git repo per args and DEFAULTs    ---- #######
     setup_git_repo(args.export_path, args.github_url)
     
     
@@ -706,6 +733,8 @@ def main():
         print(f"LESS than 5 batches required, go on...")
         args_max_notes = args_folder_count
     ######## ----  END check for 5x batch size in arg.folder    ---- #######
+    
+    
     
     
     

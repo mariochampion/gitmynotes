@@ -13,16 +13,16 @@
 
 
 ####
-##  IMPORTANT: Any ADDITIONAL configs added to this file must be also added to gitmynotes.py
+##  IMPORTANT: Any ADDITIONAL 'DEFAULT_*'configs added to this file must be also added to gitmynotes.py
 ##  in the 'USER CONFIGS' section atop that file
 
 
 #### user configs
-##.  REQUIRED TO CHANGE
+##   REQUIRED TO CHANGE
 'DEFAULT_GITHUB_URL': 'https://github.com/mariochampion/gitmynotes'
 
 
-##.  REQUIRED: LEAVE AS-IS or CHANGE--
+##   REQUIRED: LEAVE AS-IS or CHANGE--
 'DEFAULT_NOTES_FOLDER': 'Notes'
 'DEFAULT_EXPORT_PATH': '~/Documents/gitmynotes'
 'DEFAULT_NOTES_WRAPPERDIR': 'macosnotes'
@@ -35,4 +35,15 @@
 'DEFAULT_BATCH_SIZE': '10'
 'DEFAULT_NEWLINE_DELIMITER': '|||'
 'DEFAULT_RESTORE_NOTES': 'empty'
+
+
+
+#### GitMyNotes Usage data
+##   This data is not transmitted anywhere. 
+##   It is used to enable first-time help, when DEFAULT_GITHUB_URL is not set, for example
+
+'USAGE_GITMYNOTES_TOTAL': 0
+'USAGE_NOTES_PROCESSED': 0
+'USAGE_FOLDERS_PROCESSED': 0
+
 
