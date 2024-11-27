@@ -17,6 +17,8 @@
 * improve msg about access rights including steps for GH PAT and implementing it on mac. 
 * Use config file to include usage count, so I can offer INIT advice for first time, like has a GitHub set up, etc
 
+* ability to update user bash profile to have `alias gitmynotes='python gitmynotes.py'`
+
 * get someone to write tests!!
 
 * allow optionally `git push` the audit file as well
