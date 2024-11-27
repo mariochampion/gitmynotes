@@ -49,6 +49,8 @@
 
 * allow comma separated list of folders at once
 
+* `--properties` option to show the settiings, so dont have to look thru, and option to set that via cli
+
 * command to get list of folders and counts so you can decide what to do
 
 * pre-map some folders to some github repos
