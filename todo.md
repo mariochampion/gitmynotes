@@ -8,7 +8,7 @@
 
 * when 1st run is WITHOUT a github repo, which is then made later, and thenyou run again, the git push will not happen, because it doesnt happen without a commit. BUT if the notes havent changed then no commit, so no push... CONUNDRUM. temp workaround: go change notes so testing can resume.
 
-
+* check in on 'DEFAULT_NOTES_FOLDER_FORCE': '' after yaml changeover
 
 
 

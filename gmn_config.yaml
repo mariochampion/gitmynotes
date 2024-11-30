@@ -18,8 +18,8 @@
 
 
 #### user configs
-##   REQUIRED TO CHANGE
-'DEFAULT_GITHUB_URL': 'https://github.com/<changeme>/gitmynotes'
+##   REQUIRED TO CHANGE the '<ChangeMe>' github username
+'DEFAULT_GITHUB_URL': 'https://github.com/mariochampion/gitmynotes'
 
 
 ##   REQUIRED: LEAVE AS-IS or CHANGE--
@@ -27,10 +27,8 @@
 'DEFAULT_EXPORT_PATH': '~/Documents/gitmynotes'
 'DEFAULT_NOTES_WRAPPERDIR': 'macosnotes'
 'DEFAULT_PROCESSED_FOLDER_ENDING': '__GitMyNotes'
-'DEFAULT_CSV_NAME': 'gitmynotes.csv'
 'DEFAULT_AUDIT_FILE_ENDING': '.csv'
-
-'DEFAULT_NOTES_FOLDER_FORCE':
+'DEFAULT_NOTES_FOLDER_FORCE': 'Null'
 'DEFAULT_NOTECOUNT_BEFORE_CONFIRM': 5
 'DEFAULT_BATCH_SIZE': '10'
 'DEFAULT_NEWLINE_DELIMITER': '|||'

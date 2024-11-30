@@ -88,33 +88,35 @@ No one can predict the future. Losing a job or a role shouldn't mean losing your
 ```
 Export macOS Notes to GitHub
 
-usage: gitmynotes.py [-h] [--folder FOLDER] [--force] [--max-notes MAX_NOTES] [--batch-size BATCH_SIZE] [--export-path EXPORT_PATH] [--github-url GITHUB_URL] [--output-file OUTPUT_FILE]
-                     [--newline-delimiter NEWLINE_DELIMITER] [--audit-file-ending AUDIT_FILE_ENDING] [--restore-notes RESTORE_NOTES]
-                     
+usage: gitmynotes.py [-h] [--folder FOLDER] [--force] [--max-notes MAX_NOTES] [--batch-size BATCH_SIZE] [--export-path EXPORT_PATH]
+                     [--github-url GITHUB_URL] [--newline-delimiter NEWLINE_DELIMITER] [--audit-file-ending AUDIT_FILE_ENDING]
+                     [--restore-notes RESTORE_NOTES]
+
 
 options:
   -h, --help            show this help message and exit
   --folder FOLDER       [str] Specific Notes folder to export.(default: 'Notes')
-  --force               [bool] Use as '--force' (no 'true' or 'false' value allowed) to over-ride to the default required user confirmation to process the full count of Notes in the specified
-                        folder when it exceed 5x the batch size -- which could be hundreds of notes and could take a looooong time.(default: confirmation will be required)
+  --force               [bool] Use as '--force' (no 'true' or 'false' value allowed) to over-ride to the default required user confirmation to
+                        process the full count of Notes in the specified folder when it exceed 5x the batch size -- which could be hundreds of
+                        notes and could take a looooong time.(default: confirmation will be required)
   --max-notes MAX_NOTES, -maxnotes MAX_NOTES
                         [int] Maximum number of notes to process. (default: count of all notes)
   --batch-size BATCH_SIZE
-                        [int] The number of notes to convert, and git add/commit/push per loop. Especially useful for initial runs.(default: 10)
+                        [int] The number of notes to convert, and git add/commit/push per loop. Especially useful for initial runs.(default:
+                        10)
   --export-path EXPORT_PATH, --exportpath EXPORT_PATH
                         [str] Path to export the notes (default: ~/Documents/gitmynotes)
   --github-url GITHUB_URL, --githuburl GITHUB_URL
-                        [str] GitHub repository URL. (default: https://github.com/mariochampion/gitmynotes)
-  --output-file OUTPUT_FILE, --outputfile OUTPUT_FILE
-                        [str] Output CSV file path (default: '<folder>.csv)'
+                        [str] GitHub repository URL. (default: https://github.com/<changeme>/gitmynotes)
   --newline-delimiter NEWLINE_DELIMITER, --newlinedelimiter NEWLINE_DELIMITER
                         [str] Default CSV newline delimiter (default: '|||')
   --audit-file-ending AUDIT_FILE_ENDING, --auditfileending AUDIT_FILE_ENDING
                         [str] The audit file extension (default: '.csv')
   --restore-notes RESTORE_NOTES, --restorenotes RESTORE_NOTES
-                        [str] Options: 'empty' or 'always' Determines when to move notes from '<folder>___GitMyNotes' back to their original source Notes folder. The option 'empty' will not
-                        restore notes until notecount is 0 in source folder, while 'always' will restore at the end of each max-notes run. Set to 'never' to never move notes back to source
-                        folder. (default: 'empty')
+                        [str] Options: 'empty' or 'always' Determines when to move notes from '<folder>___GitMyNotes' back to their original
+                        source Notes folder. The option 'empty' will not restore notes until notecount is 0 in source folder, while 'always'
+                        will restore at the end of each max-notes run. Set to 'never' to never move notes back to source folder. (default:
+                        'empty')
 
 ```
 

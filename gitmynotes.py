@@ -38,38 +38,26 @@ import math
 import csv
 from datetime import datetime
 from typing import Tuple
-#import yaml
 from ruamel.yaml import YAML
 
 
 #### USER CONFIGS
 ##   get user configs from file ./gmn_config.yaml
 
-yaml=YAML(typ='safe')   # default, if not specfied, is 'rt' (round-trip)
-cfg = yaml.load(open("gmn_config.yaml"))
+def load_configs_from_file():
+    yaml=YAML(typ='safe')   # default, if not specfied, is 'rt' (round-trip)
+    loaded_configs = yaml.load(open("gmn_config.yaml"))
+    print(f"1. loaded_configs: {loaded_configs}")
+    return loaded_configs
 
-DEFAULT_EXPORT_PATH = cfg['DEFAULT_EXPORT_PATH']
-DEFAULT_GITHUB_URL = cfg['DEFAULT_GITHUB_URL']
-DEFAULT_NOTES_FOLDER = cfg['DEFAULT_NOTES_FOLDER']
-DEFAULT_PROCESSED_FOLDER_ENDING = cfg['DEFAULT_PROCESSED_FOLDER_ENDING']
-DEFAULT_CSV_NAME = cfg['DEFAULT_CSV_NAME']
-DEFAULT_NEWLINE_DELIMITER = cfg['DEFAULT_NEWLINE_DELIMITER']
-DEFAULT_BATCH_SIZE = cfg['DEFAULT_BATCH_SIZE']
-DEFAULT_NOTES_WRAPPERDIR = cfg['DEFAULT_NOTES_WRAPPERDIR']
-DEFAULT_AUDIT_FILE_ENDING = cfg['DEFAULT_AUDIT_FILE_ENDING']
-DEFAULT_RESTORE_NOTES = cfg['DEFAULT_RESTORE_NOTES']
-DEFAULT_NOTES_FOLDER_FORCE = cfg['DEFAULT_NOTES_FOLDER_FORCE']
-DEFAULT_NOTECOUNT_BEFORE_CONFIRM = cfg['DEFAULT_NOTECOUNT_BEFORE_CONFIRM']
-
-USAGE_GITMYNOTES_TOTAL = cfg['USAGE_GITMYNOTES_TOTAL']
-USAGE_NOTES_PROCESSED = cfg['USAGE_NOTES_PROCESSED']
-USAGE_FOLDERS_PROCESSED = cfg['USAGE_FOLDERS_PROCESSED']
 
 
 ##### Describe this function
 
 def setup_git_repo(repo_path, DEFAULT_GITHUB_URL):
     """Initialize Git repo and set remote if not already set up"""
+    print(f"repo_path, {repo_path}")
+    print(f"DEFAULT_GITHUB_URL {DEFAULT_GITHUB_URL}")    
     if not os.path.exists(os.path.join(repo_path, '.git')):
         try:
             subprocess.run(['git', 'init'], cwd=repo_path)
@@ -233,7 +221,7 @@ def commit_and_push(repo_path, folder_name=None, wrapper_dir=None):
 
 ##### Describe this function
 
-def export_notes_metadata(output_file=None, folder=None, max_notes=None, newline_delimiter=f"{DEFAULT_NEWLINE_DELIMITER}"):
+def export_notes_metadata(output_file=None, folder=None, max_notes=None, newline_delimiter=None):
     """
     Export macOS Notes metadata (title, quoted title, and modification date) to a CSV file.
     
@@ -258,7 +246,7 @@ def export_notes_metadata(output_file=None, folder=None, max_notes=None, newline
     '''
     
     if folder:
-        output_file = f"{folder}{DEFAULT_AUDIT_FILE_ENDING}"
+        #output_file = f"{folder}{DEFAULT_AUDIT_FILE_ENDING}"
         applescript += f'''
         set targetFolder to null
         repeat with f in folders
@@ -274,7 +262,7 @@ def export_notes_metadata(output_file=None, folder=None, max_notes=None, newline
         end if
         '''
     else:
-        output_file = f"{DEFAULT_CSV_NAME}"
+        #output_file = f"{DEFAULT_CSV_NAME}"
         applescript += '''
         set theNotes to notes
         '''
@@ -646,6 +634,30 @@ def build_final_msg(gitnotes_url, audit_file, share_url):
 ##### Describe this function
 
 def main():
+
+    ######## ----  Get DEFAULT_& vars from config file     ---- #######    
+    cfg = load_configs_from_file()
+    print(f"cfg : {cfg}")
+    DEFAULT_GITHUB_URL = cfg['DEFAULT_GITHUB_URL']
+    
+    DEFAULT_NOTES_FOLDER = cfg['DEFAULT_NOTES_FOLDER']
+    DEFAULT_EXPORT_PATH = cfg['DEFAULT_EXPORT_PATH']
+    DEFAULT_NOTES_WRAPPERDIR = cfg['DEFAULT_NOTES_WRAPPERDIR']
+    DEFAULT_PROCESSED_FOLDER_ENDING = cfg['DEFAULT_PROCESSED_FOLDER_ENDING']
+    DEFAULT_AUDIT_FILE_ENDING = cfg['DEFAULT_AUDIT_FILE_ENDING']
+    DEFAULT_NOTES_FOLDER_FORCE = cfg['DEFAULT_NOTES_FOLDER_FORCE']
+    DEFAULT_NOTECOUNT_BEFORE_CONFIRM = cfg['DEFAULT_NOTECOUNT_BEFORE_CONFIRM']
+    DEFAULT_BATCH_SIZE = cfg['DEFAULT_BATCH_SIZE']
+    DEFAULT_NEWLINE_DELIMITER = cfg['DEFAULT_NEWLINE_DELIMITER']
+    DEFAULT_RESTORE_NOTES = cfg['DEFAULT_RESTORE_NOTES']
+    
+    USAGE_GITMYNOTES_TOTAL = cfg['USAGE_GITMYNOTES_TOTAL']
+    USAGE_NOTES_PROCESSED = cfg['USAGE_NOTES_PROCESSED']
+    USAGE_FOLDERS_PROCESSED = cfg['USAGE_FOLDERS_PROCESSED']
+
+
+
+    ######## ----  Parse the args provided on CLI    ---- #######    
     parser = argparse.ArgumentParser(description='Export macOS Notes to GitHub')
     parser.add_argument('--folder', type=str, 
                       default=DEFAULT_NOTES_FOLDER,
@@ -663,39 +675,33 @@ def main():
                       help=f'[str] Path to export the notes (default: {DEFAULT_EXPORT_PATH})')
     parser.add_argument('--github-url','--githuburl', type=str,
                       default=DEFAULT_GITHUB_URL,
-                      help=f'[str] GitHub repository URL. (default: {DEFAULT_GITHUB_URL})')
-#     parser.add_argument('--wrapper-dir','--wrapperdir',  type=str,
-#                       default=DEFAULT_NOTES_WRAPPERDIR,
-#                       help=f"[str] Outer directory to hold folders. (default: '{DEFAULT_NOTES_WRAPPERDIR}')"),
-    parser.add_argument('--output-file', '--outputfile',type=str, 
-                      default=DEFAULT_CSV_NAME,
-                      help=f"[str] Output CSV file path (default: '<folder>.csv)'")
-                        
+                      help=f'[str] GitHub repository URL. (default: {DEFAULT_GITHUB_URL})')                       
     parser.add_argument('--newline-delimiter', '--newlinedelimiter',type=str, 
                       default=DEFAULT_NEWLINE_DELIMITER,
                       help=f"[str] Default CSV newline delimiter (default: '{DEFAULT_NEWLINE_DELIMITER}')")
-                      
     parser.add_argument('--audit-file-ending','--auditfileending', type=str, 
                       default=DEFAULT_AUDIT_FILE_ENDING,
                       help=f"[str] The audit file extension (default: '{DEFAULT_AUDIT_FILE_ENDING}')")
-
     parser.add_argument('--restore-notes','--restorenotes', type=str, 
                       default=DEFAULT_RESTORE_NOTES,
                       help=f"[str] Options: 'empty' or 'always'  Determines when to move notes from '<folder>_{DEFAULT_PROCESSED_FOLDER_ENDING}' back to their original source Notes folder. The option 'empty' will not restore notes until notecount is 0 in source folder, while 'always' will restore at the end of each max-notes run. Set to 'never' to never move notes back to source folder. (default: '{DEFAULT_RESTORE_NOTES}')")
 
 
-    
+
     args = parser.parse_args()
     
     args_max_notes = args.max_notes
     args_folder = args.folder
     args_wrapper_dir = DEFAULT_NOTES_WRAPPERDIR
+    audit_file = f"./{args.folder}{DEFAULT_AUDIT_FILE_ENDING}"
+
     
     ## set up the initial msg to let people know setup details
     initial_msg = build_initial_msg(folder=args.folder, max_notes=args_max_notes, export_path=args.export_path, github_url=args.github_url)
     colorprint(textcolor='cyan', msg=f"{initial_msg}", addseparator=True)
-    
-    
+
+
+
     ######## ----  Do INIT work, ensure DEFAULT_GITHUB_URL has been changed    ---- #######    
     if USAGE_GITMYNOTES_TOTAL == 0:
         print("Welcome first timer!")
@@ -706,29 +712,24 @@ def main():
             print(f"The 'DEFAULT_GITHUB_URL' will be updated to 'https://github.com/{usage_github_username}/gitmynotes'")
             ## now update the yaml file
             update_yaml_config('gmn_config.yaml', 'DEFAULT_GITHUB_URL', f"https://github.com/{usage_github_username}/gitmynotes")
-        
-        print("temp stop")
-        sys.exit(1)
+            cfg = load_configs_from_file()
+            DEFAULT_GITHUB_URL = cfg['DEFAULT_GITHUB_URL']
 
 
 
-    ######## ----  END of do INIT work   ---- #######    
-    
-    
-    
     ######## ----  BUILD initial dirs per args and DEFAULTS    ---- #######
     os.makedirs(args.export_path, exist_ok=True)
     if args.folder:
         export_path_w_folder = f"{args.export_path}/{args_wrapper_dir}/{args.folder}"
         os.makedirs(export_path_w_folder, exist_ok=True)
-    
+
 
 
     ######## ----  Setup the git repo per args and DEFAULTs    ---- #######
     setup_git_repo(args.export_path, args.github_url)
-    
-    
-    
+
+
+
     ######## ----  check for 5x batch size in arg.folder    ---- #######
     ''' if args_folder not set (and defaults to Notes) or set to folder with 5xBatch notes, warn user'''
     if args_folder:
@@ -809,7 +810,7 @@ def main():
             #print(f"NOTES PROCESSED > 0: {notes_processed}")
             colorprint(textcolor="white",msg=f"Notes to export to markdown: {notes_to_export}")
             processednotes_data = export_notes_metadata(
-                output_file=args.output_file,
+                output_file=audit_file,
                 folder=args.folder,
                 max_notes=notes_processed,
                 newline_delimiter=args.newline_delimiter
@@ -861,10 +862,10 @@ def main():
     else:
         final_gitnotes_url = f"{args.github_url}/tree/main/{args.folder}"
     
-    final_audit_file = f"./{args.folder}{DEFAULT_AUDIT_FILE_ENDING}"
+    
     share_url = "https://GitMyNotes.com/share?iam=123abc456"
     
-    final_msg = build_final_msg(gitnotes_url=f"{final_gitnotes_url}", audit_file=f"{final_audit_file}", share_url=f"{share_url}")
+    final_msg = build_final_msg(gitnotes_url=f"{final_gitnotes_url}", audit_file=f"{audit_file}", share_url=f"{share_url}")
     
     colorprint(textcolor="cyan",msg=f"{final_msg}", addseparator=True)
     
