@@ -47,7 +47,7 @@ from ruamel.yaml import YAML
 def load_configs_from_file():
     yaml=YAML(typ='safe')   # default, if not specfied, is 'rt' (round-trip)
     loaded_configs = yaml.load(open("gmn_config.yaml"))
-    print(f"1. loaded_configs: {loaded_configs}")
+    
     return loaded_configs
 
 
@@ -56,8 +56,7 @@ def load_configs_from_file():
 
 def setup_git_repo(repo_path, DEFAULT_GITHUB_URL):
     """Initialize Git repo and set remote if not already set up"""
-    print(f"repo_path, {repo_path}")
-    print(f"DEFAULT_GITHUB_URL {DEFAULT_GITHUB_URL}")    
+    
     if not os.path.exists(os.path.join(repo_path, '.git')):
         try:
             subprocess.run(['git', 'init'], cwd=repo_path)
@@ -221,7 +220,7 @@ def commit_and_push(repo_path, folder_name=None, wrapper_dir=None):
 
 ##### Describe this function
 
-def export_notes_metadata(output_file=None, folder=None, max_notes=None, newline_delimiter=None):
+def export_notes_metadata(output_file, folder, max_notes, newline_delimiter):
     """
     Export macOS Notes metadata (title, quoted title, and modification date) to a CSV file.
     
@@ -231,11 +230,8 @@ def export_notes_metadata(output_file=None, folder=None, max_notes=None, newline
         max_notes (int): Maximum number of notes to export (None for all notes)
         newline_delimiter (str): Default newline delimiter (|||)
     """
-    #print(f"INSIDE export_notes_metadata. max_notes: {max_notes}")
-    #print(" ")
     
-    # AppleScript to get notes information
-    
+    # AppleScript to get notes information    
     applescript = '''
     tell application "Notes"
         set noteList to {}
@@ -246,7 +242,6 @@ def export_notes_metadata(output_file=None, folder=None, max_notes=None, newline
     '''
     
     if folder:
-        #output_file = f"{folder}{DEFAULT_AUDIT_FILE_ENDING}"
         applescript += f'''
         set targetFolder to null
         repeat with f in folders
@@ -262,7 +257,6 @@ def export_notes_metadata(output_file=None, folder=None, max_notes=None, newline
         end if
         '''
     else:
-        #output_file = f"{DEFAULT_CSV_NAME}"
         applescript += '''
         set theNotes to notes
         '''
@@ -291,19 +285,18 @@ def export_notes_metadata(output_file=None, folder=None, max_notes=None, newline
         return noteList
     end tell
     '''
-    #print("about to hit process_applescript()")
+
     result,output = process_applescript(applescript)
     
     # Parse the output
     notes_data = []
-    raw_output = output.split(f"{DEFAULT_NEWLINE_DELIMITER}")
+    raw_output = output.split(newline_delimiter)
     raw_output = raw_output[:-1]
     
     current_datetime = datetime.now()
     for line in raw_output:
         
         line = line.rstrip(",")
-        #print(f"line is:{line}")
         
         #Remove leading and trailing commas
         if line.startswith(','): line = line[1:]
@@ -329,15 +322,11 @@ def export_notes_metadata(output_file=None, folder=None, max_notes=None, newline
         notes_data.append([folder, title, formatted_date, quoted_title, current_datetime])
         
     # Write to CSV
-    #print("-------  NOTES DATA -----------	-")
-    #print(f"output_file {output_file}")
-    #print(f"notes_data {notes_data}")    
     mode = 'a' if os.path.exists(output_file) else 'w'
     with open(output_file, mode, newline='', encoding='utf-8') as f:
         writer = csv.writer(f)
         if mode == 'w':  # Only write header for new files
             writer.writerow(['Folder', 'Original Title', 'Last Modified', 'Exported Title', 'Exported Date'])
-        #print(f"notes_data {notes_data}")
         writer.writerows(notes_data)
         
     colorprint(textcolor="green",msg=f"SUCCESS: Exported {len(notes_data)} notes to '{output_file}'", addseparator=True)
@@ -362,7 +351,7 @@ def move_processed_notes(folder_source, folder_dest, max_notes, create=True):
             colorprint(textcolor="red",msg=f"Failed: {message}")
     
     
-    print(f"Now to move up to {max_notes} notes from '{folder_source}' to '{folder_dest}'")
+    #print(f"Now to move up to {max_notes} notes from '{folder_source}' to '{folder_dest}'")
     
     # Escape any quotes in folder names
     folder_source_escaped = folder_source.replace('"', '\\"')
@@ -531,14 +520,15 @@ def restore_source_foldernote(folder_source, folder_bkup, restore_notes):
     
     source_count = get_foldernotecount(folder_source)
     bkup_count = get_foldernotecount(folder_bkup)
-    print(f"'{folder_source}' notecount: {source_count}")
-    print(f"'{folder_bkup}' notecount: {bkup_count}")
+    #print(f"'{folder_source}' notecount: {source_count}")
+    #print(f"'{folder_bkup}' notecount: {bkup_count}")
     
     if restore_notes == 'empty':
        if source_count == 0:
             if bkup_count > 0:
-                print(f"Source folder {folder_source} is empty!")
-                print(f"Moving {bkup_count} Notes from {folder_bkup} into original source folder: {folder_source}")
+                print(f"Source folder {folder_source} notecount is {source_count}!")
+                print(f"Option --restore-notes={restore_notes} so processed notes in {folder_bkup} will be moved back.")
+                #print(f"Moving {bkup_count} Notes from {folder_bkup} into original source folder: {folder_source}")
                 restore_result = move_processed_notes(folder_bkup, folder_source, bkup_count, create=False)
                 
                 return restore_result
@@ -584,20 +574,24 @@ def update_yaml_config(file_path, key, value):
 
 
 
-def build_initial_msg(folder=None, max_notes=None, export_path=None, github_url=None):
+def build_initial_msg(this_msg=None, folder=None, max_notes=None, export_path=None, github_url=None):
     # get some values for an initial msg
     
-    initial_msg = f'''    Welcome, 'tis a good day to GitMyNotes
+    if this_msg:
+        initial_msg = f'''{this_msg}
+'''    
+    else:
+        initial_msg = f'''    Welcome, 'tis a good day to GitMyNotes
 
 '''
     if folder:
-        initial_msg += f'''    - folder: {folder}
+        initial_msg += f'''    - Notes folder: {folder}
 '''
     if max_notes:
         initial_msg += f'''    - max-notes: {max_notes}
 '''
     if export_path:
-        initial_msg += f'''    - export to: {export_path}
+        initial_msg += f'''    - Export to: {export_path}
 '''
     if github_url:
         initial_msg += f'''    - GitHub repo: {github_url}
@@ -637,7 +631,6 @@ def main():
 
     ######## ----  Get DEFAULT_& vars from config file     ---- #######    
     cfg = load_configs_from_file()
-    print(f"cfg : {cfg}")
     DEFAULT_GITHUB_URL = cfg['DEFAULT_GITHUB_URL']
     
     DEFAULT_NOTES_FOLDER = cfg['DEFAULT_NOTES_FOLDER']
@@ -654,6 +647,7 @@ def main():
     USAGE_GITMYNOTES_TOTAL = cfg['USAGE_GITMYNOTES_TOTAL']
     USAGE_NOTES_PROCESSED = cfg['USAGE_NOTES_PROCESSED']
     USAGE_FOLDERS_PROCESSED = cfg['USAGE_FOLDERS_PROCESSED']
+    print(f"Initial configs: {cfg}")
 
 
 
@@ -690,6 +684,7 @@ def main():
 
     args = parser.parse_args()
     
+    ## Set up vars to use later
     args_max_notes = args.max_notes
     args_folder = args.folder
     args_wrapper_dir = DEFAULT_NOTES_WRAPPERDIR
@@ -697,14 +692,14 @@ def main():
 
     
     ## set up the initial msg to let people know setup details
-    initial_msg = build_initial_msg(folder=args.folder, max_notes=args_max_notes, export_path=args.export_path, github_url=args.github_url)
+    initial_msg = build_initial_msg(this_msg="", folder=args.folder, max_notes=args_max_notes, export_path=args.export_path, github_url=args.github_url)
     colorprint(textcolor='cyan', msg=f"{initial_msg}", addseparator=True)
 
 
 
     ######## ----  Do INIT work, ensure DEFAULT_GITHUB_URL has been changed    ---- #######    
     if USAGE_GITMYNOTES_TOTAL == 0:
-        print("Welcome first timer!")
+        print("Hello first timer!")
         substring = '<ChangeMe>'
         if substring in DEFAULT_GITHUB_URL:
             print(f"WHOA, the 'DEFAULT_GITHUB_URL' setting in 'gmn.config.yaml' has not been updated to your Github username")
@@ -714,19 +709,25 @@ def main():
             update_yaml_config('gmn_config.yaml', 'DEFAULT_GITHUB_URL', f"https://github.com/{usage_github_username}/gitmynotes")
             cfg = load_configs_from_file()
             DEFAULT_GITHUB_URL = cfg['DEFAULT_GITHUB_URL']
+            print(f"reloaded DEFAULT_GITHUB_URL: {DEFAULT_GITHUB_URL}")
+            
+            ## RE-DO the initial msg to let people know setup details have changed
+            initial_msg = build_initial_msg(this_msg="  Thanks for updating your GitHub username!", folder=args.folder, max_notes=args_max_notes, export_path=args.export_path, github_url=DEFAULT_GITHUB_URL)
+            colorprint(textcolor='cyan', msg=f"{initial_msg}", addseparator=True)
+
 
 
 
     ######## ----  BUILD initial dirs per args and DEFAULTS    ---- #######
     os.makedirs(args.export_path, exist_ok=True)
     if args.folder:
-        export_path_w_folder = f"{args.export_path}/{args_wrapper_dir}/{args.folder}"
+        export_path_w_folder = f"{args.export_path}/{args_wrapper_dir}/{args_folder}"
         os.makedirs(export_path_w_folder, exist_ok=True)
 
 
 
     ######## ----  Setup the git repo per args and DEFAULTs    ---- #######
-    setup_git_repo(args.export_path, args.github_url)
+    setup_git_repo(args.export_path, DEFAULT_GITHUB_URL)
 
 
 
@@ -758,11 +759,11 @@ def main():
             confirm_num = int(confirm_num)
             if confirm_num > args_folder_count:
                 confirm_num = args_folder_count 
-            print(f"Notes to process: {confirm_num}")
+            print(f"aa Notes to process: {confirm_num}")
             args_max_notes = confirm_num
             
     else:
-        print(f"LESS than 5 batches required, go on...")
+        print(f"LESS than {DEFAULT_NOTECOUNT_BEFORE_CONFIRM} batches required, go on...")
         args_max_notes = args_folder_count
     ######## ----  END check for 5x batch size in arg.folder    ---- #######
     
@@ -776,7 +777,7 @@ def main():
     else:
         notes_to_process = args_max_notes
     
-    colorprint(textcolor="white",msg=f"Notes to process: {notes_to_process}")
+    colorprint(textcolor="white",msg=f"bb Notes to process: {notes_to_process}")
     
     ''' Process in a loop of batches'''
     loop_count = math.ceil(notes_to_process / args.batch_size)
@@ -858,9 +859,9 @@ def main():
     
     ## Prep for final msg so user knows what happened
     if args_wrapper_dir:
-        final_gitnotes_url = f"{args.github_url}/tree/main/{args_wrapper_dir}/{args.folder}"
+        final_gitnotes_url = f"{DEFAULT_GITHUB_URL}/tree/main/{args_wrapper_dir}/{args.folder}"
     else:
-        final_gitnotes_url = f"{args.github_url}/tree/main/{args.folder}"
+        final_gitnotes_url = f"{DEFAULT_GITHUB_URL}/tree/main/{args.folder}"
     
     
     share_url = "https://GitMyNotes.com/share?iam=123abc456"
