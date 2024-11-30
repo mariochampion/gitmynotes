@@ -19,7 +19,7 @@
 
 #### user configs
 ##   REQUIRED TO CHANGE the '<ChangeMe>' github username
-'DEFAULT_GITHUB_URL': 'https://github.com/mariochampion/gitmynotes'
+'DEFAULT_GITHUB_URL': 'https://github.com/<ChangeMe>/gitmynotes'
 
 
 ##   REQUIRED: LEAVE AS-IS or CHANGE--
