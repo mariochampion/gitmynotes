@@ -637,11 +637,12 @@ def main():
     
     DEFAULT_NOTES_FOLDER = cfg['DEFAULT_NOTES_FOLDER']
     DEFAULT_EXPORT_PATH = cfg['DEFAULT_EXPORT_PATH']
+    DEFAULT_MAX_NOTES = cfg['DEFAULT_MAX_NOTES']
+    DEFAULT_BATCH_SIZE = cfg['DEFAULT_BATCH_SIZE']
     DEFAULT_NOTES_WRAPPERDIR = cfg['DEFAULT_NOTES_WRAPPERDIR']
     DEFAULT_PROCESSED_FOLDER_ENDING = cfg['DEFAULT_PROCESSED_FOLDER_ENDING']
     DEFAULT_AUDIT_FILE_ENDING = cfg['DEFAULT_AUDIT_FILE_ENDING']
     DEFAULT_NOTECOUNT_BEFORE_CONFIRM = cfg['DEFAULT_NOTECOUNT_BEFORE_CONFIRM']
-    DEFAULT_BATCH_SIZE = cfg['DEFAULT_BATCH_SIZE']
     DEFAULT_NEWLINE_DELIMITER = cfg['DEFAULT_NEWLINE_DELIMITER']
     DEFAULT_RESTORE_NOTES = cfg['DEFAULT_RESTORE_NOTES']
     
@@ -653,18 +654,19 @@ def main():
 
 
     ######## ----  Parse the args provided on CLI    ---- #######    
-    parser = argparse.ArgumentParser(description='Export macOS Notes to GitHub')
+    parser = argparse.ArgumentParser(description="Export macOS Notes to GitHub.")
     parser.add_argument('--folder', type=str, 
                       default=DEFAULT_NOTES_FOLDER,
                       help=f"[str] Specific Notes folder to export.(default: '{DEFAULT_NOTES_FOLDER}')")
     parser.add_argument('--force', action='store_true',
                       default=DEFAULT_NOTES_FOLDER_FORCE,
                       help=f"[bool] Use as '--force' (no 'true' or 'false' value allowed) to over-ride to the default required user confirmation to process the full count of Notes in the specified folder when it exceed 5x the batch size -- which could be hundreds of notes and could take a looooong time.(default: confirmation will be required)")
-    parser.add_argument('--max-notes', '-maxnotes', type=int, default=0,
-                      help=f'[int] Maximum number of notes to process. (default: count of all notes)')
+    parser.add_argument('--max-notes', '-maxnotes', type=int, 
+                      default=DEFAULT_MAX_NOTES,
+                      help=f'[int] Maximum number of notes to process. (default: {DEFAULT_MAX_NOTES})')
     parser.add_argument('--batch-size', type=int,
                       default=DEFAULT_BATCH_SIZE,
-                      help=f'[int] The number of notes to convert, and git add/commit/push per loop. Especially useful for initial runs.(default: {DEFAULT_BATCH_SIZE})')  
+                      help=f'[int] The number of notes to convert, and git add/commit/push per loop, calculated a max-notes/batch-size. Especially useful for initial runs.(default: {DEFAULT_BATCH_SIZE})')  
     parser.add_argument('--export-path', '--exportpath',type=str, 
                       default=os.path.expanduser(f"{DEFAULT_EXPORT_PATH}"),
                       help=f'[str] Path to export the notes (default: {DEFAULT_EXPORT_PATH})')
