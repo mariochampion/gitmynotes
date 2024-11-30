@@ -10,6 +10,8 @@
 
 * check that --help is still accurate to possible args
 
+* update and use/show USAGE_GITMYNOTES_TOTAL, etc
+
 
 
 ### enhancements
