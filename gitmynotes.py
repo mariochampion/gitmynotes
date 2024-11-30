@@ -38,13 +38,15 @@ import math
 import csv
 from datetime import datetime
 from typing import Tuple
-import yaml
+#import yaml
+from ruamel.yaml import YAML
 
 
 #### USER CONFIGS
 ##   get user configs from file ./gmn_config.yaml
 
-cfg = yaml.safe_load(open("gmn_config.yaml"))
+yaml=YAML(typ='safe')   # default, if not specfied, is 'rt' (round-trip)
+cfg = yaml.load(open("gmn_config.yaml"))
 
 DEFAULT_EXPORT_PATH = cfg['DEFAULT_EXPORT_PATH']
 DEFAULT_GITHUB_URL = cfg['DEFAULT_GITHUB_URL']
@@ -565,6 +567,35 @@ def restore_source_foldernote(folder_source, folder_bkup, restore_notes):
         return
 
 
+
+def update_yaml_config(file_path, key, value):
+    """
+    Updates a specific key-value pair in a YAML config file while preserving comments and formatting.
+    
+    Args:
+        file_path (str): Path to the YAML configuration file
+        key (str): The key to update
+        value: The new value for the specified key
+    """
+    # Use ruamel.yaml to preserve comments and formatting
+    yaml_handler = YAML()
+    yaml_handler.preserve_quotes = True  # Preserve existing quote styles
+    yaml_handler.width = 4096  # Prevent automatic line wrapping
+
+    # Read the existing file
+    with open(file_path, 'r') as file:
+        config = yaml_handler.load(file)
+    
+    # Update the specific key
+    config[key] = value
+    
+    # Write back to the file, preserving original structure
+    with open(file_path, 'w') as file:
+        yaml_handler.dump(config, file)
+
+
+
+
 def build_initial_msg(folder=None, max_notes=None, export_path=None, github_url=None):
     # get some values for an initial msg
     
@@ -668,13 +699,13 @@ def main():
     ######## ----  Do INIT work, ensure DEFAULT_GITHUB_URL has been changed    ---- #######    
     if USAGE_GITMYNOTES_TOTAL == 0:
         print("Welcome first timer!")
-        substring = 'mariochampion'
+        substring = '<ChangeMe>'
         if substring in DEFAULT_GITHUB_URL:
             print(f"WHOA, the 'DEFAULT_GITHUB_URL' setting in 'gmn.config.yaml' has not been updated to your Github username")
             usage_github_username = input("Please enter your GitHub username: ")
             print(f"The 'DEFAULT_GITHUB_URL' will be updated to 'https://github.com/{usage_github_username}/gitmynotes'")
-            
-        
+            ## now update the yaml file
+            update_yaml_config('gmn_config.yaml', 'DEFAULT_GITHUB_URL', f"https://github.com/{usage_github_username}/gitmynotes")
         
         print("temp stop")
         sys.exit(1)

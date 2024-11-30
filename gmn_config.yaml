@@ -19,7 +19,7 @@
 
 #### user configs
 ##   REQUIRED TO CHANGE
-'DEFAULT_GITHUB_URL': 'https://github.com/mariochampion/gitmynotes'
+'DEFAULT_GITHUB_URL': 'https://github.com/<changeme>/gitmynotes'
 
 
 ##   REQUIRED: LEAVE AS-IS or CHANGE--
@@ -30,7 +30,7 @@
 'DEFAULT_CSV_NAME': 'gitmynotes.csv'
 'DEFAULT_AUDIT_FILE_ENDING': '.csv'
 
-'DEFAULT_NOTES_FOLDER_FORCE': Null
+'DEFAULT_NOTES_FOLDER_FORCE':
 'DEFAULT_NOTECOUNT_BEFORE_CONFIRM': 5
 'DEFAULT_BATCH_SIZE': '10'
 'DEFAULT_NEWLINE_DELIMITER': '|||'
