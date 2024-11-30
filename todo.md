@@ -6,9 +6,9 @@
 
 * do not fail entire job when this applescript error occurs: `execution error: Notes got an error: An error of type 100002 has occurred. (100002)`
 
-* when 1st run is WITHOUT a github repo, which is then made later, and thenyou run again, the git push will not happen, because it doesnt happen without a commit. BUT if the notes havent changed then no commit, so no push... CONUNDRUM. temp workaround: go change notes so testing can resume.
-
 * check in on 'DEFAULT_NOTES_FOLDER_FORCE': '' after yaml changeover
+
+* check that --help is still accurate to possible args
 
 
 
