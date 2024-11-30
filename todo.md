@@ -6,8 +6,6 @@
 
 * do not fail entire job when this applescript error occurs: `execution error: Notes got an error: An error of type 100002 has occurred. (100002)`
 
-* check in on 'DEFAULT_NOTES_FOLDER_FORCE': '' after yaml changeover
-
 * check that --help is still accurate to possible args
 
 * update and use/show USAGE_GITMYNOTES_TOTAL, etc
