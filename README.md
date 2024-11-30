@@ -48,7 +48,7 @@ No one can predict the future. Losing a job or a role shouldn't mean losing your
 
 ### Prerequisites
 1. MacOS with Notes app and AppleScript (ships with every Mac)
-2. Python 3.x+ with PyYaml ability (run `pip install pyyaml` once)
+2. Python 3.x+ with `ruyaml` ability (run `pip install ruamel.yaml` once)
 3. GitHub repo accessible from the Mac running this script (public or private, configured auth credentials, etc) 
 
 
