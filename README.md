@@ -43,7 +43,7 @@ No one can predict the future. Losing a job or a role shouldn't mean losing your
 	
 	example: `'DEFAULT_GITHUB_URL': 'https://github.com/<MyUserName>/gitmynotes'`
 	
-	OPTIONAL: Leave as-is or change the additional DEFAULT_* configs the the file.
+	OPTIONAL: Leave as-is or change the additional `DEFAULT_*` configs the the file.
 	
 
 
@@ -71,9 +71,9 @@ Learn more with:
 3. Markdown copy of Notes from folder: `DEFAULT_EXPORT_PATH/<my-exported-note.md>`
 
 -- Remote --
-1. New GitHub directory: `DEFAULT_GITHUB_URL/DEFAULT_NOTES_OUTERDIR`
-2. New Github sub-dir mapped to Notes folders: `DEFAULT_GITHUB_URL/DEFAULT_NOTES_OUTERDIR/<notesFolderName>`
-3. Github copy of Notes from folder: `DEFAULT_GITHUB_URL/DEFAULT_NOTES_OUTERDIR/<notesFolderName>/<a-note.md>`
+1. New GitHub directory: `DEFAULT_GITHUB_URL/DEFAULT_NOTES_WRAPPERDIR`
+2. New Github sub-dir mapped to Notes folders: `DEFAULT_GITHUB_URL/DEFAULT_NOTES_WRAPPERDIR/<notesFolderName>`
+3. Github copy of Notes from folder: `DEFAULT_GITHUB_URL/DEFAULT_NOTES_WRAPPERDIR/<notesFolderName>/<a-note.md>`
 4. OPTIONAL - GitMyNotes audit file: `<notesFolderName>.csv`
 
 
