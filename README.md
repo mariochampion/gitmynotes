@@ -19,7 +19,7 @@ Concerned about a fleet of macbooks, and all the useful, non-shareable, and non-
 
 
 `prepared tech workers win`
-No one can predict the future. Losing a job or a role shouldn't mean losing your personal macOS Notes as well. Set up a free GitHub repo and back up the folders that hold your personal reminders, thoughts, and plans.
+No one can predict the future. Losing a job or a role shouldn't mean losing your personal macOS Notes as well. Set up a free GitHub repo and use GitMyNotes to back up the folders that hold your personal reminders, thoughts, and plans.
 
 
 ## Getting Started
