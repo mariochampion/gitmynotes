@@ -22,28 +22,6 @@ Concerned about a fleet of macbooks, and all the useful, non-shareable, and non-
 No one can predict the future. Losing a job or a role shouldn't mean losing your personal macOS Notes as well. Set up a free GitHub repo and back up the folders that hold your personal reminders, thoughts, and plans.
 
 
-## Usage
-`python gitmynotes.py` or set some parameters with
-
-`python gitmynotes.py [--folder='<notesFolderName>' --max-notes=<N>]`
-
-
-#### Output Artifacts
--- Local --
-
-1. New Notes folder: `<notesFolderName>_GitMyNotes` to store processed notes
-2. New GitMyNotes audit file: `<notesFolderName>.csv` to track processed notes
-3. Markdown copy of Notes from folder: `DEFAULT_EXPORT_PATH/<my-exported-note.md>`
-
--- Remote --
-1. New GitHub directory: `DEFAULT_GITHUB_URL/DEFAULT_NOTES_OUTERDIR`
-2. New Github sub-dir mapped to Notes folders: `DEFAULT_GITHUB_URL/DEFAULT_NOTES_OUTERDIR/<notesFolderName>`
-3. Github copy of Notes from folder: `DEFAULT_GITHUB_URL/DEFAULT_NOTES_OUTERDIR/<notesFolderName>/<a-note.md>`
-4. OPTIONAL - GitMyNotes audit file: `<notesFolderName>.csv`
-
-
-
-
 ## Getting Started
 
 ### Prerequisites
@@ -79,11 +57,30 @@ No one can predict the future. Losing a job or a role shouldn't mean losing your
 	`DEFAULT_BATCH_SIZE` to run loops to reach --max-notes value (example: `DEFAULT_BATCH_SIZE = 10`)
 	
 	`DEFAULT_IGNORE_FOLDER` to Notes folder to not backup to GitHub (example: `DEFAULT_IGNORE_FOLDER = "ignore"`)
-	
-	
+
+4. run Ex: `python gitmynotes.py --folder='<notesFolderName>' --max-notes <N> `	
 	
 
-4. run Ex: `python gitmynotes.py --folder='<notesFolderName>' --max-notes <N> `
+## Usage
+
+`python gitmynotes.py` or set some parameters with
+
+`python gitmynotes.py [--folder='<notesFolderName>' --max-notes=<N>]`
+
+
+#### Output Artifacts
+-- Local --
+
+1. New Notes folder: `<notesFolderName>_GitMyNotes` to store processed notes
+2. New GitMyNotes audit file: `<notesFolderName>.csv` to track processed notes
+3. Markdown copy of Notes from folder: `DEFAULT_EXPORT_PATH/<my-exported-note.md>`
+
+-- Remote --
+1. New GitHub directory: `DEFAULT_GITHUB_URL/DEFAULT_NOTES_OUTERDIR`
+2. New Github sub-dir mapped to Notes folders: `DEFAULT_GITHUB_URL/DEFAULT_NOTES_OUTERDIR/<notesFolderName>`
+3. Github copy of Notes from folder: `DEFAULT_GITHUB_URL/DEFAULT_NOTES_OUTERDIR/<notesFolderName>/<a-note.md>`
+4. OPTIONAL - GitMyNotes audit file: `<notesFolderName>.csv`
+
 
 ```
 Export macOS Notes to GitHub
