@@ -43,15 +43,15 @@ No one can predict the future. Losing a job or a role shouldn't mean losing your
 	
 	example: `'DEFAULT_GITHUB_URL': 'https://github.com/<MyUserName>/gitmynotes'`
 	
-	OPTIONAL: Leave as-is of change the additional DEFAULT_* configs in `gmn_config.yaml`. 
+	OPTIONAL: Leave as-is or change the additional DEFAULT_* configs in `gmn_config.yaml`. 
 	
 
-4. run Ex: `python gitmynotes.py --folder='<notesFolderName>' --max-notes <N> `	
+4. that's it! Now run the script: `python gitmynotes.py --folder='<notesFolderName>' --max-notes <N> `	
 	
 
 ## Usage
 
-`python gitmynotes.py` or set some parameters with
+`python gitmynotes.py` to run against default "Notes" folder, or be more specific with
 
 `python gitmynotes.py [--folder='<notesFolderName>' --max-notes=<N>]`
 
