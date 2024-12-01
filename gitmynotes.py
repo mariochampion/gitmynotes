@@ -651,11 +651,17 @@ def main():
     DEFAULT_RESTORE_NOTES = cfg['DEFAULT_RESTORE_NOTES']
     
     USAGE_GITMYNOTES_TOTAL = cfg['USAGE_GITMYNOTES_TOTAL']
-    USAGE_NOTES_PROCESSED = cfg['USAGE_NOTES_PROCESSED']
     USAGE_FOLDERS_PROCESSED = cfg['USAGE_FOLDERS_PROCESSED']
-    #print(f"Initial configs: {cfg}")
-
-
+    USAGE_NOTES_PROCESSED = cfg['USAGE_NOTES_PROCESSED']
+    
+    print(f"USAGE_FOLDERS_PROCESSED: {USAGE_FOLDERS_PROCESSED}")
+    if isinstance(USAGE_FOLDERS_PROCESSED, str): 
+        print("USAGE_FOLDERS_PROCESSED is str")
+        list(USAGE_FOLDERS_PROCESSED)
+    if type(USAGE_FOLDERS_PROCESSED) is str: print("string")
+    if type(USAGE_FOLDERS_PROCESSED) is list: print("list")
+    if type(USAGE_FOLDERS_PROCESSED) is dict: print("dict")
+    #sys.exit(1)
 
     ######## ----  Parse the args provided on CLI    ---- #######    
     parser = argparse.ArgumentParser(description="Export macOS Notes to GitHub.")
@@ -868,8 +874,8 @@ def main():
     USAGE_GITMYNOTES_TOTAL_NEW = int(USAGE_GITMYNOTES_TOTAL) + 1
     update_yaml_config('./gmn_config.yaml', 'USAGE_GITMYNOTES_TOTAL', USAGE_GITMYNOTES_TOTAL_NEW)
     
-    USAGE_FOLDERS_PROCESSED_NEW = int(USAGE_FOLDERS_PROCESSED) + 1
-    update_yaml_config('./gmn_config.yaml', 'USAGE_FOLDERS_PROCESSED', USAGE_FOLDERS_PROCESSED_NEW)
+    USAGE_FOLDERS_PROCESSED.append(args_folder)
+    update_yaml_config('./gmn_config.yaml', 'USAGE_FOLDERS_PROCESSED', USAGE_FOLDERS_PROCESSED)
     
     USAGE_NOTES_PROCESSED_NEW = int(USAGE_NOTES_PROCESSED) + int(notes_processed)
     update_yaml_config('./gmn_config.yaml', 'USAGE_NOTES_PROCESSED', USAGE_NOTES_PROCESSED_NEW)
@@ -881,7 +887,7 @@ def main():
     else:
         final_gitnotes_url = f"{DEFAULT_GITHUB_URL}/tree/main/{args_folder}"
     
-    usage_totals = [int(USAGE_GITMYNOTES_TOTAL_NEW), int(USAGE_FOLDERS_PROCESSED_NEW), int(USAGE_NOTES_PROCESSED_NEW)]
+    usage_totals = [int(USAGE_GITMYNOTES_TOTAL_NEW), len(USAGE_FOLDERS_PROCESSED), int(USAGE_NOTES_PROCESSED_NEW)]
     
     share_url = "https://GitMyNotes.com/share?iam=123abc456"
     
