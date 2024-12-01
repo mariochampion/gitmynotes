@@ -716,6 +716,7 @@ def main():
         if len(USAGE_FOLDERS_PROCESSED) == 1:
             if USAGE_FOLDERS_PROCESSED[0] == 'placeholder':
                  USAGE_FOLDERS_PROCESSED[0] = args_folder
+                 update_yaml_config('./gmn_config.yaml', 'USAGE_FOLDERS_PROCESSED', USAGE_FOLDERS_PROCESSED)
 #         print(f"USAGE_FOLDERS_PROCESSED : {USAGE_FOLDERS_PROCESSED}")
 #         sys.exit(1)
     
@@ -879,8 +880,9 @@ def main():
     USAGE_GITMYNOTES_TOTAL_NEW = int(USAGE_GITMYNOTES_TOTAL) + 1
     update_yaml_config('./gmn_config.yaml', 'USAGE_GITMYNOTES_TOTAL', USAGE_GITMYNOTES_TOTAL_NEW)
     
-    USAGE_FOLDERS_PROCESSED.append(args_folder)
-    update_yaml_config('./gmn_config.yaml', 'USAGE_FOLDERS_PROCESSED', USAGE_FOLDERS_PROCESSED)
+    if args_folder not in USAGE_FOLDERS_PROCESSED:
+        USAGE_FOLDERS_PROCESSED.append(args_folder)
+        update_yaml_config('./gmn_config.yaml', 'USAGE_FOLDERS_PROCESSED', USAGE_FOLDERS_PROCESSED)
     
     USAGE_NOTES_PROCESSED_NEW = int(USAGE_NOTES_PROCESSED) + int(notes_processed)
     update_yaml_config('./gmn_config.yaml', 'USAGE_NOTES_PROCESSED', USAGE_NOTES_PROCESSED_NEW)
