@@ -11,15 +11,15 @@ Do you use Notes? Do you use GitHub? Then undoubtedly yes!
 Do you use Notes and can [start with GitHub](https://docs.github.com/en/get-started/start-your-journey)? Then also yes!
 
 `writing is re-writing`
-Transform your macOS Notes into a version-controlled archive on GitHub. Preserve your most excellent lines via versions to track the full evolution of your work. Use GitMyNotes to maintain a complete history of every change and trace back your ideas from current state and previous alternatives -- with every revision safely tracked and recoverable. Learn how to GitHub and branch and fork to explore your ideas, in trusted collabs, or on your own.
+Transform your macOS Notes into a version-controlled archive on GitHub. Use GitMyNotes to preserve and maintain your most excellent lines via versioning to track the full evolution of your work. Learn how to GitHub using branches and forks to explore your ideas, in trusted collabs, or on your own.
 
 
 `IT team gotta keep copies`
-Concerned about a fleet of macbooks, and all the useful, non-shareable, and non-collaborative notes just one cup of coffee away from disaster? 
+Concerned about a fleet of macbooks, and all the useful, non-shareable, and non-collaborative notes just one cup of coffee away from disaster? Use GitMyNotes on a cronjob on every Mac to keep versioned copies of valuable Notes.
 
 
 `prepared tech workers win`
-No one can predict the future. Losing a job or a role shouldn't mean losing your personal macOS Notes as well. Set up a free GitHub repo and back up the folders that hold your personal notes.
+No one can predict the future. Losing a job or a role shouldn't mean losing your personal macOS Notes as well. Set up a free GitHub repo and back up the folders that hold your personal reminders, thoughts, and plans.
 
 
 ## Usage
