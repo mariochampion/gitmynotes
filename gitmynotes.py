@@ -705,23 +705,25 @@ def main():
 
     ######## ----  Do INIT work, ensure DEFAULT_GITHUB_URL has been changed    ---- #######    
     if USAGE_GITMYNOTES_TOTAL == 0:
-        #print("Hello first timer!")
-        substring = '<ChangeMe>'
-        if substring in DEFAULT_GITHUB_URL:
-            changeme_msg = "WHOA, the 'DEFAULT_GITHUB_URL' setting in 'gmn.config.yaml' has not been updated to your Github username"
-            colorprint(textcolor="magenta", msg=f"{changeme_msg}")
-            
-            usage_github_username = input("Please enter your GitHub username: ")
-            print(f"The 'DEFAULT_GITHUB_URL' will be updated to 'https://github.com/{usage_github_username}/gitmynotes'")
-            ## now update the yaml file
-            update_yaml_config('gmn_config.yaml', 'DEFAULT_GITHUB_URL', f"https://github.com/{usage_github_username}/gitmynotes")
-            cfg = load_configs_from_file()
-            DEFAULT_GITHUB_URL = cfg['DEFAULT_GITHUB_URL']
-            
-            
-            ## RE-DO the initial msg to let people know setup details have changed
-            initial_msg = build_initial_msg(this_msg="  Thanks for updating your GitHub username!", folder=args_folder, max_notes=args_max_notes, export_path=args.export_path, github_url=DEFAULT_GITHUB_URL)
-            colorprint(textcolor='cyan', msg=f"{initial_msg}", addseparator=True)
+        # leave this here for lter 1st timer things
+        print("Hello first timer!")
+    
+    substring = '<ChangeMe>'
+    if substring in DEFAULT_GITHUB_URL:
+        changeme_msg = "WHOA, the 'DEFAULT_GITHUB_URL' setting in 'gmn.config.yaml' has not been updated to your Github username"
+        colorprint(textcolor="magenta", msg=f"{changeme_msg}")
+        
+        usage_github_username = input("Please enter your GitHub username: ")
+        print(f"The 'DEFAULT_GITHUB_URL' will be updated to 'https://github.com/{usage_github_username}/gitmynotes'")
+        ## now update the yaml file
+        update_yaml_config('gmn_config.yaml', 'DEFAULT_GITHUB_URL', f"https://github.com/{usage_github_username}/gitmynotes")
+        cfg = load_configs_from_file()
+        DEFAULT_GITHUB_URL = cfg['DEFAULT_GITHUB_URL']
+        
+        
+        ## RE-DO the initial msg to let people know setup details have changed
+        initial_msg = build_initial_msg(this_msg="  Thanks for updating your GitHub username!", folder=args_folder, max_notes=args_max_notes, export_path=args.export_path, github_url=DEFAULT_GITHUB_URL)
+        colorprint(textcolor='cyan', msg=f"{initial_msg}", addseparator=True)
 
 
 
