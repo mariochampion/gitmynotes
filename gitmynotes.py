@@ -601,8 +601,13 @@ def build_initial_msg(this_msg=None, folder=None, max_notes=None, export_path=No
 
 
 
-def build_final_msg(gitnotes_url, audit_file, share_url):
+def build_final_msg(gitnotes_url, audit_file, usage_totals, share_url):
     # get some values for an initial msg
+    
+    print(f"2 usage_totals")
+    print(usage_totals[0])
+    print(usage_totals[1])
+    print(usage_totals[2])
     
     final_msg = f'''    GitMyNotes actions complete!
 
@@ -612,6 +617,10 @@ def build_final_msg(gitnotes_url, audit_file, share_url):
 '''
     if audit_file:
         final_msg += f'''    - Check your audit file: {audit_file}
+'''
+    if usage_totals:
+        final_msg += f'    - Runs::Folders::Notes: '+str(usage_totals[0])+'::'+str(usage_totals[1])+'::'+str(usage_totals[2])
+    final_msg += f'''
 '''
     if share_url:
         final_msg += f'''    - Tell your friends, learn more:
@@ -856,16 +865,29 @@ def main():
         colorprint(textcolor="red",msg=f"{restore_declined_msg}", addseparator=True)
     
     
+    
+    ######## ----  update usage counts    ---- #######
+    USAGE_GITMYNOTES_TOTAL_NEW = int(USAGE_GITMYNOTES_TOTAL) + 1
+    update_yaml_config('./gmn_config.yaml', 'USAGE_GITMYNOTES_TOTAL', USAGE_GITMYNOTES_TOTAL_NEW)
+    
+    USAGE_FOLDERS_PROCESSED_NEW = int(USAGE_FOLDERS_PROCESSED) + 1
+    update_yaml_config('./gmn_config.yaml', 'USAGE_FOLDERS_PROCESSED', USAGE_FOLDERS_PROCESSED_NEW)
+    
+    USAGE_NOTES_PROCESSED_NEW = int(USAGE_NOTES_PROCESSED) + int(notes_processed)
+    update_yaml_config('./gmn_config.yaml', 'USAGE_NOTES_PROCESSED', USAGE_NOTES_PROCESSED_NEW)
+    
+    
     ## Prep for final msg so user knows what happened
     if args_wrapper_dir:
         final_gitnotes_url = f"{DEFAULT_GITHUB_URL}/tree/main/{args_wrapper_dir}/{args_folder}"
     else:
         final_gitnotes_url = f"{DEFAULT_GITHUB_URL}/tree/main/{args_folder}"
     
+    usage_totals = [int(USAGE_GITMYNOTES_TOTAL_NEW), int(USAGE_FOLDERS_PROCESSED_NEW), int(USAGE_NOTES_PROCESSED_NEW)]
     
     share_url = "https://GitMyNotes.com/share?iam=123abc456"
     
-    final_msg = build_final_msg(gitnotes_url=f"{final_gitnotes_url}", audit_file=f"{audit_file}", share_url=f"{share_url}")
+    final_msg = build_final_msg(gitnotes_url=f"{final_gitnotes_url}", audit_file=f"{audit_file}", usage_totals = usage_totals, share_url=f"{share_url}")
     
     colorprint(textcolor="cyan",msg=f"{final_msg}", addseparator=True)
     

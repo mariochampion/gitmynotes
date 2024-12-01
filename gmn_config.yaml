@@ -39,8 +39,7 @@
 ##   This data is not transmitted anywhere. 
 ##   It is used to enable first-time help, when DEFAULT_GITHUB_URL is not set, for example
 
-'USAGE_GITMYNOTES_TOTAL': 0
-'USAGE_NOTES_PROCESSED': 0
-'USAGE_FOLDERS_PROCESSED': 0
-
+'USAGE_GITMYNOTES_TOTAL': 7
+'USAGE_NOTES_PROCESSED': 19
+'USAGE_FOLDERS_PROCESSED': 7
 
