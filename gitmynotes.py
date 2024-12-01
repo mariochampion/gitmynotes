@@ -604,10 +604,6 @@ def build_initial_msg(this_msg=None, folder=None, max_notes=None, export_path=No
 def build_final_msg(gitnotes_url, audit_file, usage_totals, share_url):
     # get some values for an initial msg
     
-    print(f"2 usage_totals")
-    print(usage_totals[0])
-    print(usage_totals[1])
-    print(usage_totals[2])
     
     final_msg = f'''    GitMyNotes actions complete!
 
@@ -774,7 +770,7 @@ def main():
             confirm_num = int(confirm_num)
             if confirm_num > notes_to_process:
                 confirm_num = notes_to_process 
-            print(f"aa Notes to process: {confirm_num}")
+            #print(f"aa Notes to process: {confirm_num}")
             notes_to_process = confirm_num
             
     else:
@@ -785,7 +781,7 @@ def main():
     
     
     
-    colorprint(textcolor="white",msg=f"bb Notes to process: {notes_to_process}")
+    colorprint(textcolor="white",msg=f"Notes to process: {notes_to_process}")
     
     ''' Process in a loop of batches'''
     loop_count = math.ceil(notes_to_process / args.batch_size)
