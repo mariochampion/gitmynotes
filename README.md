@@ -30,12 +30,12 @@ No one can predict the future. Losing a job or a role shouldn't mean losing your
 3. GitHub repo (eg, `https://github.com/<MYUSERNAME>/gitmynotes`) accessible from the Mac running this script. Can be public or private, must be configured working auth credentials, etc) 
 
 
-## Steps
-1. clone the repo: `git clone https://github.com/mariochampion/gitmynotes.git`
+## Steps 1-2-3
+1. First, clone the repo: `git clone https://github.com/mariochampion/gitmynotes.git`
 
-2. cd into gitmynotes dir: `cd gitmynotes`
+2. Next, `cd` into gitmynotes dir: `cd gitmynotes`
 
-3. in file `gmn_config.yaml`, set the required Github url to your url
+3. Then, in file `gmn_config.yaml`, set the required Github url to your url
 
 	-- REQUIRED TO CHANGE--
 	
@@ -43,17 +43,24 @@ No one can predict the future. Losing a job or a role shouldn't mean losing your
 	
 	example: `'DEFAULT_GITHUB_URL': 'https://github.com/<MyUserName>/gitmynotes'`
 	
-	OPTIONAL: Leave as-is or change the additional DEFAULT_* configs in `gmn_config.yaml`. 
+	OPTIONAL: Leave as-is or change the additional DEFAULT_* configs the the file.
 	
 
-4. that's it! Now run the script: `python gitmynotes.py --folder='<notesFolderName>' --max-notes <N> `	
-	
+
 
 ## Usage
 
-`python gitmynotes.py` to run against default "Notes" folder, or be more specific with
+That's it! Now run the script:
+
+`python gitmynotes.py` to run against default "Notes" folder. 
+
+Or be more specific with:
 
 `python gitmynotes.py [--folder='<notesFolderName>' --max-notes=<N>]`
+
+Learn more with:
+
+`python gitmynotes.py --help`
 
 
 #### Output Artifacts
