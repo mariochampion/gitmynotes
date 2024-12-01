@@ -27,7 +27,7 @@ No one can predict the future. Losing a job or a role shouldn't mean losing your
 ### Prerequisites
 1. MacOS with Notes app and AppleScript (ships with every Mac)
 2. Python 3.x+ with `ruyaml` ability (run `pip install ruamel.yaml` once)
-3. GitHub repo accessible from the Mac running this script (public or private, configured auth credentials, etc) 
+3. GitHub repo (eg, `https://github.com/<MYUSERNAME>/gitmynotes`) accessible from the Mac running this script. Can be public or private, must be configured working auth credentials, etc) 
 
 
 ## Steps
@@ -35,28 +35,16 @@ No one can predict the future. Losing a job or a role shouldn't mean losing your
 
 2. cd into gitmynotes dir: `cd gitmynotes`
 
-3. in file `gitmynotes.py`, set required and optional configurations, or leave as shipped with these common sense defaults
+3. in file `gmn_config.yaml`, set the required Github url to your url
 
 	-- REQUIRED TO CHANGE--
 	
-	set `DEFAULT_GITHUB_URL` to the the repo where you want to store Notes (example: `DEFAULT_GITHUB_URL = "https://github.com/<myusername>/<myrepo>""`)
+	set `DEFAULT_GITHUB_URL` to the the repo where you want to store Notes.
 	
-
-	-- REQUIRED: LEAVE AS-IS or CHANGE--
-
-	`DEFAULT_EXPORT_PATH` to the export location (example: `DEFAULT_EXPORT_PATH = "~/Documents/gitmynotes"`)
+	example: `'DEFAULT_GITHUB_URL': 'https://github.com/<MyUserName>/gitmynotes'`
 	
-	`DEFAULT_PROCESSED_FOLDER_ENDING = "__GitMyNotes"`
-
-	`DEFAULT_CSV_NAME = "GitMyNotes.csv"`
-
-	`DEFAULT_NEWLINE_DELIMITER = "|||"`
-
-	`DEFAULT_MAX_NOTES = 10`
+	OPTIONAL: Leave as-is of change the additional DEFAULT_* configs in `gmn_config.yaml`. 
 	
-	`DEFAULT_BATCH_SIZE` to run loops to reach --max-notes value (example: `DEFAULT_BATCH_SIZE = 10`)
-	
-	`DEFAULT_IGNORE_FOLDER` to Notes folder to not backup to GitHub (example: `DEFAULT_IGNORE_FOLDER = "ignore"`)
 
 4. run Ex: `python gitmynotes.py --folder='<notesFolderName>' --max-notes <N> `	
 	
