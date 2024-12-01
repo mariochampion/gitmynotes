@@ -35,7 +35,7 @@ No one can predict the future. Losing a job or a role shouldn't mean losing your
 
 2. Next, `cd` into gitmynotes dir: `cd gitmynotes`
 
-3. Then, in file `gmn_config.yaml`, set the required Github url to your url
+3. Then, in file `gmn_config.yaml`, set the required Github url to your Github url
 
 	-- REQUIRED TO CHANGE--
 	
