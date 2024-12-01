@@ -10,6 +10,8 @@
 
 * update and use/show USAGE_GITMYNOTES_TOTAL, etc
 
+* remove many of the debug print() statements
+
 
 
 ### enhancements
