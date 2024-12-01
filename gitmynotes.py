@@ -691,11 +691,11 @@ def main():
     args_max_notes = args.max_notes
     args_folder = args.folder
     args_wrapper_dir = DEFAULT_NOTES_WRAPPERDIR
-    audit_file = f"./{args.folder}{DEFAULT_AUDIT_FILE_ENDING}"
+    audit_file = f"./{args_folder}{DEFAULT_AUDIT_FILE_ENDING}"
 
 
     ## set up the initial msg to let people know setup details
-    initial_msg = build_initial_msg(this_msg="", folder=args.folder, max_notes=args_max_notes, export_path=args.export_path, github_url=args.github_url)
+    initial_msg = build_initial_msg(this_msg="", folder=args_folder, max_notes=args_max_notes, export_path=args.export_path, github_url=args.github_url)
     colorprint(textcolor='cyan', msg=f"{initial_msg}", addseparator=True)
 
 
@@ -715,7 +715,7 @@ def main():
             print(f"reloaded DEFAULT_GITHUB_URL: {DEFAULT_GITHUB_URL}")
             
             ## RE-DO the initial msg to let people know setup details have changed
-            initial_msg = build_initial_msg(this_msg="  Thanks for updating your GitHub username!", folder=args.folder, max_notes=args_max_notes, export_path=args.export_path, github_url=DEFAULT_GITHUB_URL)
+            initial_msg = build_initial_msg(this_msg="  Thanks for updating your GitHub username!", folder=args_folder, max_notes=args_max_notes, export_path=args.export_path, github_url=DEFAULT_GITHUB_URL)
             colorprint(textcolor='cyan', msg=f"{initial_msg}", addseparator=True)
         else:
             print(f"No changes max_notes {args_max_notes}")
@@ -725,7 +725,7 @@ def main():
 
     ######## ----  BUILD initial dirs per args and DEFAULTS    ---- #######
     os.makedirs(args.export_path, exist_ok=True)
-    if args.folder:
+    if args_folder:
         export_path_w_folder = f"{args.export_path}/{args_wrapper_dir}/{args_folder}"
         os.makedirs(export_path_w_folder, exist_ok=True)
 
@@ -775,7 +775,7 @@ def main():
     
     ''' if args_max_notes note set, get a notecount value based on folder name '''
     if args_max_notes == 0:
-        notes_to_process = get_foldernotecount(args.folder)
+        notes_to_process = get_foldernotecount(args_folder)
         print("11")
     else:
         notes_to_process = args_max_notes
@@ -797,7 +797,7 @@ def main():
         notes_processed = 0
         notes_processed = export_notes_to_markdown(
             args.export_path,
-            args.folder,
+            args_folder,
             notes_to_export,
             args_wrapper_dir
         )
@@ -805,7 +805,7 @@ def main():
         if notes_processed > 0:
             colorprint(textcolor="green",msg=f"SUCCESS: Exported {notes_processed} Notes to local folder {args.export_path}")
             
-            commit_and_push(args.export_path, args.folder, args_wrapper_dir)
+            commit_and_push(args.export_path, args_folder, args_wrapper_dir)
         else:
             colorprint(textcolor="magenta",msg=f"No notes were processed, skipping git commit")
             #print(f"------------------------------------")
@@ -816,7 +816,7 @@ def main():
             colorprint(textcolor="white",msg=f"Notes to export to markdown: {notes_to_export}")
             processednotes_data = export_notes_metadata(
                 output_file=audit_file,
-                folder=args.folder,
+                folder=args_folder,
                 max_notes=notes_processed,
                 newline_delimiter=args.newline_delimiter
             )
@@ -826,8 +826,8 @@ def main():
             
         if processednotes_data:
             move_result = move_processed_notes(
-                folder_source=args.folder,
-                folder_dest=f"{args.folder}{DEFAULT_PROCESSED_FOLDER_ENDING}",
+                folder_source=args_folder,
+                folder_dest=f"{args_folder}{DEFAULT_PROCESSED_FOLDER_ENDING}",
                 max_notes=notes_to_export
             )
         
@@ -838,7 +838,7 @@ def main():
         
         if move_result:
             #print(f"================================")
-            colorprint(textcolor="green",msg=f"SUCCESS: Moved notes to Notes folder: '{args.folder}{DEFAULT_PROCESSED_FOLDER_ENDING}'", addseparator=True)
+            colorprint(textcolor="green",msg=f"SUCCESS: Moved notes to Notes folder: '{args_folder}{DEFAULT_PROCESSED_FOLDER_ENDING}'", addseparator=True)
             #print(f"================================")
         else:
             #print(f"================================")
@@ -849,23 +849,23 @@ def main():
     print(f"Option to restore the source folder is '{args.restore_notes}'")
     
     restore_result = 0
-    restore_result = restore_source_foldernote(folder_source=args.folder, folder_bkup=f"{args.folder}{DEFAULT_PROCESSED_FOLDER_ENDING}", restore_notes=args.restore_notes)
+    restore_result = restore_source_foldernote(folder_source=args_folder, folder_bkup=f"{args_folder}{DEFAULT_PROCESSED_FOLDER_ENDING}", restore_notes=args.restore_notes)
         
     if restore_result:
-        colorprint(textcolor="green",msg=f"SUCCESS: RESTORED notes to {args.folder} from {args.folder}{DEFAULT_PROCESSED_FOLDER_ENDING}", addseparator=True)
+        colorprint(textcolor="green",msg=f"SUCCESS: RESTORED notes to {args_folder} from {args_folder}{DEFAULT_PROCESSED_FOLDER_ENDING}", addseparator=True)
     
     else:
-        restore_declined_msg = f'''    DECLINED! Notes not restored to '{args.folder}' 
-    Set --restore-notes=empty to move notes back to '{args.folder}' when notecount is 0
-    Set --restore-notes=always to move notes back to '{args.folder}' after backup'''
+        restore_declined_msg = f'''    DECLINED! Notes not restored to '{args_folder}' 
+    Set --restore-notes=empty to move notes back to '{args_folder}' when notecount is 0
+    Set --restore-notes=always to move notes back to '{args_folder}' after backup'''
         colorprint(textcolor="red",msg=f"{restore_declined_msg}", addseparator=True)
     
     
     ## Prep for final msg so user knows what happened
     if args_wrapper_dir:
-        final_gitnotes_url = f"{DEFAULT_GITHUB_URL}/tree/main/{args_wrapper_dir}/{args.folder}"
+        final_gitnotes_url = f"{DEFAULT_GITHUB_URL}/tree/main/{args_wrapper_dir}/{args_folder}"
     else:
-        final_gitnotes_url = f"{DEFAULT_GITHUB_URL}/tree/main/{args.folder}"
+        final_gitnotes_url = f"{DEFAULT_GITHUB_URL}/tree/main/{args_folder}"
     
     
     share_url = "https://GitMyNotes.com/share?iam=123abc456"
