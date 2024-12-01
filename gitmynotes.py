@@ -637,7 +637,6 @@ def main():
     
     DEFAULT_NOTES_FOLDER = cfg['DEFAULT_NOTES_FOLDER']
     DEFAULT_EXPORT_PATH = cfg['DEFAULT_EXPORT_PATH']
-    DEFAULT_MAX_NOTES = cfg['DEFAULT_MAX_NOTES']
     DEFAULT_BATCH_SIZE = cfg['DEFAULT_BATCH_SIZE']
     DEFAULT_NOTES_WRAPPERDIR = cfg['DEFAULT_NOTES_WRAPPERDIR']
     DEFAULT_PROCESSED_FOLDER_ENDING = cfg['DEFAULT_PROCESSED_FOLDER_ENDING']
@@ -649,7 +648,7 @@ def main():
     USAGE_GITMYNOTES_TOTAL = cfg['USAGE_GITMYNOTES_TOTAL']
     USAGE_NOTES_PROCESSED = cfg['USAGE_NOTES_PROCESSED']
     USAGE_FOLDERS_PROCESSED = cfg['USAGE_FOLDERS_PROCESSED']
-    print(f"Initial configs: {cfg}")
+    #print(f"Initial configs: {cfg}")
 
 
 
@@ -662,8 +661,7 @@ def main():
                       default=DEFAULT_NOTES_FOLDER_FORCE,
                       help=f"[bool] Use as '--force' (no 'true' or 'false' value allowed) to over-ride to the default required user confirmation to process the full count of Notes in the specified folder when it exceed 5x the batch size -- which could be hundreds of notes and could take a looooong time.(default: confirmation will be required)")
     parser.add_argument('--max-notes', '--maxnotes', type=int, 
-                      default=DEFAULT_MAX_NOTES,
-                      help=f'[int] Maximum number of notes to process. (default: {DEFAULT_MAX_NOTES})')
+                      help=f'[int] Maximum number of notes to process.')
     parser.add_argument('--batch-size', type=int,
                       default=DEFAULT_BATCH_SIZE,
                       help=f'[int] The number of notes to convert, and git add/commit/push per loop, calculated a max-notes/batch-size. Especially useful for initial runs.(default: {DEFAULT_BATCH_SIZE})')  
@@ -738,48 +736,46 @@ def main():
 
     ######## ----  check for 5x batch size in args_folder_count    ---- #######
     ''' if args_folder not set (and defaults to Notes) or set to folder with 5xBatch notes, warn user'''
-    if args_folder:
-        args_folder_count = get_foldernotecount(args_folder)
-        print(f"33{args_folder} count: {args_folder_count}")
-        
-    else:
-        args_folder_count = 0
     
-    if args_folder_count > (args.batch_size * DEFAULT_LOOPCOUNT_BEFORE_CONFIRM):
+    args_folder_count = 0
+    args_folder_count = get_foldernotecount(args_folder)
+    if args_max_notes:
+        if args_max_notes > args_folder_count:
+            notes_to_process = args_folder_count
+        else:
+            notes_to_process = args_max_notes
+    else:
+        notes_to_process = args_folder_count
+    
+    if notes_to_process > (args.batch_size * DEFAULT_LOOPCOUNT_BEFORE_CONFIRM):
         if args.force:
             print(f"--force was set, so go on without confirm...")
             return
         else:
-            print(f"--force not set, and MORE than 5 batches required, must confirm")
-            confirm_warn = f'''WHOA. {args_folder_count} notes to process in 'Notes' folder!
+            print(f"--force not set, and MORE than {DEFAULT_LOOPCOUNT_BEFORE_CONFIRM} batches required, must confirm")
+            confirm_warn = f'''WHOA. {notes_to_process} notes to process in 'Notes' folder!
         Confirmation Required.'''
             colorprint(textcolor='magenta', msg=f"{confirm_warn}", addseparator=True)
-            confirm_msg = f''' Enter a number up to {args_folder_count} of notes to process, or 'x' to eXit.
-  [Or 'enter' for all {args_folder_count} notes] : '''
+            confirm_msg = f''' Enter a number up to {notes_to_process} of notes to process, or 'x' to eXit.
+  [Or 'enter' to process all {notes_to_process} notes] : '''
             
-            confirm_num = input(f"{confirm_msg}") or f"{args_folder_count}"
+            confirm_num = input(f"{confirm_msg}") or f"{notes_to_process}"
             if confirm_num == 'x' or confirm_num == '0': 
                 colorprint(textcolor='red', msg="    Exiting GitMyNotes...", addseparator=True)
                 sys.exit(1)
             confirm_num = int(confirm_num)
-            if confirm_num > args_folder_count:
-                confirm_num = args_folder_count 
+            if confirm_num > notes_to_process:
+                confirm_num = notes_to_process 
             print(f"aa Notes to process: {confirm_num}")
-            args_max_notes = confirm_num
+            notes_to_process = confirm_num
             
     else:
         print(f"LESS than {DEFAULT_LOOPCOUNT_BEFORE_CONFIRM} batches required, go on...")
-        args_max_notes = args_folder_count
+    
+    
     ######## ----  END check for 5x batch size in arg.folder    ---- #######
     
     
-    ''' if args_max_notes note set, get a notecount value based on folder name '''
-    if args_max_notes == 0:
-        notes_to_process = get_foldernotecount(args_folder)
-        print("11")
-    else:
-        notes_to_process = args_max_notes
-        print(f"22 notes_to_process{notes_to_process} args_max_notes{args_max_notes}")
     
     colorprint(textcolor="white",msg=f"bb Notes to process: {notes_to_process}")
     
@@ -857,7 +853,7 @@ def main():
     else:
         restore_declined_msg = f'''    DECLINED! Notes not restored to '{args_folder}' 
     Set --restore-notes=empty to move notes back to '{args_folder}' when notecount is 0
-    Set --restore-notes=always to move notes back to '{args_folder}' after backup'''
+    Set --restore-notes=always to move notes back to '{args_folder}' after every backup'''
         colorprint(textcolor="red",msg=f"{restore_declined_msg}", addseparator=True)
     
     
