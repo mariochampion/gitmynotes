@@ -654,14 +654,14 @@ def main():
     USAGE_FOLDERS_PROCESSED = cfg['USAGE_FOLDERS_PROCESSED']
     USAGE_NOTES_PROCESSED = cfg['USAGE_NOTES_PROCESSED']
     
-    print(f"USAGE_FOLDERS_PROCESSED: {USAGE_FOLDERS_PROCESSED}")
-    if isinstance(USAGE_FOLDERS_PROCESSED, str): 
-        print("USAGE_FOLDERS_PROCESSED is str")
-        list(USAGE_FOLDERS_PROCESSED)
-    if type(USAGE_FOLDERS_PROCESSED) is str: print("string")
-    if type(USAGE_FOLDERS_PROCESSED) is list: print("list")
-    if type(USAGE_FOLDERS_PROCESSED) is dict: print("dict")
-    #sys.exit(1)
+#     print(f"USAGE_FOLDERS_PROCESSED: {USAGE_FOLDERS_PROCESSED}")
+#     if isinstance(USAGE_FOLDERS_PROCESSED, str): 
+#         print("USAGE_FOLDERS_PROCESSED is str")
+#         list(USAGE_FOLDERS_PROCESSED)
+#     if type(USAGE_FOLDERS_PROCESSED) is str: print("string")
+#     if type(USAGE_FOLDERS_PROCESSED) is list: print("list")
+#     if type(USAGE_FOLDERS_PROCESSED) is dict: print("dict")
+#     sys.exit(1)
 
     ######## ----  Parse the args provided on CLI    ---- #######    
     parser = argparse.ArgumentParser(description="Export macOS Notes to GitHub.")
@@ -711,8 +711,13 @@ def main():
 
     ######## ----  Do INIT work, ensure DEFAULT_GITHUB_URL has been changed    ---- #######    
     if USAGE_GITMYNOTES_TOTAL == 0:
-        # leave this here for lter 1st timer things
-        print("Hello first timer!")
+        # leave this here for later 1st timer things
+#         print("Hello first timer!")
+        if len(USAGE_FOLDERS_PROCESSED) == 1:
+            if USAGE_FOLDERS_PROCESSED[0] == 'placeholder':
+                 USAGE_FOLDERS_PROCESSED[0] = args_folder
+#         print(f"USAGE_FOLDERS_PROCESSED : {USAGE_FOLDERS_PROCESSED}")
+#         sys.exit(1)
     
     substring = '<ChangeMe>'
     if substring in DEFAULT_GITHUB_URL:
