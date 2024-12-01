@@ -27,7 +27,7 @@ No one can predict the future. Losing a job or a role shouldn't mean losing your
 ### Prerequisites
 1. MacOS with Notes app and AppleScript (ships with every Mac)
 2. Python 3.x+ with `ruyaml` ability (run `pip install ruamel.yaml` once)
-3. GitHub repo (eg, `https://github.com/<MYUSERNAME>/gitmynotes`) accessible from the Mac running this script. Can be public or private, must be configured working auth credentials, etc) 
+3. GitHub repo (eg, `https://github.com/<MYUSERNAME>/gitmynotes`) accessible from the Mac running this script. Can be public or private, must be configured working auth credentials, etc.
 
 
 ## Steps 1-2-3
