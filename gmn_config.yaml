@@ -19,27 +19,29 @@
 
 #### user configs
 ##   REQUIRED TO CHANGE the '<ChangeMe>' github username
-'DEFAULT_GITHUB_URL': 'https://github.com/<ChangeMe>/gitmynotes'
+'DEFAULT_GITHUB_URL': 'https://github.com/mariochampion/gitmynotes'
 
 
 ##   REQUIRED: LEAVE AS-IS or CHANGE--
-'DEFAULT_NOTES_FOLDER': 'Notes'
-'DEFAULT_BATCH_SIZE': 10
-'DEFAULT_LOOPCOUNT_BEFORE_CONFIRM': 5
+'DEFAULT_NOTES_FOLDER': 'Notes' # This is the default folder, found on every macOS Notes app to be processed, if --folder not set.
+'DEFAULT_BATCH_SIZE': 10 # notecount / batchsize = loopcount. 'notecount' is either explicit as 'maxnotes' or returned from get_foldernotecount(folder) if maxnotes not set.
+'DEFAULT_LOOPCOUNT_BEFORE_CONFIRM': 5 # loopcount X batchsize = notecount before you must confirm intention to process in one run. This can be over-ridden by adding '--force' to your command.
 'DEFAULT_EXPORT_PATH': '~/Documents/gitmynotes'
-'DEFAULT_PROCESSED_FOLDER_ENDING': '__GitMyNotes'
-'DEFAULT_NEWLINE_DELIMITER': '|||'
-'DEFAULT_AUDIT_FILE_ENDING': '.csv'
-'DEFAULT_RESTORE_NOTES': 'empty'
-'DEFAULT_NOTES_WRAPPERDIR': 'macosnotes'
+'DEFAULT_PROCESSED_FOLDER_ENDING': '__GitMyNotes' # ex: if folder is "plans", this will create temp folder "plans__GitMyNotes"
+'DEFAULT_NEWLINE_DELIMITER': '|||' # this is for internal use when creating local audit file, like "plans.csv"
+'DEFAULT_AUDIT_FILE_ENDING': '.csv' # I wouldnt change this, personally.
+'DEFAULT_RESTORE_NOTES': 'empty' # options are "empty, always, never"
+'DEFAULT_NOTES_WRAPPERDIR': 'macosnotes' # this is the dir in Github in which notes folders will be created
 
 
 
 #### GitMyNotes Usage data
 ##   This data is not transmitted anywhere. 
 ##   It is used to enable first-time help, when DEFAULT_GITHUB_URL is not set, for example
+##   And to help show the benefit you have recieved using GitMyNotes
 
-'USAGE_GITMYNOTES_TOTAL': 7
-'USAGE_NOTES_PROCESSED': 19
-'USAGE_FOLDERS_PROCESSED': 7
+'USAGE_GITMYNOTES_TOTAL': 9
+'USAGE_FOLDERS_PROCESSED': 9
+'USAGE_NOTES_PROCESSED': 32
+
 
