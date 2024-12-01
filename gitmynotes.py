@@ -527,7 +527,7 @@ def restore_source_foldernote(folder_source, folder_bkup, restore_notes):
        if source_count == 0:
             if bkup_count > 0:
                 print(f"Source folder {folder_source} notecount is {source_count}!")
-                print(f"Option --restore-notes={restore_notes} so processed notes in {folder_bkup} will be moved back.")
+                print(f"Option '--restore-notes={restore_notes}' so processed notes in '{folder_bkup}' will be moved back.")
                 #print(f"Moving {bkup_count} Notes from {folder_bkup} into original source folder: {folder_source}")
                 restore_result = move_processed_notes(folder_bkup, folder_source, bkup_count, create=False)
                 
@@ -642,7 +642,7 @@ def main():
     DEFAULT_NOTES_WRAPPERDIR = cfg['DEFAULT_NOTES_WRAPPERDIR']
     DEFAULT_PROCESSED_FOLDER_ENDING = cfg['DEFAULT_PROCESSED_FOLDER_ENDING']
     DEFAULT_AUDIT_FILE_ENDING = cfg['DEFAULT_AUDIT_FILE_ENDING']
-    DEFAULT_NOTECOUNT_BEFORE_CONFIRM = cfg['DEFAULT_NOTECOUNT_BEFORE_CONFIRM']
+    DEFAULT_LOOPCOUNT_BEFORE_CONFIRM = cfg['DEFAULT_LOOPCOUNT_BEFORE_CONFIRM']
     DEFAULT_NEWLINE_DELIMITER = cfg['DEFAULT_NEWLINE_DELIMITER']
     DEFAULT_RESTORE_NOTES = cfg['DEFAULT_RESTORE_NOTES']
     
@@ -661,7 +661,7 @@ def main():
     parser.add_argument('--force', action='store_true',
                       default=DEFAULT_NOTES_FOLDER_FORCE,
                       help=f"[bool] Use as '--force' (no 'true' or 'false' value allowed) to over-ride to the default required user confirmation to process the full count of Notes in the specified folder when it exceed 5x the batch size -- which could be hundreds of notes and could take a looooong time.(default: confirmation will be required)")
-    parser.add_argument('--max-notes', '-maxnotes', type=int, 
+    parser.add_argument('--max-notes', '--maxnotes', type=int, 
                       default=DEFAULT_MAX_NOTES,
                       help=f'[int] Maximum number of notes to process. (default: {DEFAULT_MAX_NOTES})')
     parser.add_argument('--batch-size', type=int,
@@ -717,6 +717,8 @@ def main():
             ## RE-DO the initial msg to let people know setup details have changed
             initial_msg = build_initial_msg(this_msg="  Thanks for updating your GitHub username!", folder=args.folder, max_notes=args_max_notes, export_path=args.export_path, github_url=DEFAULT_GITHUB_URL)
             colorprint(textcolor='cyan', msg=f"{initial_msg}", addseparator=True)
+        else:
+            print(f"No changes max_notes {args_max_notes}")
 
 
 
@@ -734,16 +736,16 @@ def main():
 
 
 
-    ######## ----  check for 5x batch size in arg.folder    ---- #######
+    ######## ----  check for 5x batch size in args_folder_count    ---- #######
     ''' if args_folder not set (and defaults to Notes) or set to folder with 5xBatch notes, warn user'''
     if args_folder:
         args_folder_count = get_foldernotecount(args_folder)
-        print(f"{args_folder} count: {args_folder_count}")
+        print(f"33{args_folder} count: {args_folder_count}")
         
     else:
         args_folder_count = 0
     
-    if args_folder_count > (args.batch_size * DEFAULT_NOTECOUNT_BEFORE_CONFIRM):
+    if args_folder_count > (args.batch_size * DEFAULT_LOOPCOUNT_BEFORE_CONFIRM):
         if args.force:
             print(f"--force was set, so go on without confirm...")
             return
@@ -766,20 +768,18 @@ def main():
             args_max_notes = confirm_num
             
     else:
-        print(f"LESS than {DEFAULT_NOTECOUNT_BEFORE_CONFIRM} batches required, go on...")
+        print(f"LESS than {DEFAULT_LOOPCOUNT_BEFORE_CONFIRM} batches required, go on...")
         args_max_notes = args_folder_count
     ######## ----  END check for 5x batch size in arg.folder    ---- #######
-    
-    print(f"TEMP STOP")
-    sys.exit(1)
-    
     
     
     ''' if args_max_notes note set, get a notecount value based on folder name '''
     if args_max_notes == 0:
         notes_to_process = get_foldernotecount(args.folder)
+        print("11")
     else:
         notes_to_process = args_max_notes
+        print(f"22 notes_to_process{notes_to_process} args_max_notes{args_max_notes}")
     
     colorprint(textcolor="white",msg=f"bb Notes to process: {notes_to_process}")
     
