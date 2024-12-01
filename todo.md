@@ -7,8 +7,6 @@
 
 * do not fail entire job when this applescript error occurs: `execution error: Notes got an error: An error of type 100002 has occurred. (100002)`
 
-* USAGE_FOLDERS_PROCESSED is not accurate
-
 * check that --help is still accurate to possible args
 
 * remove many of the debug print() statements
