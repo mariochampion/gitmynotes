@@ -7,10 +7,7 @@
 
 * do not fail entire job when this applescript error occurs: `execution error: Notes got an error: An error of type 100002 has occurred. (100002)`
 
-* check that --help is still accurate to possible args
-
-* remove many of the debug print() statements
-
+* potential bug when you point to folder which exists but has 0 notes in it
 
 
 ### enhancements
