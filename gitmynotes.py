@@ -791,6 +791,7 @@ Add '--force' to skip confirmation in the future.'''
     
     ''' Process in a loop of batches'''
     loop_count = math.ceil(notes_to_process / args.batch_size)
+    notes_processed = 0
     for x in range(1,loop_count+1): 
         colorprint(textcolor="cyan",msg=f"    Begin export of Notes with batch {x} of {loop_count}", addseparator=True)
         
@@ -800,7 +801,6 @@ Add '--force' to skip confirmation in the future.'''
         else:
             notes_to_export = args.batch_size
         
-        notes_processed = 0
         notes_processed = export_notes_to_markdown(
             args.export_path,
             args_folder,
@@ -880,7 +880,7 @@ Add '--force' to skip confirmation in the future.'''
     update_yaml_config('./gmn_config.yaml', 'USAGE_NOTES_PROCESSED', USAGE_NOTES_PROCESSED_NEW)
     
     
-    ## Prep for final msg so user knows what happened
+    ######## ----  Prep for final msg so user knows what happened    ---- #######
     if args_wrapper_dir:
         final_gitnotes_url = f"{DEFAULT_GITHUB_URL}/tree/main/{args_wrapper_dir}/{args_folder}"
     else:
