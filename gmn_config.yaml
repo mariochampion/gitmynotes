@@ -12,10 +12,12 @@
 ## ===================================================================
 
 
+#### Important
+##
+##   Any ADDITIONAL 'DEFAULT_*'configs added to this file must be also added to gitmynotes.py
+##   in the 'USER CONFIGS' section atop that file
+##
 ####
-##  IMPORTANT: Any ADDITIONAL 'DEFAULT_*'configs added to this file must be also added to gitmynotes.py
-##  in the 'USER CONFIGS' section atop that file
-
 
 
 #### User Configs
