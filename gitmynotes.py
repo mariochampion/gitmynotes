@@ -479,7 +479,7 @@ def process_applescript(applescript):
 def get_foldernotecount(folder=None):
 
     if folder:
-        colorprint(textcolor="magenta",msg=f"No max-notes set. Using count of notes in folder: {folder}")
+        colorprint(textcolor="magenta",msg=f"No --max-notes set. Using count of notes in folder: {folder}")
         # Properly escape quotes in folder name for AppleScript
         folder_escaped = folder.replace('"', '\\"')
         
@@ -654,15 +654,6 @@ def main():
     USAGE_FOLDERS_PROCESSED = cfg['USAGE_FOLDERS_PROCESSED']
     USAGE_NOTES_PROCESSED = cfg['USAGE_NOTES_PROCESSED']
     
-#     print(f"USAGE_FOLDERS_PROCESSED: {USAGE_FOLDERS_PROCESSED}")
-#     if isinstance(USAGE_FOLDERS_PROCESSED, str): 
-#         print("USAGE_FOLDERS_PROCESSED is str")
-#         list(USAGE_FOLDERS_PROCESSED)
-#     if type(USAGE_FOLDERS_PROCESSED) is str: print("string")
-#     if type(USAGE_FOLDERS_PROCESSED) is list: print("list")
-#     if type(USAGE_FOLDERS_PROCESSED) is dict: print("dict")
-#     sys.exit(1)
-
     ######## ----  Parse the args provided on CLI    ---- #######    
     parser = argparse.ArgumentParser(description="Export macOS Notes to GitHub.")
     parser.add_argument('--folder', type=str, 
@@ -767,12 +758,15 @@ def main():
     
     if notes_to_process > (args.batch_size * DEFAULT_LOOPCOUNT_BEFORE_CONFIRM):
         if args.force:
-            print(f"--force was set, so go on without confirm...")
+            #print(f"--force was set, so go on without confirm...")
             return
         else:
-            print(f"--force not set, and MORE than {DEFAULT_LOOPCOUNT_BEFORE_CONFIRM} batches required, must confirm")
-            confirm_warn = f'''WHOA. {notes_to_process} notes to process in 'Notes' folder!
-        Confirmation Required.'''
+            #print(f"--force not set, and MORE than {DEFAULT_LOOPCOUNT_BEFORE_CONFIRM} batches required, must confirm")
+            confirm_warn = f'''WHOA. {notes_to_process} notes to process in '{args_folder}' folder!
+
+    <<<< Confirmation Required.>>>>
+
+Add '--force' to skip confirmation in the future.'''
             colorprint(textcolor='magenta', msg=f"{confirm_warn}", addseparator=True)
             confirm_msg = f''' Enter a number up to {notes_to_process} of notes to process, or 'x' to eXit.
   [Or 'enter' to process all {notes_to_process} notes] : '''
@@ -788,7 +782,8 @@ def main():
             notes_to_process = confirm_num
             
     else:
-        print(f"LESS than {DEFAULT_LOOPCOUNT_BEFORE_CONFIRM} batches required, go on...")
+        pass
+        #print(f"LESS than {DEFAULT_LOOPCOUNT_BEFORE_CONFIRM} batches required, go on...")
     
     
     ######## ----  END check for 5x batch size in arg.folder    ---- #######
@@ -869,7 +864,7 @@ def main():
         colorprint(textcolor="green",msg=f"SUCCESS: RESTORED notes to {args_folder} from {args_folder}{DEFAULT_PROCESSED_FOLDER_ENDING}", addseparator=True)
     
     else:
-        restore_declined_msg = f'''    DECLINED! Notes not restored to '{args_folder}' 
+        restore_declined_msg = f'''    << Notes not restored to '{args_folder}' >> 
     Set --restore-notes=empty to move notes back to '{args_folder}' when notecount is 0
     Set --restore-notes=always to move notes back to '{args_folder}' after every backup'''
         colorprint(textcolor="red",msg=f"{restore_declined_msg}", addseparator=True)
