@@ -445,7 +445,7 @@ def create_gitnotes_folder(folder: str) -> Tuple[bool, str]:
 
 def process_applescript(applescript):
     ''' generic function to process applescript and return a result object'''
-    colorprint(textcolor='white', msg=f"Processing AppleScript...")
+    # colorprint(textcolor='white', msg=f"Processing AppleScript...")
     
     try:
         result = subprocess.run(
@@ -479,7 +479,7 @@ def process_applescript(applescript):
 def get_foldernotecount(folder=None):
 
     if folder:
-        colorprint(textcolor="magenta",msg=f"No --max-notes set. Using count of notes in folder: {folder}")
+        print(f"Getting count of notes in folder: {folder}")
         # Properly escape quotes in folder name for AppleScript
         folder_escaped = folder.replace('"', '\\"')
         
@@ -503,6 +503,8 @@ def get_foldernotecount(folder=None):
         '''
         
         result,output_count = process_applescript(applescript_notecount)
+        print(f"'{folder_escaped}' notecount: {output_count}")
+        print("")
         return int(output_count)
         
     else:
@@ -520,8 +522,8 @@ def restore_source_foldernote(folder_source, folder_bkup, restore_notes):
     
     source_count = get_foldernotecount(folder_source)
     bkup_count = get_foldernotecount(folder_bkup)
-    #print(f"'{folder_source}' notecount: {source_count}")
-    #print(f"'{folder_bkup}' notecount: {bkup_count}")
+    
+    
     
     if restore_notes == 'empty':
        if source_count == 0:
@@ -783,14 +785,9 @@ Add '--force' to skip confirmation in the future.'''
             
     else:
         pass
-        #print(f"LESS than {DEFAULT_LOOPCOUNT_BEFORE_CONFIRM} batches required, go on...")
-    
-    
     ######## ----  END check for 5x batch size in arg.folder    ---- #######
     
     
-    
-    colorprint(textcolor="white",msg=f"Notes to process: {notes_to_process}")
     
     ''' Process in a loop of batches'''
     loop_count = math.ceil(notes_to_process / args.batch_size)
@@ -855,7 +852,7 @@ Add '--force' to skip confirmation in the future.'''
             #print(f"================================")
     
     ## check for restore-empty-source-folder to decide what to do with contents of folder_GitMyNotes backup folders
-    print(f"Option to restore the source folder is '{args.restore_notes}'")
+    print(f"Option --restore-notes is '{args.restore_notes}'")
     
     restore_result = 0
     restore_result = restore_source_foldernote(folder_source=args_folder, folder_bkup=f"{args_folder}{DEFAULT_PROCESSED_FOLDER_ENDING}", restore_notes=args.restore_notes)
