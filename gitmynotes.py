@@ -792,6 +792,7 @@ Add '--force' to skip confirmation in the future.'''
     ''' Process in a loop of batches'''
     loop_count = math.ceil(notes_to_process / args.batch_size)
     notes_processed = 0
+    processednotes_data = 0
     for x in range(1,loop_count+1): 
         colorprint(textcolor="cyan",msg=f"    Begin export of Notes with batch {x} of {loop_count}", addseparator=True)
         
@@ -826,15 +827,14 @@ Add '--force' to skip confirmation in the future.'''
                 max_notes=notes_processed,
                 newline_delimiter=args.newline_delimiter
             )
-        else:
-            processednotes_data = 0	
             
             
         if processednotes_data:
             move_result = move_processed_notes(
                 folder_source=args_folder,
                 folder_dest=f"{args_folder}{DEFAULT_PROCESSED_FOLDER_ENDING}",
-                max_notes=notes_to_export
+                max_notes=notes_to_export,
+                create=True
             )
         
         
@@ -851,20 +851,23 @@ Add '--force' to skip confirmation in the future.'''
             colorprint(textcolor="red",msg=f"    !!! FAILED to MOVE notes !!!", addseparator=True)
             #print(f"================================")
     
-    ## check for restore-empty-source-folder to decide what to do with contents of folder_GitMyNotes backup folders
-    print(f"Option --restore-notes is '{args.restore_notes}'")
     
-    restore_result = 0
-    restore_result = restore_source_foldernote(folder_source=args_folder, folder_bkup=f"{args_folder}{DEFAULT_PROCESSED_FOLDER_ENDING}", restore_notes=args.restore_notes)
+    if processednotes_data:
         
-    if restore_result:
-        colorprint(textcolor="green",msg=f"SUCCESS: RESTORED notes to {args_folder} from {args_folder}{DEFAULT_PROCESSED_FOLDER_ENDING}", addseparator=True)
-    
-    else:
-        restore_declined_msg = f'''    << Notes not restored to '{args_folder}' >> 
-    Set --restore-notes=empty to move notes back to '{args_folder}' when notecount is 0
-    Set --restore-notes=always to move notes back to '{args_folder}' after every backup'''
-        colorprint(textcolor="red",msg=f"{restore_declined_msg}", addseparator=True)
+        ## check for restore-empty-source-folder to decide what to do with contents of folder_GitMyNotes backup folders
+        print(f"Option --restore-notes is '{args.restore_notes}'")
+        
+        restore_result = 0
+        restore_result = restore_source_foldernote(folder_source=args_folder, folder_bkup=f"{args_folder}{DEFAULT_PROCESSED_FOLDER_ENDING}", restore_notes=args.restore_notes)
+            
+        if restore_result:
+            colorprint(textcolor="green",msg=f"SUCCESS: RESTORED notes to {args_folder} from {args_folder}{DEFAULT_PROCESSED_FOLDER_ENDING}", addseparator=True)
+        
+        else:
+            restore_declined_msg = f'''    << Notes not restored to '{args_folder}' >> 
+        Set --restore-notes=empty to move notes back to '{args_folder}' when notecount is 0
+        Set --restore-notes=always to move notes back to '{args_folder}' after every backup'''
+            colorprint(textcolor="red",msg=f"{restore_declined_msg}", addseparator=True)
     
     
     
