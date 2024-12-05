@@ -33,8 +33,6 @@
 
 * make sure the .gitignore is correct
 
-* remove 'mariochampion' from config values 
-
 * write some measure of real instructions
 
 
