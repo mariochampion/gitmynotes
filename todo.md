@@ -9,6 +9,20 @@
 
 * mention when locked notes are encountered and the content is NOT sent to github, but a stub file is, with just the title and mod/create dates
 
+* why getting this?? when actually sent to github, maybe related to --restore setting
+```Notes to export to markdown: 10
+
+------------------------------------------------
+SUCCESS: Exported 0 notes to './Notes.csv'
+------------------------------------------------
+
+No Notes to Move
+
+------------------------------------------------
+    !!! FAILED to MOVE notes !!!
+------------------------------------------------
+```
+
 
 
 ### enhancements
