@@ -165,13 +165,13 @@ def commit_and_push(repo_path, folder_name=None, wrapper_dir=None):
     result_gitadd = subprocess.run(['git', 'add', f'{wrapper_dir}'], cwd=repo_path)
     if result_gitadd.returncode == 0:
         colorprint(textcolor="green",msg=f"Successful GIT ADD to origin/main.")
-        #print(result_gitadd)
+        print(f"1 result_gitadd: {result_gitadd}")
 
     else:
         colorprint(textcolor="red",msg=f"Error GIT ADD to origin/main:")
-        print(result_gitadd)
+        print(f"2 result_gitadd: {result_gitadd}")
     
-    folder_info = f" from folder '{folder_name}'" if folder_name else ""
+    folder_info = f"from folder '{folder_name}'" if folder_name else ""
     commit_message = f"Backed up {folder_info} - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
         
     result_gitcommit = subprocess.run(['git', 'commit', '-m', commit_message], cwd=repo_path, capture_output=True, text=True)
@@ -190,7 +190,7 @@ def commit_and_push(repo_path, folder_name=None, wrapper_dir=None):
     - commit message:{commit_message}
     '''
         colorprint(textcolor="white",msg=f"{commit_print_msg}")
-        print(result_gitcommit)
+        print(f"result_gitcommit: {result_gitcommit}")
 
     
     if result_gitcommit.returncode == 0:
@@ -204,12 +204,12 @@ def commit_and_push(repo_path, folder_name=None, wrapper_dir=None):
         
         if result_push.returncode == 0:
             colorprint(textcolor="green",msg=f"Successful GIT PUSH to origin/main.")
-            #print(result_push)
-            #print(" ")
+            print(f"1 result_push: {result_push}")
+            print(" ")
         else:
             colorprint(textcolor="red",msg=f"Error GIT PUSH to origin/main:")
-            print(result_push)
-           # print(" ")
+            print(f"2 result_push: {result_push}")
+            print(" ")
             # Optionally, try force push if regular push fails
 	        # result = subprocess.run(['git', 'push', '-f', 'origin', 'main'], cwd=repo_path, capture_output=True, text=True)
     else:
