@@ -537,7 +537,7 @@ def restore_source_foldernote(folder_source, folder_bkup, restore_notes):
             
     if restore_notes == 'always':
         if bkup_count > 0:
-            print(f"Source folder {folder_source} not empty! Contains {source_count} un-backed-up notes.")
+            print(f"Source folder {folder_source} not empty! Contains {source_count} un-backed-up notes.") #this may sometime be not clear
             print(f"Option --restore-notes={restore_notes} so processed notes in {folder_bkup} will be moved back.")
             print(f"WARNING: This non-'empty' setting can cause some notes to never be backed up.")
             restore_result = move_processed_notes(folder_bkup, folder_source, bkup_count, create=False)
