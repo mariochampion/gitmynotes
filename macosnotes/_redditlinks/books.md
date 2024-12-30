@@ -1,13 +1,13 @@
-<div><b>Creation Date:</b> Tuesday, May 21, 2024 at 10:43:55 PM<br></div>
-<div><b>Modification Date:</b> Wednesday, December 18, 2024 at 11:24:15 AM<br></div>
-<div><h1>books</h1></div>
+<div><b>Creation Date:</b> Tuesday, May 21, 2024 at 10:43:55 PM<br></div>
+<div><b>Modification Date:</b> Wednesday, December 18, 2024 at 11:24:15 AM<br></div>
+<div><h1>b</h1><h1>ook</h1><h1>s</h1><h1><br></h1></div>
 <div><h1><br></h1></div>
 <div>https://www.reddit.com/r/suggestmeabook/comments/1cy09ql/iil_the_library_at_mount_char_piranesi_a_short/?utm_source=share&amputm_medium=ios_app&amputm_name=iossmf</div>
 <div><h1><br></h1></div>
-<div><h1>——</h1></div>
-<div>2024 scifi :</div>
-<div>alien clay</div>
-<div>jumpnauts </div>
+<div><h1>——</h1><h1><br></h1></div>
+<div>2024 scifi :<br></div>
+<div>alien clay<br></div>
+<div>jumpnauts <br></div>
 <div>womb city</div>
 <div><br></div>
 <div><br></div>
@@ -16,16 +16,16 @@
 <div><br></div>
 <div><br></div>
 <div><br></div>
-<div>———</div>
-<div><h1>the other valley</h1></div>
+<div>———<br></div>
+<div><h1>t</h1><h1>he </h1><h1>oth</h1><h1>er </h1><h1>va</h1><h1>ll</h1><h1>ey</h1><h1><br></h1></div>
 <div><br></div>
-<div>a book </div>
+<div>a book <br></div>
 <div><br></div>
-<div>wittgenstein mistress </div>
+<div>wittgenstein mistress <br></div>
 <div><br></div>
 <div>ken wilbur</div>
 <div><br></div>
-<div>dan cummins - comedian </div>
+<div>dan cummins - comedian <br></div>
 <div><br></div>
 <div><br></div>
 <div>https://www.reddit.com/r/suggestmeabook/comments/1ecb3hi/whats_your_personal_most_underrated_book/?utm_source=share&amputm_medium=ios_app&amputm_name=iossmf<br></div>
@@ -40,9 +40,9 @@
 <div><br></div>
 <div>Shark Ship is a post-apocalyptic story set on a boat populated by people who, due to an overpopulation crisis, have pledged to never set foot on land again. The setting and plot are great, but the real star are the relationships. The way characters who have lived their entire lives so close to each other and in such a rigid hierarchy come to understand each other is complex, subtle, and sometimes very sad.</div>
 <div><br></div>
-<div>Most of his stuff is totally forgotten today, and available only in the collection His Share of The Glory, but it's well worth tracking down. He's a phenomenal writer, and deeply, deeply underrated.</div>
+<div>Most of his stuff is totally forgotten today, and available only in the collection His Share of The Glory, but it's well worth tracking down. He's a phenomenal writer, and deeply, deeply underrated.<br></div>
 <div><br></div>
-<div>—————</div>
+<div>—————<br></div>
 <div><br></div>
 <div>https://www.reddit.com/r/suggestmeabook/comments/1ehogqj/books_with_similar_prose_to_this_is_how_you_lose/?utm_source=share&amputm_medium=ios_app&amputm_name=iossmf<br></div>
 <div><br></div>
