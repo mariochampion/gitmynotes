@@ -25,6 +25,9 @@ No Notes to Move
 ------------------------------------------------
 ```
 
+* start fresh like new user, track issues, see what claude can do?
+
+
 
 
 ### enhancements
