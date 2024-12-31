@@ -4,9 +4,6 @@
 
 ### bugs
 
-
-* connect claude MCP to review collected notes
-
 * do not fail entire job when this applescript error occurs: `execution error: Notes got an error: An error of type 100002 has occurred. (100002)`
 
 * mention when locked notes are encountered and the content is NOT sent to github, but a stub file is, with just the title and mod/create dates
@@ -25,15 +22,28 @@ No Notes to Move
 ------------------------------------------------
 ```
 
-* start fresh like new user, track issues, see what claude can do?
+
+
+### SCRAPER ENHANCEMENTS
+
+* connect claude MCP to review collected notes
+
+* make reddit specific scraper and generic scraper, depending on url (each one a separate file so others can contribute)
+
+* make url detection not dependent on "href="
+
+* enable for multiple files with pre-fetch yaml, auto-populate from dirs if X conditions met (less than 100 words, etc)
+
+
 
 
 
 
 ### enhancements
 
+* start fresh like new user, track issues, see what claude can do?
+
 * improve msg about access rights including steps for GH PAT and implementing it on mac. 
-* Use config file to include usage count, so I can offer INIT advice for first time, like has a GitHub set up, etc
 
 * ability to update user bash profile to have `alias gitmynotes='python gitmynotes.py'`
 
