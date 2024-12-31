@@ -3,12 +3,11 @@
 <div><h1>Car loan w Ufcu.. and home insurance broker.</h1></div>
 <div><a href=https://www.reddit.com/r/Austin/comments/1hbjsi3/car_insurance_shopping/>https://www.reddit.com/r/Austin/comments/1hbjsi3/car_insurance_shopping/</a><br></div>
 
-
 <div><br></div>
 <div><b>Post Details:</b><br></div>
 <div>Author: u/Tough-Philosophy495</div>
 <div>Posted: 2024-12-10 20:58:18</div>
-<div>Score: 3</div>
+<div>Score: 1</div>
 <div>Comments: 16</div>
 <div><br></div>
 <div><b>Content:</b></div>
@@ -34,4 +33,4 @@ ALWAYS ALWAYS ALWAYS. Make sure the quotes are the same coverage. Lots of sales 
 Not all home owners insurance is the same. In fact it very drastically so by calling the office you can have them explain the discounts and coverage. Most companies don’t cover slow water leaks, and will deny claims for this. Most companies give new roof discounts that will decrease over the years raising your premiums.</div>
 
 <div><br></div>
-<div>#AutoInsurance #CarInsurance</div>
+<div>#Insurance #Coverage #StateFarm</div>
