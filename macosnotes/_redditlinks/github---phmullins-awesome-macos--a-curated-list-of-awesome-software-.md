@@ -12,3 +12,20 @@
 <div><br></div>
 <div>https://github.com/phmullins/awesome-macos</div>
 
+
+<div><br></div>
+<div><b>Post Details:</b><br></div>
+<div>Author: u/seenukarthi</div>
+<div>Posted: 2024-12-19 02:49:11</div>
+<div>Score: 197</div>
+<div>Comments: 29</div>
+<div><br></div>
+<div><b>Content:</b></div>
+<div></div>
+
+<div><br></div>
+<div><b>Top Comment by u/zippyzebu9:</b></div>
+<div>More curated version [here](https://maverickmac.github.io/2024-10-30/maverick-mac).</div>
+
+<div><br></div>
+<div>#Apple #GithubPhmullinsawesomemacosCuratedList #AwesomeSoftware</div>
