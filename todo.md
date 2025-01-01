@@ -30,9 +30,7 @@ No Notes to Move
 
 * make reddit specific scraper and generic scraper, depending on url (each one a separate file so others can contribute)
 
-* make url detection not dependent on "href="
-
-* enable for multiple files with pre-fetch yaml, auto-populate from dirs if X conditions met (less than 100 words, etc)
+* auto-populate prefetch yaml from dirs if X conditions met (less than MINIMUM_WORD_COUNT words, etc)
 
 
 
