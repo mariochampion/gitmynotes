@@ -1,11 +1,4 @@
 PREFETCH_BASE_DIR: macosnotes
 _redditlinks:
-  FETCHED:
-  - macos-tricks.md
-  - somewhere-out-there--there-is-somebody-failing-their-timed-online-.md
-  - upscale--remix--python.md
-  - github---phmullins-awesome-macos--a-curated-list-of-awesome-software-.md
-  - car-loan-w-ufcu..-and-home-insurance-broker..md
-  - i-made-an-ai-3d-model-generator.-try-it-for-free--.md
-  PREFETCHED:
-  - upsampler.md
+  FETCHED: []
+  PREFETCHED: []

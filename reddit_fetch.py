@@ -1,5 +1,5 @@
 import praw
-import yaml
+from ruamel.yaml import YAML
 import os
 from bs4 import BeautifulSoup
 import re
@@ -14,9 +14,11 @@ def get_script_dir():
 
 def load_config():
     """Load config from the same directory as the script."""
+    yaml = YAML()
+    yaml.preserve_quotes = True
     config_path = os.path.join(get_script_dir(), 'gmn_config.yaml')
     with open(config_path, 'r') as file:
-        return yaml.safe_load(file)
+        return yaml.load(file)
 
 def load_stopwords():
     """Load custom stopwords from the same directory as the script."""
@@ -214,17 +216,12 @@ def main():
         config = load_config()
         reddit = setup_reddit(config)
         
-        # Load the prefetched yaml file
-        script_dir = get_script_dir()
-        yaml_path = os.path.join(script_dir, 'reddit_prefetched.yaml')
-        with open(yaml_path, 'r') as file:
-            prefetch_config = yaml.safe_load(file)
-            
-        base_dir = prefetch_config['PREFETCH_BASE_DIR']
-        redditlinks = prefetch_config['_redditlinks']
+        # Get reddit config from the same config file
+        redditlinks = config['_redditlinks']
+        base_dir = config['DEFAULT_NOTES_WRAPPERDIR']  # Use the default wrapper dir
         
         # Get list of files to process
-        prefetched_files = redditlinks.get('PREFETCHED', [])
+        prefetched_files = redditlinks.get('PREFETECHED', [])
         print(f"Found {len(prefetched_files)} files to process")
         
         if not prefetched_files:
@@ -239,17 +236,21 @@ def main():
         
         # Update YAML file once after all processing
         if successful_files:
-            # Remove processed files from PREFETCHED
-            redditlinks['PREFETCHED'] = [f for f in prefetched_files if f not in successful_files]
+            # Remove processed files from PREFETECHED
+            redditlinks['PREFETECHED'] = [f for f in prefetched_files if f not in successful_files]
             
             # Add to FETCHED
             if 'FETCHED' not in redditlinks:
                 redditlinks['FETCHED'] = []
             redditlinks['FETCHED'].extend(successful_files)
             
-            # Write updated YAML file
-            with open(yaml_path, 'w') as yaml_file:
-                yaml.dump(prefetch_config, yaml_file, default_flow_style=False)
+            # Write updated YAML file while preserving formatting
+            yaml = YAML()
+            yaml.preserve_quotes = True
+            yaml.indent(mapping=2, sequence=4, offset=2)
+            config_path = os.path.join(get_script_dir(), 'gmn_config.yaml')
+            with open(config_path, 'w') as yaml_file:
+                yaml.dump(config, yaml_file)
             
             print(f"Successfully processed {len(successful_files)} files")
         else:

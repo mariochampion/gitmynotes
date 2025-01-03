@@ -1,6 +1,6 @@
 import os
-import yaml
 import re
+from ruamel.yaml import YAML
 
 MINIMUM_WORD_COUNT = 50
 
@@ -9,6 +9,7 @@ def get_script_dir():
     return os.path.dirname(os.path.abspath(__file__))
 
 def count_content_words(content):
+    """Count the number of words in the content, excluding metadata and URLs."""
     # Remove creation and modification date lines
     lines = content.split('\n')
     filtered_lines = []
@@ -38,22 +39,29 @@ def count_content_words(content):
 
 def main():
     try:
+        yaml = YAML()
+        yaml.preserve_quotes = True
+        yaml.indent(mapping=2, sequence=4, offset=2)
+        
         script_dir = get_script_dir()
         # Load the YAML file from the same directory as the script
-        yaml_path = os.path.join(script_dir, 'reddit_prefetched.yaml')
-        with open(yaml_path, 'r') as file:
-            config = yaml.safe_load(file)
+        config_path = os.path.join(script_dir, 'gmn_config.yaml')
+        with open(config_path, 'r') as file:
+            config = yaml.load(file)
+        
+        # Initialize _redditlinks section if it doesn't exist
+        if '_redditlinks' not in config:
+            config['_redditlinks'] = {'FETCHED': [], 'PREFETECHED': []}
         
         # Get list of files already in FETCHED or PREFETCHED
-        processed_files = set(config['_redditlinks'].get('FETCHED', []) + 
-                            config['_redditlinks'].get('PREFETCHED', []))
-        
-        # Initialize PREFETCHED if it doesn't exist
-        if 'PREFETCHED' not in config['_redditlinks']:
-            config['_redditlinks']['PREFETCHED'] = []
+        redditlinks = config['_redditlinks']
+        processed_files = set(redditlinks.get('FETCHED', []) + 
+                            redditlinks.get('PREFETECHED', []))
         
         # Process each file in the directory using relative path
-        dir_path = os.path.join(script_dir, config['PREFETCH_BASE_DIR'], '_redditlinks')
+        base_dir = config['DEFAULT_NOTES_WRAPPERDIR']  # Use the default wrapper dir
+        dir_path = os.path.join(script_dir, base_dir, '_redditlinks')
+        
         for filename in os.listdir(dir_path):
             if not filename.endswith('.md'):
                 continue
@@ -70,7 +78,7 @@ def main():
                     
                     if word_count < MINIMUM_WORD_COUNT:
                         print(f"Adding {filename} to PREFETCHED (word count: {word_count})")
-                        config['_redditlinks']['PREFETCHED'].append(filename)
+                        redditlinks['PREFETECHED'].append(filename)
                     else:
                         print(f"Skipping {filename} - too many words ({word_count})")
             
@@ -78,9 +86,9 @@ def main():
                 print(f"Error processing {filename}: {str(e)}")
                 continue
         
-        # Save updated YAML file
-        with open(yaml_path, 'w') as file:
-            yaml.dump(config, file, default_flow_style=False)
+        # Save updated YAML file while preserving formatting and comments
+        with open(config_path, 'w') as file:
+            yaml.dump(config, file)
             
         print("\nYAML file updated successfully!")
         
