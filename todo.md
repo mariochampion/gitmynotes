@@ -28,7 +28,7 @@ No Notes to Move
 
 * connect claude MCP to review collected notes
 
-* make reddit specific scraper and generic scraper, depending on url (each one a separate file so others can contribute)
+* make generic scraper, depending on url (each one a separate file so others can contribute)
 
 * auto-populate prefetch yaml from dirs if X conditions met (less than MINIMUM_WORD_COUNT words, etc)
 
