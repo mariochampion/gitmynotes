@@ -1,0 +1,35 @@
+<div><b>Creation Date:</b> Wednesday, September 20, 2023 at 9:06:45 PM<br></div>
+<div><b>Modification Date:</b> Thursday, September 21, 2023 at 7:48:41 PM<br></div>
+<div><h1>Z</h1><h1>apier</h1></div>
+<div><br></div>
+<div><br></div>
+<div><br></div>
+<div><b>Do you have experience working on growth teams in a B2B context? Please share a quick summary of your growth-oriented experience. *</b><br></div>
+<div>When I was hired as a PM in 2019 at Liquibase, a &quotdevops for the database&quot solution, we only offered a popular open-source project and a fairly expensive Enterprise offering. In my tenure and with my leadership, we developed a new Liquibase Pro product, growing from 0 to near 200 customers, ranging from some of the world’s largest companies to 5 person startups, deploying across legacy SQL, NoSQL, and cloud native stacks, generating multiple 7 figures of revenue, and near 50% of company ARR.</div>
+<div><br></div>
+<div>For some broader growth-oriented examples: I crafted a new onboarding experience, with new commands to handle much of the boilerplate setups and default configs, invoking these when the app detects for example missing but required resources. We also inform users when they run open-source operations which have paid counterparts, with a quick benefits summary and link to a free trial. I also helped create video and lesson content for Liquibase University and Youtube, as well as hosting or participating in our online meetups, sometimes with demos, sometimes just for AMAs, to hear first-hand both user experiences from both seasoned veterans and first-time dabblers.<br></div>
+<div><br></div>
+<div>As a more specific example, we need to solve for a wide array of use cases in a panoply of tool chains/tech stacks and cultural obstacles to on-board users and guide them through discovery and into a steady-state in which Liquibase is fully embedded in their critical workflows. The successes we have created are meaningful (although many more await!), with one important breakthrough being a deeper understanding that we needed to more fully map personas along multiple dimensions. This includes the organization's or team’s cultural cohort, the champion/advocate's &quotdevops journey&quot persona, the user-type persona, and more. This insight re-shaped strategy for multiple teams, affecting marketing, sales and sales enablement, and customer success, in addition to Product and Engineering efforts.<br></div>
+<div><br></div>
+<div><b>Briefly tell us why you'd be a great fit for this role *</b><br></div>
+<div>I am an optimistic, agile, entrepreneurial, and technical PM currently at Liquibase, and before that a Sr PM with an edtech startup in Austin where I earned 3 patents. I’ve been PMing remote teams, collaborating across the USA and Canada to Ukraine and Poland to Brazil and Argentina. I am proud of what we’ve accomplished at Liquibase, how what we ship helps customers spend time with dates instead of with databases, how much revenue it has generated, and where things are headed. But/And after four years here, I’m looking for a meaningful next opportunity. </div>
+<div><br></div>
+<div>Working with a command-line tool, with its basic UX options and yet critical capabilities, has been a rewarding and educational experience in getting to the stripped-down core of user on-boarding and engagement. Before that at Trails.by, we had to deal with both individual user sign-ups, and mass-enrolled users added by their school or organization in a white-label SaaS context. With users ranging from kids to MBA students, equally famous for not reading notes or instructions, we had to instrument the on-boarding journey to discover the biggest help was example content and introductory challenges.</div>
+<div><br></div>
+<div>While these are just a couple of examples, in full disclosure, user growth, engagement, education has not been the bulk of my PM experiences, but I love the puzzle of such a challenge. I am deeply intrigued by collaborating with fellow nerds to strike out on directionally-correct experiments, learning and course-correcting as data comes in. I know this cycle is how great things are made.</div>
+<div><br></div>
+<div><br></div>
+<div><br></div>
+<div><b>Tell us about a time where you worked with a stakeholder team to grow or optimize sign ups, revenue, adoption, engagement, etc. How did you measure success? How did you structure your relationship with the stakeholders? *</b><b><br></b></div>
+<div><b><br></b></div>
+<div>While PM’ing Liquibase Pro, which is a CLI tool both embedded into DevOps pipelines/automations and installed to developer laptops and sandboxes, we repeatedly heard from customers the desire for a centralized location for reports and data on operations. In a collaboration with Marketing, Engineering, Customer Success, and Lead Customers willing to engage, we decided on an experiment, called Liquibase Hub, to test the gap between expressed desire and commitment for such a service. <br></div>
+<div><br></div>
+<div>Shortly after initial launch, and despite marketing, blogs, emails, and early commitments, sign-ups were lagging. Interviews had shown us that many orgs claim to be wary of SaaS interaction with their data, and so we had settled on a conservative approach of requiring a manual interaction to configure a connected Hub account. Thinking ahead, we had an alternative “guided connection strategy” in our pocket. And so we were quickly able to implement a smarter almost entirely automated experience to increase signups and follow-on engagement: recognize certain user actions, inform them of the benefits of centralizing certain operational data streams, offer a friendly (but still command-line), “Enter [y] to register with Liquibase Hub”, which handled all the setup for users. Then, after operations, we simply popped a link to the Hub-based report, and info on how to disable this new capability. Additionally we added commands to the core product to manually invoke the same flow, step by step, for those who desired a more controlled and visible process. This was helpful for sign-off from Security and Compliance teams.<br></div>
+<div><br></div>
+<div>The increase in sign-ups was dramatic and continued with all new releases of the product. Unfortunately, perhaps because it was so easy, more than one user interview revealed the use of Hub as essentially a “free data piggy bank”. Note the word “free.” We didn’t find enough paid conversion, our ultimate success measure, to pencil out Hub’s costs (infra, SOC II compliance, regular pen tests, maintenance and upgrades, etc) and shut it down. <br></div>
+<div><br></div>
+<div><br></div>
+<div><br></div>
+<div>—————————————————————<br></div>
+<div>Liquibase is at heart a command-line tool, which, when I joined, was &quotsold&quot to devs, even though the key users are automated deployment jobs, and the primary recipients of the tactical value are DevOps/DevSecOps folks who need repeatable and auditable database pipeline workflows, and the primary recipients of the strategic value are their managers, architects, VPs and the like, who actually write the checks.</div>
+
