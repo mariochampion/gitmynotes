@@ -166,7 +166,6 @@ def commit_and_push(repo_path, folder_name=None, wrapper_dir=None):
     if result_gitadd.returncode == 0:
         colorprint(textcolor="green",msg=f"Successful GIT ADD to origin/main.")
         print(f"1 result_gitadd: {result_gitadd}")
-
     else:
         colorprint(textcolor="red",msg=f"Error GIT ADD to origin/main:")
         print(f"2 result_gitadd: {result_gitadd}")
@@ -329,7 +328,7 @@ def export_notes_metadata(output_file, folder, max_notes, newline_delimiter):
             writer.writerow(['Folder', 'Original Title', 'Last Modified', 'Exported Title', 'Exported Date'])
         writer.writerows(notes_data)
         
-    colorprint(textcolor="green",msg=f"SUCCESS: Exported {len(notes_data)} notes to '{output_file}'", addseparator=True)
+    colorprint(textcolor="green",msg=f"22 SUCCESS: Exported {len(notes_data)} notes to '{output_file}'", addseparator=True)
     
     return notes_data
 
@@ -815,7 +814,7 @@ Add '--force' to skip confirmation in the future.'''
         )
         
         if notes_processed > 0:
-            colorprint(textcolor="green",msg=f"SUCCESS: Exported {notes_processed} Notes to local folder {args.export_path}")
+            colorprint(textcolor="green",msg=f"11 SUCCESS: Exported {notes_processed} Notes to local folder {args.export_path}")
             
             commit_and_push(args.export_path, args_folder, args_wrapper_dir)
         else:
@@ -826,13 +825,18 @@ Add '--force' to skip confirmation in the future.'''
         if notes_processed > 0:
             print(f"NOTES PROCESSED > 0: {notes_processed}")
             colorprint(textcolor="white",msg=f"Notes to export to markdown: {notes_to_export}")
+            print(f'''BEFORE export:
+output_file={audit_file}
+folder={args_folder}
+max_notes={notes_processed}
+newline_delimiter={args.newline_delimiter}''')
+
             processednotes_data = export_notes_metadata(
                 output_file=audit_file,
                 folder=args_folder,
                 max_notes=notes_processed,
                 newline_delimiter=args.newline_delimiter
             )
-            
             
         if processednotes_data:
             move_result = move_processed_notes(
@@ -841,8 +845,6 @@ Add '--force' to skip confirmation in the future.'''
                 max_notes=notes_to_export,
                 create=True
             )
-        
-        
         else:
             move_result = 0
             colorprint(textcolor="magenta",msg=f"No Notes to Move")
