@@ -805,13 +805,13 @@ Add '--force' to skip confirmation in the future.'''
             notes_to_export = final_loop_size
         print(f"batch size for this loop: {notes_to_export}")
 
-        
-        notes_processed = export_notes_to_markdown(
-            args.export_path,
-            args_folder,
-            notes_to_export,
-            args_wrapper_dir
-        )
+        if notes_to_export > 0:
+            notes_processed = export_notes_to_markdown(
+                args.export_path,
+                args_folder,
+                notes_to_export,
+                args_wrapper_dir
+            )
         
         if notes_processed > 0:
             colorprint(textcolor="green",msg=f"11 SUCCESS: Exported {notes_processed} Notes to local folder {args.export_path}")
