@@ -151,7 +151,7 @@ def export_notes_to_markdown(export_path, folder_name=None, max_notes=None, wrap
     '''
     result = subprocess.run(['osascript', '-e', applescript], capture_output=True, text=True)
     if result.stderr:
-        print(f"Error: {result.stderr}")
+        print(f"Error in EXPORT NOTES: {result.stderr}")
         return 0
     return int(result.stdout.strip()) if result.stdout.strip() else 0
 
@@ -346,9 +346,9 @@ def move_processed_notes(folder_source, folder_dest, max_notes, create=True):
         success, message = create_gitnotes_folder(folder_dest)
     
         if success:
-            colorprint(textcolor="green",msg=f"Success: {message}")
+            colorprint(textcolor="green",msg=f"Create notes folder Success: {message}")
         else:
-            colorprint(textcolor="red",msg=f"Failed: {message}")
+            colorprint(textcolor="red",msg=f"Create notes folder Failed: {message}")
     
     
     #print(f"Now to move up to {max_notes} notes from '{folder_source}' to '{folder_dest}'")
@@ -396,7 +396,7 @@ def move_processed_notes(folder_source, folder_dest, max_notes, create=True):
     '''
     
     result_move, output_move = process_applescript(applescript_movenote)
-    #print(f"applescript_movenote result: {result_move} {output_move}")
+    print(f"applescript_movenote result: {result_move} {output_move}")
     return result_move
    
 
@@ -791,6 +791,7 @@ Add '--force' to skip confirmation in the future.'''
     
     ''' Process in a loop of batches'''
     loop_count = math.ceil(notes_to_process / args.batch_size)
+    final_loop_size = notes_to_process % args.batch_size
     notes_processed = 0
     processednotes_data = 0
     for x in range(1,loop_count+1): 
@@ -799,8 +800,12 @@ Add '--force' to skip confirmation in the future.'''
         
         if loop_count == 1:
             notes_to_export = notes_to_process
-        else:
+        if x < loop_count:
             notes_to_export = args.batch_size
+        if x == loop_count:
+            notes_to_export = final_loop_size
+        print(f"batch size for this loop: {notes_to_export}")
+
         
         notes_processed = export_notes_to_markdown(
             args.export_path,
@@ -819,7 +824,7 @@ Add '--force' to skip confirmation in the future.'''
             
         ## if notes were process to git, then create the audit trail and move the notes
         if notes_processed > 0:
-            #print(f"NOTES PROCESSED > 0: {notes_processed}")
+            print(f"NOTES PROCESSED > 0: {notes_processed}")
             colorprint(textcolor="white",msg=f"Notes to export to markdown: {notes_to_export}")
             processednotes_data = export_notes_metadata(
                 output_file=audit_file,
