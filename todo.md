@@ -8,7 +8,7 @@
 
 * mention when locked notes are encountered and the content is NOT sent to github, but a stub file is, with just the title and mod/create dates
 
-* why getting this?? when actually sent to github, maybe related to --restore setting
+* why getting this?? when actually sent to github, maybe related to --restore setting, maybe related to | in title??
 ```Notes to export to markdown: 10
 
 ------------------------------------------------
