@@ -221,7 +221,7 @@ def main():
         base_dir = config['DEFAULT_NOTES_WRAPPERDIR']  # Use the default wrapper dir
         
         # Get list of files to process
-        prefetched_files = redditlinks.get('PREFETECHED', [])
+        prefetched_files = redditlinks.get('PREFETCHED', [])
         print(f"Found {len(prefetched_files)} files to process")
         
         if not prefetched_files:
@@ -236,8 +236,8 @@ def main():
         
         # Update YAML file once after all processing
         if successful_files:
-            # Remove processed files from PREFETECHED
-            redditlinks['PREFETECHED'] = [f for f in prefetched_files if f not in successful_files]
+            # Remove processed files from PREFETCHED
+            redditlinks['PREFETCHED'] = [f for f in prefetched_files if f not in successful_files]
             
             # Add to FETCHED
             if 'FETCHED' not in redditlinks:

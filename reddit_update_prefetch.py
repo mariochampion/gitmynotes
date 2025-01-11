@@ -49,18 +49,18 @@ def main():
         with open(config_path, 'r') as file:
             config = yaml.load(file)
         
-        # Initialize _redditlinks section if it doesn't exist
-        if '_redditlinks' not in config:
-            config['_redditlinks'] = {'FETCHED': [], 'PREFETECHED': []}
+        # Initialize _reddit section if it doesn't exist
+        if '_reddit' not in config:
+            config['_reddit'] = {'FETCHED': [], 'PREFETCHED': []}
         
         # Get list of files already in FETCHED or PREFETCHED
-        redditlinks = config['_redditlinks']
+        redditlinks = config['_reddit']
         processed_files = set(redditlinks.get('FETCHED', []) + 
-                            redditlinks.get('PREFETECHED', []))
+                            redditlinks.get('PREFETCHED', []))
         
         # Process each file in the directory using relative path
         base_dir = config['DEFAULT_NOTES_WRAPPERDIR']  # Use the default wrapper dir
-        dir_path = os.path.join(script_dir, base_dir, '_redditlinks')
+        dir_path = os.path.join(script_dir, base_dir, '_reddit')
         
         for filename in os.listdir(dir_path):
             if not filename.endswith('.md'):
@@ -78,7 +78,7 @@ def main():
                     
                     if word_count < MINIMUM_WORD_COUNT:
                         print(f"Adding {filename} to PREFETCHED (word count: {word_count})")
-                        redditlinks['PREFETECHED'].append(filename)
+                        redditlinks['PREFETCHED'].append(filename)
                     else:
                         print(f"Skipping {filename} - too many words ({word_count})")
             
