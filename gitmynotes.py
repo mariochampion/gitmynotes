@@ -230,6 +230,9 @@ def export_notes_metadata(output_file, folder, max_notes, newline_delimiter):
         newline_delimiter (str): Default newline delimiter (|||)
     """
     
+    print(f"INSIDE export_notes_metadata: {output_file}, {folder}, {max_notes}, {newline_delimiter}")
+    
+    
     # AppleScript to get notes information    
     applescript = '''
     tell application "Notes"
@@ -273,19 +276,24 @@ def export_notes_metadata(output_file, folder, max_notes, newline_delimiter):
         '''
         
     applescript += '''
-            set noteTitle to name of theNote as string
-            -- clean noteTitle to not break on commas in noteTitle
-            set noteTitle to do shell script "echo " & noteTitle & "| sed 's/,/-/'"
-            -- Clean the title for use as filename
-            set cleanTitle to do shell script "echo " & quoted form of noteTitle & " | sed 's/[^a-zA-Z0-9.]/-/g' | tr '[:upper:]' '[:lower:]'"
-            set noteData to noteTitle &","& cleanTitle & ".md" &","& modification date of theNote & custom_delimiter
-            copy noteData to the end of noteList
+	    set noteTitle to name of theNote as string
+        -- log ("Processing note: " & noteTitle)
+	    -- clean noteTitle using quoted form to handle special characters
+	    set noteTitle to do shell script ("echo " & quoted form of noteTitle & "| sed 's/,/-/g'")
+	    -- Clean the title for use as filename, using quoted form again
+	    set cleanTitle to do shell script ("echo " & quoted form of noteTitle & " | sed 's/[^a-zA-Z0-9.]/-/g' | tr '[:upper:]' '[:lower:]'")
+	    set noteData to noteTitle &","& cleanTitle & ".md" &","& modification date of theNote & custom_delimiter
+        copy noteData to the end of noteList
         end repeat
         return noteList
     end tell
     '''
-
+    
     result,output = process_applescript(applescript)
+    print(f"process_applescript result: {result}")
+    print("-------------------")
+    print(f"process_applescript output: {output}")
+
     
     # Parse the output
     notes_data = []
