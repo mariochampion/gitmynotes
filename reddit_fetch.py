@@ -182,7 +182,7 @@ def update_markdown_file(file_path, post_info):
 def process_reddit_file(filename, base_dir, reddit):
     """Process a single Reddit file and return success status."""
     script_dir = get_script_dir()
-    full_path = os.path.join(script_dir, base_dir, '_redditlinks', filename)
+    full_path = os.path.join(script_dir, base_dir, '_reddit', filename)
     
     try:
         # Get the URL from the file
@@ -217,7 +217,7 @@ def main():
         reddit = setup_reddit(config)
         
         # Get reddit config from the same config file
-        redditlinks = config['_redditlinks']
+        redditlinks = config['_reddit']
         base_dir = config['DEFAULT_NOTES_WRAPPERDIR']  # Use the default wrapper dir
         
         # Get list of files to process
