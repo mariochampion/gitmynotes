@@ -798,7 +798,12 @@ Add '--force' to skip confirmation in the future.'''
     
     ''' Process in a loop of batches'''
     loop_count = math.ceil(notes_to_process / args.batch_size)
-    final_loop_size = notes_to_process % args.batch_size
+    
+    if notes_to_process == args.batch_size:
+        final_loop_size = args.batch_size
+    else:
+        final_loop_size = notes_to_process % args.batch_size
+    
     notes_processed = 0
     processednotes_data = 0
     for x in range(1,loop_count+1): 
