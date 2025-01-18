@@ -13,6 +13,8 @@
 
 ### SCRAPER ENHANCEMENTS
 
+* scraper/fetcher dir with reddit and then optional other scrapers/fetchers
+
 * connect claude MCP to review collected notes
 
 * make generic scraper, depending on url (each one a separate file so others can contribute)
