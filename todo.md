@@ -23,6 +23,8 @@
 
 * auto-populate prefetch yaml from dirs if X conditions met (less than MINIMUM_WORD_COUNT words, etc)
 
+* allow for random scraper dir name and path
+
 
 
 
