@@ -39,17 +39,29 @@ import csv
 from datetime import datetime
 from typing import Tuple
 from ruamel.yaml import YAML
+from enum import Enum
+
+class PrintLevel(Enum):
+    NONE = 0
+    RESULTS = 1
+    DEBUG = 2
+    ALL = 3
+
+# Set a default print level - you might want to load this from your config later
+
+
 
 
 #### USER CONFIGS
-##   get user configs from file ./gmn_config.yaml
 
+PRINT_LEVEL = PrintLevel.RESULTS
+
+##   get user configs from file ./gmn_config.yaml
 def load_configs_from_file():
     yaml=YAML(typ='safe')   # default, if not specfied, is 'rt' (round-trip)
     loaded_configs = yaml.load(open("gmn_config.yaml"))
     
     return loaded_configs
-
 
 
 ##### Describe this function
@@ -151,7 +163,7 @@ def export_notes_to_markdown(export_path, folder_name=None, max_notes=None, wrap
     '''
     result = subprocess.run(['osascript', '-e', applescript], capture_output=True, text=True)
     if result.stderr:
-        print(f"Error in EXPORT NOTES: {result.stderr}")
+        results_print(f"Error in EXPORT NOTES: {result.stderr}")
         return 0
     return int(result.stdout.strip()) if result.stdout.strip() else 0
 
@@ -162,13 +174,14 @@ def export_notes_to_markdown(export_path, folder_name=None, max_notes=None, wrap
 def commit_and_push(repo_path, folder_name=None, wrapper_dir=None):
     """Commit changes and push to GitHub"""
     # Always operate from the git root directory
+       
     result_gitadd = subprocess.run(['git', 'add', f'{wrapper_dir}'], cwd=repo_path)
     if result_gitadd.returncode == 0:
         print_color(textcolor="green",msg=f"Successful GIT ADD to origin/main.")
-        print(f"1 result_gitadd: {result_gitadd}")
+        results_print(f"1 result_gitadd: {result_gitadd}")
     else:
         print_color(textcolor="red",msg=f"Error GIT ADD to origin/main:")
-        print(f"2 result_gitadd: {result_gitadd}")
+        results_print(f"2 result_gitadd: {result_gitadd}")
     
     folder_info = f"from folder '{folder_name}'" if folder_name else ""
     commit_message = f"Backed up {folder_info} - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
@@ -189,7 +202,7 @@ def commit_and_push(repo_path, folder_name=None, wrapper_dir=None):
     - commit message:{commit_message}
     '''
         print_color(textcolor="white",msg=f"{commit_print_msg}")
-        print(f"result_gitcommit: {result_gitcommit}")
+        results_print(f"result_gitcommit: {result_gitcommit}")
 
     
     if result_gitcommit.returncode == 0:
@@ -203,11 +216,11 @@ def commit_and_push(repo_path, folder_name=None, wrapper_dir=None):
         
         if result_push.returncode == 0:
             print_color(textcolor="green",msg=f"Successful GIT PUSH to origin/main.")
-            print(f"1 result_push: {result_push}")
+            results_print(f"1 result_push: {result_push}")
             print(" ")
         else:
             print_color(textcolor="red",msg=f"Error GIT PUSH to origin/main:")
-            print(f"2 result_push: {result_push}")
+            results_print(f"2 result_push: {result_push}")
             print(" ")
             # Optionally, try force push if regular push fails
 	        # result = subprocess.run(['git', 'push', '-f', 'origin', 'main'], cwd=repo_path, capture_output=True, text=True)
@@ -230,7 +243,7 @@ def export_notes_metadata(output_file, folder, max_notes, newline_delimiter):
         newline_delimiter (str): Default newline delimiter (|||)
     """
     
-    print(f"INSIDE export_notes_metadata: {output_file}, {folder}, {max_notes}, {newline_delimiter}")
+    debug_print(f"INSIDE export_notes_metadata: {output_file}, {folder}, {max_notes}, {newline_delimiter}")
     
     
     # AppleScript to get notes information    
@@ -290,9 +303,9 @@ def export_notes_metadata(output_file, folder, max_notes, newline_delimiter):
     '''
     
     result,output = process_applescript(applescript)
-    print(f"process_applescript result: {result}")
+    results_print(f"process_applescript result: {result}")
     print("-------------------")
-    print(f"process_applescript output: {output}")
+    results_print(f"process_applescript output: {output}")
 
     
     # Parse the output
@@ -358,7 +371,7 @@ def move_processed_notes(folder_source, folder_dest, max_notes, create=True):
             print_color(textcolor="red",msg=f"Create notes folder Failed: {message}")
     
     
-    #print(f"Now to move up to {max_notes} notes from '{folder_source}' to '{folder_dest}'")
+    debug_print(f"Now to move up to {max_notes} notes from '{folder_source}' to '{folder_dest}'")
     
     # Escape any quotes in folder names
     folder_source_escaped = folder_source.replace('"', '\\"')
@@ -403,7 +416,7 @@ def move_processed_notes(folder_source, folder_dest, max_notes, create=True):
     '''
     
     result_move, output_move = process_applescript(applescript_movenote)
-    print(f"applescript_movenote result: {result_move} {output_move}")
+    results_print(f"applescript_movenote result: {result_move} {output_move}")
     return result_move
    
 
@@ -486,7 +499,7 @@ def process_applescript(applescript):
 def get_foldernotecount(folder=None):
 
     if folder:
-        print(f"Getting count of notes in folder: {folder}")
+        debug_print(f"Getting count of notes in folder: {folder}")
         # Properly escape quotes in folder name for AppleScript
         folder_escaped = folder.replace('"', '\\"')
         
@@ -510,7 +523,7 @@ def get_foldernotecount(folder=None):
         '''
         
         result,output_count = process_applescript(applescript_notecount)
-        print(f"'{folder_escaped}' notecount: {output_count}")
+        results_print(f"'{folder_escaped}' notecount: {output_count}")
         print("")
         return int(output_count)
         
@@ -535,18 +548,17 @@ def restore_source_foldernote(folder_source, folder_bkup, restore_notes):
     if restore_notes == 'empty':
        if source_count == 0:
             if bkup_count > 0:
-                print(f"Source folder {folder_source} notecount is {source_count}!")
-                print(f"Option '--restore-notes={restore_notes}' so processed notes in '{folder_bkup}' will be moved back.")
-                #print(f"Moving {bkup_count} Notes from {folder_bkup} into original source folder: {folder_source}")
+                results_print(f"Source folder {folder_source} notecount is {source_count}!")
+                results_print(f"Option '--restore-notes={restore_notes}' so processed notes in '{folder_bkup}' will be moved back.")
                 restore_result = move_processed_notes(folder_bkup, folder_source, bkup_count, create=False)
                 
                 return restore_result
             
     if restore_notes == 'always':
         if bkup_count > 0:
-            print(f"Source folder {folder_source} not empty! Contains {source_count} un-backed-up notes.") #this may sometime be not clear
-            print(f"Option --restore-notes={restore_notes} so processed notes in {folder_bkup} will be moved back.")
-            print(f"WARNING: This non-'empty' setting can cause some notes to never be backed up.")
+            results_print(f"Source folder {folder_source} not empty! Contains {source_count} un-backed-up notes.") #this may sometime be not clear
+            results_print(f"Option --restore-notes={restore_notes} so processed notes in {folder_bkup} will be moved back.")
+            results_print(f"WARNING: This non-'empty' setting can cause some notes to never be backed up.")
             restore_result = move_processed_notes(folder_bkup, folder_source, bkup_count, create=False)
                 
             return restore_result
@@ -579,6 +591,21 @@ def update_yaml_config(file_path, key, value):
     # Write back to the file, preserving original structure
     with open(file_path, 'w') as file:
         yaml_handler.dump(config, file)
+
+
+
+def debug_print(*args, **kwargs):
+    if PRINT_LEVEL.value >= PrintLevel.DEBUG.value:
+        print("DEBUG:", *args, **kwargs)
+
+def results_print(*args, **kwargs):
+    if PRINT_LEVEL.value >= PrintLevel.RESULTS.value:
+        print("RESULT:", *args, **kwargs)
+
+#def some_function():
+#    results_print("Processing started...")  # Prints at RESULTS or higher
+#    debug_print("Variable x =", x)         # Only prints at DEBUG or higher
+
 
 
 
@@ -658,6 +685,7 @@ def main():
     DEFAULT_LOOPCOUNT_BEFORE_CONFIRM = cfg['DEFAULT_LOOPCOUNT_BEFORE_CONFIRM']
     DEFAULT_NEWLINE_DELIMITER = cfg['DEFAULT_NEWLINE_DELIMITER']
     DEFAULT_RESTORE_NOTES = cfg['DEFAULT_RESTORE_NOTES']
+    PRINT_LEVEL = PrintLevel[cfg['PRINT_LEVEL']]
     
     USAGE_GITMYNOTES_TOTAL = cfg['USAGE_GITMYNOTES_TOTAL']
     USAGE_FOLDERS_PROCESSED = cfg['USAGE_FOLDERS_PROCESSED']
@@ -680,9 +708,9 @@ def main():
                       default=DEFAULT_BATCH_SIZE,
                       help=f'[int] The number of notes to convert, and git add/commit/push per loop, calculated a max-notes/batch-size. Especially useful for initial runs.(default: {DEFAULT_BATCH_SIZE})')  
 
-    parser.add_argument('--debug', action='store_false',
-                      default=DEFAULT_NOTES_FOLDER_FORCE,
-                      help=f"[bool] Use as '--debug' (no 'true' or 'false' value allowed) to turn on extra print() commands to aid in tracking code flow and general debugging. (default is no debug print() statements)")
+    parser.add_argument('--print', '--print-level', type=str,
+                      default=PRINT_LEVEL,
+                      help=f"[str] Optional set to 'none', 'results', 'debug', 'all' for different in tracking code flow and general debugging. (default: 'all')")
                       
     parser.add_argument('--export-path', '--exportpath',type=str, 
                       default=os.path.expanduser(f"{DEFAULT_EXPORT_PATH}"),
@@ -729,7 +757,7 @@ def main():
             if USAGE_FOLDERS_PROCESSED[0] == 'placeholder':
                  USAGE_FOLDERS_PROCESSED[0] = args_folder
                  update_yaml_config('./gmn_config.yaml', 'USAGE_FOLDERS_PROCESSED', USAGE_FOLDERS_PROCESSED)
-#         print(f"USAGE_FOLDERS_PROCESSED : {USAGE_FOLDERS_PROCESSED}")
+        results_print(f"USAGE_FOLDERS_PROCESSED : {USAGE_FOLDERS_PROCESSED}")
 #         sys.exit(1)
     
     substring = '<ChangeMe>'
@@ -798,7 +826,7 @@ Add '--force' to skip confirmation in the future.'''
             confirm_num = int(confirm_num)
             if confirm_num > notes_to_process:
                 confirm_num = notes_to_process 
-            #print(f"aa Notes to process: {confirm_num}")
+            debug_print(f"aa Notes to process: {confirm_num}")
             notes_to_process = confirm_num
             
     else:
@@ -843,13 +871,12 @@ Add '--force' to skip confirmation in the future.'''
             commit_and_push(args.export_path, args_folder, args_wrapper_dir)
         else:
             print_color(textcolor="magenta",msg=f"No notes were processed, skipping git commit")
-            #print(f"------------------------------------")
             
         ## if notes were process to git, then create the audit trail and move the notes
         if notes_processed > 0:
-            print(f"NOTES PROCESSED > 0: {notes_processed}")
+            debug_print(f"NOTES PROCESSED > 0: {notes_processed}")
             print_color(textcolor="white",msg=f"Notes to export to markdown: {notes_to_export}")
-            print(f'''BEFORE export:
+            debug_print(f'''BEFORE export:
 output_file={audit_file}
 folder={args_folder}
 max_notes={notes_processed}
@@ -887,22 +914,22 @@ newline_delimiter={args.newline_delimiter}''')
             USAGE_FOLDERS_PROCESSED.append(args_folder)
             update_yaml_config('./gmn_config.yaml', 'USAGE_FOLDERS_PROCESSED', USAGE_FOLDERS_PROCESSED)
         
-        print(f"++++++++++  Update config yaml  +++++++++++++")
-        print(f"(before)USAGE_NOTES_PROCESSED: {USAGE_NOTES_PROCESSED}")
-        print(f"notes_processed: {notes_processed}")
+        results_print(f"++++++++++  Update config yaml usage stats  +++++++++++++")
+        debug_print(f"(before)USAGE_NOTES_PROCESSED: {USAGE_NOTES_PROCESSED}")
+        debug_print(f"notes_processed: {notes_processed}")
         
         USAGE_NOTES_PROCESSED_NEW = int(USAGE_NOTES_PROCESSED) + int(notes_processed)
-        print(f"USAGE_NOTES_PROCESSED_NEW: {USAGE_NOTES_PROCESSED_NEW}")
+        debug_print(f"USAGE_NOTES_PROCESSED_NEW: {USAGE_NOTES_PROCESSED_NEW}")
         update_yaml_config('./gmn_config.yaml', 'USAGE_NOTES_PROCESSED', USAGE_NOTES_PROCESSED_NEW)
         USAGE_NOTES_PROCESSED = USAGE_NOTES_PROCESSED_NEW
-        print(f"(after)USAGE_NOTES_PROCESSED: {USAGE_NOTES_PROCESSED}")
-        print(f"++++++++++++++++++++++++++++++++++++++++++++++")
+        debug_print(f"(after)USAGE_NOTES_PROCESSED: {USAGE_NOTES_PROCESSED}")
+        debug_print(f"++++++++++++++++++++++++++++++++++++++++++++++")
     
     
     if processednotes_data:
         
         ## check for restore-empty-source-folder to decide what to do with contents of folder_GitMyNotes backup folders
-        print(f"Option --restore-notes is '{args.restore_notes}'")
+        debug_print(f"Option --restore-notes is '{args.restore_notes}'")
         
         restore_result = 0
         restore_result = restore_source_foldernote(folder_source=args_folder, folder_bkup=f"{args_folder}{DEFAULT_PROCESSED_FOLDER_ENDING}", restore_notes=args.restore_notes)
@@ -935,6 +962,7 @@ newline_delimiter={args.newline_delimiter}''')
     
     
 ############# END OF MAIN
+
 
 
 
