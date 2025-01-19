@@ -29,6 +29,8 @@
 
 ### enhancements
 
+* auto-discover Notes dirs and list them as options for choosing, with "Notes" as default
+
 * start fresh like new user, track issues, see what claude can do?
 
 * improve msg about access rights including steps for GH PAT and implementing it on mac. 
