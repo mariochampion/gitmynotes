@@ -96,8 +96,10 @@ def setup_git_repo(repo_path, DEFAULT_GITHUB_URL):
 
 ##### Describe this function
 
-def export_notes_to_markdown(export_path, folder_name=None, max_notes=None, wrapper_dir=None):
+def export_notes_to_markdown(DEFAULT_CURRENTNOTE_FILE, export_path, folder_name=None, max_notes=None, wrapper_dir=None):
     """Export Notes using applescript/osascript with folder and count limits"""
+    
+    print(f"DEFAULT_CURRENTNOTE_FILE {DEFAULT_CURRENTNOTE_FILE}")
     
     ## tell the people some information
     if (max_notes > 0 and folder_name !="" and wrapper_dir !=""):
@@ -143,7 +145,7 @@ def export_notes_to_markdown(export_path, folder_name=None, max_notes=None, wrap
             set currentNote to item i of allNotes
             set noteTitle to the name of currentNote
             -- Write to file and track title for when unsupported note breaks
-            do shell script "echo " & quoted form of noteTitle & "," & " > currentnote.txt"
+            do shell script "echo " & quoted form of noteTitle & " > currentnote.txt"
             log ("Exporting note: " & noteTitle)
             
             set linebreaker to "\n"
@@ -173,7 +175,8 @@ def export_notes_to_markdown(export_path, folder_name=None, max_notes=None, wrap
         
         searchstring = "type 100002"
         if searchstring in result.stderr:
-            print(f"{searchstring} is present for note 'noteTitle'.")
+            noteTitle = get_currentnote(DEFAULT_CURRENTNOTE_FILE)
+            print(f"{searchstring} is present for note '{noteTitle}'.")
         else:
             debug_print(f"{searchstring} is not present.")
         
@@ -367,6 +370,12 @@ def export_notes_metadata(output_file, folder, max_notes, newline_delimiter):
     print_color(textcolor="green",msg=f"22 SUCCESS: Exported {len(notes_data)} notes to '{output_file}'", addseparator=True)
     
     return notes_data
+
+
+def get_currentnote(currentnotefile):
+    with open(currentnotefile, 'r') as file:
+        return file.readline().strip()
+
 
 
 
@@ -698,6 +707,8 @@ def main():
     DEFAULT_LOOPCOUNT_BEFORE_CONFIRM = cfg['DEFAULT_LOOPCOUNT_BEFORE_CONFIRM']
     DEFAULT_NEWLINE_DELIMITER = cfg['DEFAULT_NEWLINE_DELIMITER']
     DEFAULT_RESTORE_NOTES = cfg['DEFAULT_RESTORE_NOTES']
+    DEFAULT_CURRENTNOTE_FILE = cfg['DEFAULT_CURRENTNOTE_FILE']
+    debug_print(f"DEFAULT_CURRENTNOTE_FILE {DEFAULT_CURRENTNOTE_FILE}")
 #    PRINT_LEVEL = PrintLevel[cfg['PRINT_LEVEL']]
 #    print(f"PRINT_LEVEL {PRINT_LEVEL}")
     
@@ -873,6 +884,7 @@ Add '--force' to skip confirmation in the future.'''
 
         if notes_to_export > 0:
             notes_processed = export_notes_to_markdown(
+                DEFAULT_CURRENTNOTE_FILE, 
                 args.export_path,
                 args_folder,
                 notes_to_export,
