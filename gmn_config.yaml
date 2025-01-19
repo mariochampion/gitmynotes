@@ -47,7 +47,7 @@
 ##
 ##   This data is not transmitted anywhere. 
 ##   It is used to enable first-time help, when DEFAULT_GITHUB_URL is 0, for example
-##   And to help show the benefit you have recieved using GitMyNotes
+##   And to help show the benefit you have received using GitMyNotes
 
 'USAGE_GITMYNOTES_TOTAL': 0
 'USAGE_FOLDERS_PROCESSED':
