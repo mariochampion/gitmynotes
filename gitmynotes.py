@@ -160,11 +160,14 @@ def export_notes_to_markdown(export_path, folder_name=None, max_notes=None, wrap
     end tell
     '''
     result = subprocess.run(['osascript', '-e', applescript], capture_output=True, text=True)
+    
     if result.stdout:
         results_print(f"EXPORT NOTES stdout: {result.stdout}")
+        
     if result.stderr:
         results_print(f"Error in EXPORT NOTES: {result.stderr}")
         return 0
+    
     return int(result.stdout.strip()) if result.stdout.strip() else 0
 
 
