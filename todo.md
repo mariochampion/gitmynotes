@@ -8,7 +8,6 @@
 
 * mention when locked notes are encountered and the content is NOT sent to github, but a stub file is, with just the title and mod/create dates
 
-* clean up a ton of print statements
 
 
 ### SCRAPER ENHANCEMENTS
