@@ -141,8 +141,8 @@ def export_notes_to_markdown(export_path, folder_name=None, max_notes=None, wrap
         
         repeat with i from 1 to notesToProcess
             set currentNote to item i of allNotes
-            
             set noteTitle to the name of currentNote
+            log ("Exporting note: " & noteTitle)
             set linebreaker to "\n"
             set noteCreateDate to "<div><b>Creation Date:</b> " & creation date of currentNote & "<br></div>"
             set noteModDate to "<div><b>Modification Date:</b> " & modification date of currentNote & "<br></div>"
@@ -160,6 +160,8 @@ def export_notes_to_markdown(export_path, folder_name=None, max_notes=None, wrap
     end tell
     '''
     result = subprocess.run(['osascript', '-e', applescript], capture_output=True, text=True)
+    if result.stdout:
+        results_print(f"EXPORT NOTES stdout: {result.stdout}")
     if result.stderr:
         results_print(f"Error in EXPORT NOTES: {result.stderr}")
         return 0
@@ -288,7 +290,7 @@ def export_notes_metadata(output_file, folder, max_notes, newline_delimiter):
         
     applescript += '''
 	    set noteTitle to name of theNote as string
-        -- log ("Processing note: " & noteTitle)
+        log ("Processing note: " & noteTitle)
 	    -- clean noteTitle using quoted form to handle special characters
 	    set noteTitle to do shell script ("echo " & quoted form of noteTitle & "| sed 's/,/-/g'")
 	    -- Clean the title for use as filename, using quoted form again
@@ -603,7 +605,7 @@ def results_print(*args, **kwargs):
 
 
 
-def build_initial_msg(this_msg=None, folder=None, max_notes=None, export_path=None, github_url=None):
+def build_initial_msg(this_msg=None, folder=None, max_notes=None, export_path=None, github_url=None, print_level=None):
     # get some values for an initial msg
     
     if this_msg:
@@ -615,6 +617,9 @@ def build_initial_msg(this_msg=None, folder=None, max_notes=None, export_path=No
 '''
     if folder:
         initial_msg += f'''    - Notes folder: {folder}
+'''
+    if max_notes:
+        initial_msg += f'''    - print-level: {print_level}
 '''
     if max_notes:
         initial_msg += f'''    - max-notes: {max_notes}
@@ -738,7 +743,7 @@ def main():
 
 
     ## set up the initial msg to let people know setup details
-    initial_msg = build_initial_msg(this_msg="", folder=args_folder, max_notes=args_max_notes, export_path=args.export_path, github_url=args.github_url)
+    initial_msg = build_initial_msg(this_msg="", folder=args_folder, max_notes=args_max_notes, export_path=args.export_path, github_url=args.github_url, print_level=PRINT_LEVEL)
     print_color(textcolor='cyan', msg=f"{initial_msg}", addseparator=True)
 
 
@@ -768,7 +773,7 @@ def main():
         
         
         ## RE-DO the initial msg to let people know setup details have changed
-        initial_msg = build_initial_msg(this_msg="  Thanks for updating your GitHub username!", folder=args_folder, max_notes=args_max_notes, export_path=args.export_path, github_url=DEFAULT_GITHUB_URL)
+        initial_msg = build_initial_msg(this_msg="  Thanks for updating your GitHub username!", folder=args_folder, max_notes=args_max_notes, export_path=args.export_path, github_url=DEFAULT_GITHUB_URL, print_level=PRINT_LEVEL)
         print_color(textcolor='cyan', msg=f"{initial_msg}", addseparator=True)
 
 
@@ -860,7 +865,7 @@ Add '--force' to skip confirmation in the future.'''
             )
         
         if notes_processed > 0:
-            print_color(textcolor="green",msg=f"11 SUCCESS: Exported {notes_processed} Notes to local folder {args.export_path}")
+            print_color(textcolor="green",msg=f"SUCCESS: Exported {notes_processed} Notes to local folder {args.export_path}")
             
             commit_and_push(args.export_path, args_folder, args_wrapper_dir)
         else:
