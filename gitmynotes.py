@@ -47,8 +47,6 @@ class PrintLevel(Enum):
     DEBUG = 2
     ALL = 3
 
-# Set a default print level - you might want to load this from your config later
-
 
 
 
