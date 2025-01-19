@@ -142,7 +142,10 @@ def export_notes_to_markdown(export_path, folder_name=None, max_notes=None, wrap
         repeat with i from 1 to notesToProcess
             set currentNote to item i of allNotes
             set noteTitle to the name of currentNote
+            -- Write to file and track title for when unsupported note breaks
+            do shell script "echo " & quoted form of noteTitle & "," & " > currentnote.txt"
             log ("Exporting note: " & noteTitle)
+            
             set linebreaker to "\n"
             set noteCreateDate to "<div><b>Creation Date:</b> " & creation date of currentNote & "<br></div>"
             set noteModDate to "<div><b>Modification Date:</b> " & modification date of currentNote & "<br></div>"
@@ -165,8 +168,17 @@ def export_notes_to_markdown(export_path, folder_name=None, max_notes=None, wrap
         results_print(f"EXPORT NOTES stdout: {result.stdout}")
         
     if result.stderr:
-        results_print(f"Error in EXPORT NOTES: {result.stderr}")
+        results_print(f"Error in EXPORT NOTES:")
+        results_print(f"{result.stderr}")
+        
+        searchstring = "type 100002"
+        if searchstring in result.stderr:
+            print(f"{searchstring} is present for note 'noteTitle'.")
+        else:
+            debug_print(f"{searchstring} is not present.")
+        
         return 0
+    
     
     return int(result.stdout.strip()) if result.stdout.strip() else 0
 
