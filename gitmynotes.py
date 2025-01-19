@@ -52,7 +52,7 @@ class PrintLevel(Enum):
 
 #### USER CONFIGS
 
-PRINT_LEVEL = PrintLevel.RESULTS
+PRINT_LEVEL = PrintLevel.ALL
 
 ##   get user configs from file ./gmn_config.yaml
 def load_configs_from_file():
@@ -591,7 +591,7 @@ def update_yaml_config(file_path, key, value):
         yaml_handler.dump(config, file)
 
 
-
+## PRINT OPTIONS
 def debug_print(*args, **kwargs):
     if PRINT_LEVEL.value >= PrintLevel.DEBUG.value:
         print("DEBUG:", *args, **kwargs)
@@ -599,11 +599,6 @@ def debug_print(*args, **kwargs):
 def results_print(*args, **kwargs):
     if PRINT_LEVEL.value >= PrintLevel.RESULTS.value:
         print("RESULT:", *args, **kwargs)
-
-#def some_function():
-#    results_print("Processing started...")  # Prints at RESULTS or higher
-#    debug_print("Variable x =", x)         # Only prints at DEBUG or higher
-
 
 
 
@@ -683,7 +678,8 @@ def main():
     DEFAULT_LOOPCOUNT_BEFORE_CONFIRM = cfg['DEFAULT_LOOPCOUNT_BEFORE_CONFIRM']
     DEFAULT_NEWLINE_DELIMITER = cfg['DEFAULT_NEWLINE_DELIMITER']
     DEFAULT_RESTORE_NOTES = cfg['DEFAULT_RESTORE_NOTES']
-    PRINT_LEVEL = PrintLevel[cfg['PRINT_LEVEL']]
+#    PRINT_LEVEL = PrintLevel[cfg['PRINT_LEVEL']]
+#    print(f"PRINT_LEVEL {PRINT_LEVEL}")
     
     USAGE_GITMYNOTES_TOTAL = cfg['USAGE_GITMYNOTES_TOTAL']
     USAGE_FOLDERS_PROCESSED = cfg['USAGE_FOLDERS_PROCESSED']
