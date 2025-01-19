@@ -870,6 +870,25 @@ newline_delimiter={args.newline_delimiter}''')
             #print(f"================================")
             colorprint(textcolor="red",msg=f"    !!! FAILED to MOVE notes !!!", addseparator=True)
             #print(f"================================")
+        
+        ######## ----  update usage counts    ---- #######
+        USAGE_GITMYNOTES_TOTAL_NEW = int(USAGE_GITMYNOTES_TOTAL) + 1
+        update_yaml_config('./gmn_config.yaml', 'USAGE_GITMYNOTES_TOTAL', USAGE_GITMYNOTES_TOTAL_NEW)
+        
+        if args_folder not in USAGE_FOLDERS_PROCESSED:
+            USAGE_FOLDERS_PROCESSED.append(args_folder)
+            update_yaml_config('./gmn_config.yaml', 'USAGE_FOLDERS_PROCESSED', USAGE_FOLDERS_PROCESSED)
+        
+        print(f"++++++++++++++++++++++++++++++++++++++++++++++")
+        print(f"(before)USAGE_NOTES_PROCESSED: {USAGE_NOTES_PROCESSED}")
+        print(f"notes_processed: {notes_processed}")
+        
+        USAGE_NOTES_PROCESSED_NEW = int(USAGE_NOTES_PROCESSED) + int(notes_processed)
+        print(f"USAGE_NOTES_PROCESSED_NEW: {USAGE_NOTES_PROCESSED_NEW}")
+        update_yaml_config('./gmn_config.yaml', 'USAGE_NOTES_PROCESSED', USAGE_NOTES_PROCESSED_NEW)
+        USAGE_NOTES_PROCESSED = USAGE_NOTES_PROCESSED_NEW
+        print(f"(after)USAGE_NOTES_PROCESSED: {USAGE_NOTES_PROCESSED}")
+        print(f"++++++++++++++++++++++++++++++++++++++++++++++")
     
     
     if processednotes_data:
@@ -888,20 +907,6 @@ newline_delimiter={args.newline_delimiter}''')
         Set --restore-notes=empty to move notes back to '{args_folder}' when notecount is 0
         Set --restore-notes=always to move notes back to '{args_folder}' after every backup'''
             colorprint(textcolor="red",msg=f"{restore_declined_msg}", addseparator=True)
-    
-    
-    
-    ######## ----  update usage counts    ---- #######
-    USAGE_GITMYNOTES_TOTAL_NEW = int(USAGE_GITMYNOTES_TOTAL) + 1
-    update_yaml_config('./gmn_config.yaml', 'USAGE_GITMYNOTES_TOTAL', USAGE_GITMYNOTES_TOTAL_NEW)
-    
-    if args_folder not in USAGE_FOLDERS_PROCESSED:
-        USAGE_FOLDERS_PROCESSED.append(args_folder)
-        update_yaml_config('./gmn_config.yaml', 'USAGE_FOLDERS_PROCESSED', USAGE_FOLDERS_PROCESSED)
-    
-    USAGE_NOTES_PROCESSED_NEW = int(USAGE_NOTES_PROCESSED) + int(notes_processed)
-    update_yaml_config('./gmn_config.yaml', 'USAGE_NOTES_PROCESSED', USAGE_NOTES_PROCESSED_NEW)
-    
     
     ######## ----  Prep for final msg so user knows what happened    ---- #######
     if args_wrapper_dir:
