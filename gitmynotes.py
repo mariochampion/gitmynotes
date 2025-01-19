@@ -668,26 +668,38 @@ def main():
     parser.add_argument('--folder', type=str, 
                       default=DEFAULT_NOTES_FOLDER,
                       help=f"[str] Specific Notes folder to export.(default: '{DEFAULT_NOTES_FOLDER}')")
+
     parser.add_argument('--force', action='store_true',
                       default=DEFAULT_NOTES_FOLDER_FORCE,
                       help=f"[bool] Use as '--force' (no 'true' or 'false' value allowed) to over-ride to the default required user confirmation to process the full count of Notes in the specified folder when it exceed 5x the batch size -- which could be hundreds of notes and could take a looooong time.(default: confirmation will be required)")
+
     parser.add_argument('--max-notes', '--maxnotes', type=int, 
                       help=f'[int] Maximum number of notes to process.')
+
     parser.add_argument('--batch-size', type=int,
                       default=DEFAULT_BATCH_SIZE,
                       help=f'[int] The number of notes to convert, and git add/commit/push per loop, calculated a max-notes/batch-size. Especially useful for initial runs.(default: {DEFAULT_BATCH_SIZE})')  
+
+    parser.add_argument('--debug', action='store_false',
+                      default=DEFAULT_NOTES_FOLDER_FORCE,
+                      help=f"[bool] Use as '--debug' (no 'true' or 'false' value allowed) to turn on extra print() commands to aid in tracking code flow and general debugging. (default is no debug print() statements)")
+                      
     parser.add_argument('--export-path', '--exportpath',type=str, 
                       default=os.path.expanduser(f"{DEFAULT_EXPORT_PATH}"),
                       help=f'[str] Path to export the notes (default: {DEFAULT_EXPORT_PATH})')
+
     parser.add_argument('--github-url','--githuburl', type=str,
                       default=DEFAULT_GITHUB_URL,
                       help=f'[str] GitHub repository URL. (default: {DEFAULT_GITHUB_URL})')                       
+
     parser.add_argument('--newline-delimiter', '--newlinedelimiter',type=str, 
                       default=DEFAULT_NEWLINE_DELIMITER,
                       help=f"[str] Default CSV newline delimiter (default: '{DEFAULT_NEWLINE_DELIMITER}')")
+
     parser.add_argument('--audit-file-ending','--auditfileending', type=str, 
                       default=DEFAULT_AUDIT_FILE_ENDING,
                       help=f"[str] The audit file extension (default: '{DEFAULT_AUDIT_FILE_ENDING}')")
+
     parser.add_argument('--restore-notes','--restorenotes', '--restore', type=str, 
                       default=DEFAULT_RESTORE_NOTES,
                       help=f"[str] Options: 'empty' or 'always'  Determines when to move notes from '<folder>_{DEFAULT_PROCESSED_FOLDER_ENDING}' back to their original source Notes folder. The option 'empty' will not restore notes until notecount is 0 in source folder, while 'always' will restore at the end of each max-notes run. Set to 'never' to never move notes back to source folder. (default: '{DEFAULT_RESTORE_NOTES}')")
@@ -767,10 +779,9 @@ def main():
     
     if notes_to_process > (args.batch_size * DEFAULT_LOOPCOUNT_BEFORE_CONFIRM):
         if args.force:
-            #print(f"--force was set, so go on without confirm...")
+            print(f"In the original command --force was set, continuing without confirm...")
             return
         else:
-            #print(f"--force not set, and MORE than {DEFAULT_LOOPCOUNT_BEFORE_CONFIRM} batches required, must confirm")
             confirm_warn = f'''WHOA. {notes_to_process} notes to process in '{args_folder}' folder!
 
     <<<< Confirmation Required.>>>>
@@ -863,13 +874,10 @@ newline_delimiter={args.newline_delimiter}''')
             print_color(textcolor="magenta",msg=f"No Notes to Move")
         
         if move_result:
-            #print(f"================================")
             print_color(textcolor="green",msg=f"SUCCESS: Moved notes to Notes folder: '{args_folder}{DEFAULT_PROCESSED_FOLDER_ENDING}'", addseparator=True)
-            #print(f"================================")
         else:
-            #print(f"================================")
             print_color(textcolor="red",msg=f"    !!! FAILED to MOVE notes !!!", addseparator=True)
-            #print(f"================================")
+
         
         ######## ----  update usage counts    ---- #######
         USAGE_GITMYNOTES_TOTAL_NEW = int(USAGE_GITMYNOTES_TOTAL) + 1
@@ -879,7 +887,7 @@ newline_delimiter={args.newline_delimiter}''')
             USAGE_FOLDERS_PROCESSED.append(args_folder)
             update_yaml_config('./gmn_config.yaml', 'USAGE_FOLDERS_PROCESSED', USAGE_FOLDERS_PROCESSED)
         
-        print(f"++++++++++++++++++++++++++++++++++++++++++++++")
+        print(f"++++++++++  Update config yaml  +++++++++++++")
         print(f"(before)USAGE_NOTES_PROCESSED: {USAGE_NOTES_PROCESSED}")
         print(f"notes_processed: {notes_processed}")
         
