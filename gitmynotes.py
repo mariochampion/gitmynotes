@@ -448,7 +448,7 @@ def move_one_note(note_name, folder_source, folder_dest, create=True):
     
     print_color(textcolor='red', msg=f'''    uh oh, unsupported note encountered: '{note_name}'
     Note moved to notes folder: '{folder_dest}'.
-    Job stopped. Please run your command again.''', addseparator=True)
+    Previous notes will be moved. Please run your command again to continue.''', addseparator=True)
     return 0
    
 
