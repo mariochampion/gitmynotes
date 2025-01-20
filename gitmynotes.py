@@ -99,8 +99,6 @@ def setup_git_repo(repo_path, DEFAULT_GITHUB_URL):
 def export_notes_to_markdown(DEFAULT_CURRENTNOTE_FILE, export_path, folder_name=None, max_notes=None, wrapper_dir=None):
     """Export Notes using applescript/osascript with folder and count limits"""
     
-    print(f"DEFAULT_CURRENTNOTE_FILE {DEFAULT_CURRENTNOTE_FILE}")
-    
     ## tell the people some information
     if (max_notes > 0 and folder_name !="" and wrapper_dir !=""):
         print_color(textcolor="white",msg=f"Starting export of {max_notes} Notes from '{folder_name}' into '{wrapper_dir}/{folder_name}'...")
@@ -186,7 +184,8 @@ def export_notes_to_markdown(DEFAULT_CURRENTNOTE_FILE, export_path, folder_name=
             print(f"passed move_one_note")
             ## return the number of notes that have been moved
             goodnotes = noteCount -1
-            return goodnotes
+            #return goodnotes
+            return 0
             
         else:
             debug_print(f"{searchstring} is not present.")
@@ -448,7 +447,8 @@ def move_one_note(note_name, folder_source, folder_dest, create=True):
     
     print_color(textcolor='red', msg=f'''    uh oh, unsupported note encountered: '{note_name}'
     Note moved to notes folder: '{folder_dest}'.
-    Previous notes will be moved. Please run your command again to continue.''', addseparator=True)
+    Previous notes will be moved in this loop, but. 
+    please run your command again to ensure all notes are moved.''', addseparator=True)
     return 0
    
 
@@ -784,7 +784,6 @@ def main():
     DEFAULT_NEWLINE_DELIMITER = cfg['DEFAULT_NEWLINE_DELIMITER']
     DEFAULT_RESTORE_NOTES = cfg['DEFAULT_RESTORE_NOTES']
     DEFAULT_CURRENTNOTE_FILE = cfg['DEFAULT_CURRENTNOTE_FILE']
-    debug_print(f"DEFAULT_CURRENTNOTE_FILE {DEFAULT_CURRENTNOTE_FILE}")
 #    PRINT_LEVEL = PrintLevel[cfg['PRINT_LEVEL']]
 #    print(f"PRINT_LEVEL {PRINT_LEVEL}")
     
@@ -938,6 +937,10 @@ Add '--force' to skip confirmation in the future.'''
     
     ''' Process in a loop of batches'''
     loop_count = math.ceil(notes_to_process / args.batch_size)
+    
+    print("IN MAIN")
+    print(f"notes_to_process {notes_to_process}")
+    print(f"args.batch_size {args.batch_size}")
     
     if notes_to_process == args.batch_size:
         final_loop_size = args.batch_size
