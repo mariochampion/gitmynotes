@@ -146,7 +146,7 @@ def export_notes_to_markdown(DEFAULT_CURRENTNOTE_FILE, export_path, folder_name=
             set noteTitle to the name of currentNote
             -- Write to file and track title for when unsupported note breaks
             do shell script "echo " & i & "++++" & quoted form of noteTitle & " > currentnote.txt"
-            log ("Exporting note: " & noteTitle)
+            --log ("Exporting note: " & noteTitle)
             
             set linebreaker to "\n"
             set noteCreateDate to "<div><b>Creation Date:</b> " & creation date of currentNote & "<br></div>"
@@ -335,7 +335,7 @@ def export_notes_metadata(output_file, folder, max_notes, newline_delimiter):
     results_print(f"process_applescript result: {result}")
     print("-------------------")
     results_print(f"process_applescript output: {output}")
-
+    
     
     # Parse the output
     notes_data = []
@@ -977,7 +977,7 @@ Add '--force' to skip confirmation in the future.'''
         ## if notes were process to git, then create the audit trail and move the notes
         if notes_processed > 0:
             debug_print(f"NOTES PROCESSED > 0: {notes_processed}")
-            print_color(textcolor="white",msg=f"Notes to export to markdown: {notes_to_export}")
+            print_color(textcolor="white",msg=f"Notes to export to markdown: {notes_processed}")
             debug_print(f'''BEFORE export:
 output_file={audit_file}
 folder={args_folder}
