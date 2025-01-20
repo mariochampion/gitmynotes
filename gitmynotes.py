@@ -184,7 +184,9 @@ def export_notes_to_markdown(DEFAULT_CURRENTNOTE_FILE, export_path, folder_name=
             folder_dest = folder_name+"_unsupported"
             just_one = 1
             move_one_note(noteTitle, folder_name, folder_dest, just_one, create=True)
-            
+            print(f"passed move_one_note")
+            ## return the number of notes that have been moved
+            return 0
             
         else:
             debug_print(f"{searchstring} is not present.")
@@ -404,7 +406,7 @@ def move_one_note(note_name, folder_source, folder_dest, max_notes, create=True)
             print_color(textcolor="red",msg=f"Create notes folder Failed: {message}")
     
     
-    debug_print(f"Now to move up to {max_notes} notes from '{folder_source}' to '{folder_dest}'")
+    debug_print(f"Now to move UNSUPPORTED note {note_name} from '{folder_source}' to '{folder_dest}'")
     
     # Escape any quotes in folder names
     folder_source_escaped = folder_source.replace('"', '\\"')
@@ -440,8 +442,12 @@ def move_one_note(note_name, folder_source, folder_dest, max_notes, create=True)
     '''
     
     result_onemove, output_onemove = process_applescript(applescript_moveonenote)
-    results_print(f"applescript_moveonenote result: {result_onemove} {output_onemove}")
-    return result_onemove
+    debug_print(f"applescript_moveonenote result: {result_onemove} {output_onemove}")
+    
+    print_color(textcolor='red', msg=f'''    uh oh, unsupported note encountered: '{note_name}'
+    Note moved to notes folder: '{folder_dest}'.
+    Job stopped. Please run your command again.''', addseparator=True)
+    return 0
    
 
 
