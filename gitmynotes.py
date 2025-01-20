@@ -145,7 +145,7 @@ def export_notes_to_markdown(DEFAULT_CURRENTNOTE_FILE, export_path, folder_name=
             set currentNote to item i of allNotes
             set noteTitle to the name of currentNote
             -- Write to file and track title for when unsupported note breaks
-            do shell script "echo " & quoted form of noteTitle & " > currentnote.txt"
+            do shell script "echo " & i & "++++" & quoted form of noteTitle & " > currentnote.txt"
             log ("Exporting note: " & noteTitle)
             
             set linebreaker to "\n"
@@ -179,14 +179,14 @@ def export_notes_to_markdown(DEFAULT_CURRENTNOTE_FILE, export_path, folder_name=
         
         searchstring = "type 100002"
         if searchstring in result.stderr:
-            noteTitle = get_currentnote(DEFAULT_CURRENTNOTE_FILE)
+            noteCount, noteTitle = get_currentnote_data(DEFAULT_CURRENTNOTE_FILE)
             print(f"{searchstring} is present for note '{noteTitle}'.")
             folder_dest = folder_name+"_unsupported"
-            just_one = 1
-            move_one_note(noteTitle, folder_name, folder_dest, just_one, create=True)
+            move_one_note(noteTitle, folder_name, folder_dest, create=True)
             print(f"passed move_one_note")
             ## return the number of notes that have been moved
-            return 0
+            goodnotes = noteCount -1
+            return goodnotes
             
         else:
             debug_print(f"{searchstring} is not present.")
@@ -383,16 +383,18 @@ def export_notes_metadata(output_file, folder, max_notes, newline_delimiter):
     return notes_data
 
 
-def get_currentnote(currentnotefile):
-    with open(currentnotefile, 'r') as file:
-        return file.readline().strip()
 
+def get_currentnote_data(filename):
+    with open(filename, 'r') as file:
+        line = file.readline().strip()
+        notecount, notetitle = line.split("++++")
+        return int(notecount), notetitle
 
 
 
 ##### Describe this function
 
-def move_one_note(note_name, folder_source, folder_dest, max_notes, create=True):
+def move_one_note(note_name, folder_source, folder_dest, create=True):
     ''' Move processed notes into destination folder '''
     
     # if processed_notes exists, then that stage was a success, so next step:
@@ -406,7 +408,7 @@ def move_one_note(note_name, folder_source, folder_dest, max_notes, create=True)
             print_color(textcolor="red",msg=f"Create notes folder Failed: {message}")
     
     
-    debug_print(f"Now to move UNSUPPORTED note {note_name} from '{folder_source}' to '{folder_dest}'")
+    debug_print(f"Now to move UNSUPPORTED note '{note_name}' from '{folder_source}' to '{folder_dest}'")
     
     # Escape any quotes in folder names
     folder_source_escaped = folder_source.replace('"', '\\"')
