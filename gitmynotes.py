@@ -319,7 +319,7 @@ def export_notes_metadata(output_file, folder, max_notes, newline_delimiter):
         
     applescript += '''
 	    set noteTitle to name of theNote as string
-        log ("Processing note: " & noteTitle)
+	    --log ("Processing note: " & noteTitle)
 	    -- clean noteTitle using quoted form to handle special characters
 	    set noteTitle to do shell script ("echo " & quoted form of noteTitle & "| sed 's/,/-/g'")
 	    -- Clean the title for use as filename, using quoted form again
