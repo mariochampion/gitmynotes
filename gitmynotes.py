@@ -173,10 +173,19 @@ def export_notes_to_markdown(DEFAULT_CURRENTNOTE_FILE, export_path, folder_name=
         results_print(f"Error in EXPORT NOTES:")
         results_print(f"{result.stderr}")
         
+        
+        ### LOOK FOR ERROR OF UNSPPORTED (usually image) IN NOTE,
+        ### AND MOVE THIS TO <foldername>_UNSUPPORTED
+        
         searchstring = "type 100002"
         if searchstring in result.stderr:
             noteTitle = get_currentnote(DEFAULT_CURRENTNOTE_FILE)
             print(f"{searchstring} is present for note '{noteTitle}'.")
+            folder_dest = folder_name+"_unsupported"
+            just_one = 1
+            move_one_note(noteTitle, folder_name, folder_dest, just_one, create=True)
+            
+            
         else:
             debug_print(f"{searchstring} is not present.")
         
@@ -375,6 +384,65 @@ def export_notes_metadata(output_file, folder, max_notes, newline_delimiter):
 def get_currentnote(currentnotefile):
     with open(currentnotefile, 'r') as file:
         return file.readline().strip()
+
+
+
+
+##### Describe this function
+
+def move_one_note(note_name, folder_source, folder_dest, max_notes, create=True):
+    ''' Move processed notes into destination folder '''
+    
+    # if processed_notes exists, then that stage was a success, so next step:
+    # create_gitmynotes_folder(folder_dest) so we have a place to move notes
+    if create:
+        success, message = create_gitnotes_folder(folder_dest)
+    
+        if success:
+            print_color(textcolor="green",msg=f"Create notes folder Success: {message}")
+        else:
+            print_color(textcolor="red",msg=f"Create notes folder Failed: {message}")
+    
+    
+    debug_print(f"Now to move up to {max_notes} notes from '{folder_source}' to '{folder_dest}'")
+    
+    # Escape any quotes in folder names
+    folder_source_escaped = folder_source.replace('"', '\\"')
+    folder_dest_escaped = folder_dest.replace('"', '\\"')
+    
+    applescript_moveonenote = f'''
+    tell application "Notes"
+        set targetAccount to "iCloud"
+        tell account targetAccount
+            try
+                set sourceFolder to folder "{folder_source_escaped}"
+                set destFolder to folder "{folder_dest_escaped}"
+                set theNote to first note of sourceFolder whose name is "{note_name}"
+                
+                -- Check if we have notes to move
+                if theNote is missing value then
+                    return "No such note found in source folder"
+                end if
+                
+                -- Do the move
+                try
+                    move theNote to destFolder
+                on error errMsg
+                    return "Error moving note " & theNote & " : " & errMsg
+                end try
+                
+                return "SUCCESS: Moved one note '" & theNote & "' to "  & destFolder
+            on error errMsg
+               return "Error: " & errMsg
+            end try
+        end tell
+    end tell
+    '''
+    
+    result_onemove, output_onemove = process_applescript(applescript_moveonenote)
+    results_print(f"applescript_moveonenote result: {result_onemove} {output_onemove}")
+    return result_onemove
+   
 
 
 
