@@ -4,17 +4,16 @@
 
 ### bugs
 
-* do not fail entire job when this applescript error occurs: `execution error: Notes got an error: An error of type 100002 has occurred. (100002)`
-
 * mention when locked notes are encountered and the content is NOT sent to github, but a stub file is, with just the title and mod/create dates
+
+
+* FIXED: * do not fail entire job when this applescript error occurs: `execution error: Notes got an error: An error of type 100002 has occurred. (100002)`, but could also be improved with loop completion
 
 
 
 ### SCRAPER ENHANCEMENTS
 
 * scraper/fetcher dir with reddit and then optional other scrapers/fetchers
-
-* connect claude MCP to review collected notes
 
 * make generic scraper, depending on url (each one a separate file so others can contribute)
 
@@ -25,11 +24,11 @@
 
 
 
-
-
 ### enhancements
 
 * auto-discover Notes dirs and list them as options for choosing, with "Notes" as default
+
+* connect claude MCP to review collected notes
 
 * start fresh like new user, track issues, see what claude can do?
 
