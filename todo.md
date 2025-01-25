@@ -6,7 +6,6 @@
 
 * mention when locked notes are encountered and the content is NOT sent to github, but a stub file is, with just the title and mod/create dates
 
-
 * FIXED: * do not fail entire job when this applescript error occurs: `execution error: Notes got an error: An error of type 100002 has occurred. (100002)`, but could also be improved with loop completion
 
 
@@ -27,6 +26,8 @@
 ### enhancements
 
 * auto-discover Notes dirs and list them as options for choosing, with "Notes" as default
+
+* --local option to skip github part! duh!
 
 * connect claude MCP to review collected notes
 
