@@ -199,7 +199,7 @@ def export_notes_to_markdown(DEFAULT_CURRENTNOTE_FILE, export_path, folder_name=
 
 ##### Describe this function
 
-def commit_and_push(repo_path, folder_name=None, wrapper_dir=None):
+def git_add_commit_push(repo_path, folder_name=None, wrapper_dir=None):
     """Commit changes and push to GitHub"""
     # Always operate from the git root directory
        
@@ -973,7 +973,7 @@ Add '--force' to skip confirmation in the future.'''
         if notes_processed > 0:
             print_color(textcolor="green",msg=f"SUCCESS: Exported {notes_processed} Notes to local folder {args.export_path}")
             
-            commit_and_push(args.export_path, args_folder, args_wrapper_dir)
+            git_add_commit_push(args.export_path, args_folder, args_wrapper_dir)
         else:
             print_color(textcolor="magenta",msg=f"No notes were processed, skipping git commit")
             
