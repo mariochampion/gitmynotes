@@ -705,7 +705,7 @@ def results_print(*args, **kwargs):
 
 
 
-def build_initial_msg(this_msg=None, folder=None, max_notes=None, export_path=None, github_url=None, print_level=None):
+def build_initial_msg(this_msg=None, folder=None, max_notes=None, export_path=None, github_url=None, print_level=None, local_only=None):
     # get some values for an initial msg
     
     if this_msg:
@@ -726,6 +726,10 @@ def build_initial_msg(this_msg=None, folder=None, max_notes=None, export_path=No
 '''
     if export_path:
         initial_msg += f'''    - Export to: {export_path}
+'''
+    if local_only:
+        initial_msg += f'''    - Local Only option set via '--local'. 
+        DO NOT SEND TO:
 '''
     if github_url:
         initial_msg += f'''    - GitHub repo: {github_url}
@@ -770,6 +774,7 @@ def main():
 
     ######## ----  Get DEFAULT_& vars from config file     ---- #######    
     DEFAULT_NOTES_FOLDER_FORCE = None ##special case not in config file because... reasons.
+    DEFAULT_LOCAL_ONLY = None ##special case not in config file to turn OFF sending to github
     
     cfg = load_configs_from_file()
     DEFAULT_GITHUB_URL = cfg['DEFAULT_GITHUB_URL']
@@ -800,6 +805,10 @@ def main():
     parser.add_argument('--force', action='store_true',
                       default=DEFAULT_NOTES_FOLDER_FORCE,
                       help=f"[bool] Use as '--force' (no 'true' or 'false' value allowed) to over-ride to the default required user confirmation to process the full count of Notes in the specified folder when it exceed 5x the batch size -- which could be hundreds of notes and could take a looooong time.(default: confirmation will be required)")
+                      
+    parser.add_argument('--local-only', action='store_true',
+                      default=DEFAULT_LOCAL_ONLY,
+                      help=f"[bool] Use as '--local-only' (no 'true' or 'false' value allowed) to over-ride to the default action of backing up notes to GitHub. When set, only a local copy of notes will be made. (DEFAULT: Send notes to GitHub repo)")                      
 
     parser.add_argument('--max-notes', '--maxnotes', type=int, 
                       help=f'[int] Maximum number of notes to process.')
@@ -841,12 +850,12 @@ def main():
     args_folder = args.folder
     args_wrapper_dir = DEFAULT_NOTES_WRAPPERDIR
     audit_file = f"./{args_folder}{DEFAULT_AUDIT_FILE_ENDING}"
+    args_local_only = args.local_only
 
 
     ## set up the initial msg to let people know setup details
-    initial_msg = build_initial_msg(this_msg="", folder=args_folder, max_notes=args_max_notes, export_path=args.export_path, github_url=args.github_url, print_level=PRINT_LEVEL)
+    initial_msg = build_initial_msg(this_msg="", folder=args_folder, max_notes=args_max_notes, export_path=args.export_path, github_url=args.github_url, print_level=PRINT_LEVEL, local_only=args_local_only)
     print_color(textcolor='cyan', msg=f"{initial_msg}", addseparator=True)
-
 
 
     ######## ----  Do INIT work, ensure DEFAULT_GITHUB_URL has been changed    ---- #######    
@@ -874,7 +883,7 @@ def main():
         
         
         ## RE-DO the initial msg to let people know setup details have changed
-        initial_msg = build_initial_msg(this_msg="  Thanks for updating your GitHub username!", folder=args_folder, max_notes=args_max_notes, export_path=args.export_path, github_url=DEFAULT_GITHUB_URL, print_level=PRINT_LEVEL)
+        initial_msg = build_initial_msg(this_msg="", folder=args_folder, max_notes=args_max_notes, export_path=args.export_path, github_url=args.github_url, print_level=PRINT_LEVEL, local_only=args_local_only)
         print_color(textcolor='cyan', msg=f"{initial_msg}", addseparator=True)
 
 
@@ -973,7 +982,11 @@ Add '--force' to skip confirmation in the future.'''
         if notes_processed > 0:
             print_color(textcolor="green",msg=f"SUCCESS: Exported {notes_processed} Notes to local folder {args.export_path}")
             
-            git_add_commit_push(args.export_path, args_folder, args_wrapper_dir)
+            
+            ## SEND TO GITHUB BY DEFAULT, UNLESS 'LOCAL' OPTION SET TRUE
+            if localoption:
+                git_add_commit_push(args.export_path, args_folder, args_wrapper_dir)
+            
         else:
             print_color(textcolor="magenta",msg=f"No notes were processed, skipping git commit")
             
