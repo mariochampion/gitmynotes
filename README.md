@@ -1,7 +1,7 @@
 # GitMyNotes
 ## GitMyNotes adds convenient version control, off-site backups, and optional collaboration to your macOS Notes.
 
-A lightweight macOS utility using Python and AppleScript to sync your macOS Notes to your public or private GitHub repos, the GitMyNotes solution exports Notes to Markdown in a local directory, while preserving folder organization and formatting. It features out-of-the-box common sense defaults or user-driven customization, a local audit trail file  with checkpoint features for interrupted backups, and secure GitHub integration. All processing happens on your machine, with the only external data transmission secured by your enterprise-grade GitHub authentication credentials.
+A lightweight macOS utility using Python and AppleScript to sync your macOS Notes to your public or private GitHub repos (or, optionally, a local only backup). The GitMyNotes solution exports Notes to Markdown in a local directory, while preserving folder organization and formatting. It features out-of-the-box common sense defaults or user-driven customization, a local audit trail file with checkpoint features for interrupted backups, and secure GitHub integration. All processing happens on your machine, with the only external data transmission secured by your enterprise-grade GitHub authentication credentials.
 
 
 # GitMyNotes is for me?
@@ -60,14 +60,14 @@ That's it! Now run the script:
 
 Or be more specific with:
 
-`python gitmynotes.py [--folder='<notesFolderName>' --max-notes=<N>]`
+`python gitmynotes.py [--folder='<notesFolderName>' --max-notes=<N> --print-level=results]`
 
 Learn more with:
 
 `python gitmynotes.py --help`
 
 
-## Cool cat usage
+## Better usage
 
 Set an [alias in your bash profile](https://www.google.com/search?q=set+up+alias+in+mac+bash+profile):`alias gitmynotes='python gitmynotes.py'`
 
@@ -83,6 +83,7 @@ or `gitmynotes --help`
 1. New Notes folder: `<notesFolderName>_GitMyNotes` to store processed notes
 2. New GitMyNotes audit file: `<notesFolderName>.csv` to track processed notes
 3. Markdown copy of Notes from folder: `DEFAULT_EXPORT_PATH/<my-exported-note.md>`
+4. POTENTIALLY: Unsupported notes (often a note with JUST an image) will be moved to `<notesFolderName>_unsupported`
 
 -- Remote --
 1. New GitHub directory: `DEFAULT_GITHUB_URL/DEFAULT_NOTES_WRAPPERDIR`
