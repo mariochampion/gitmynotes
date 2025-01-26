@@ -92,6 +92,10 @@ or `gitmynotes --help`
 4. OPTIONAL - GitMyNotes audit file: `<notesFolderName>.csv`
 
 
+
+## HELP and COMMAND list
+
+
 ```
 Export macOS Notes to GitHub
 
