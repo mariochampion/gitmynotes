@@ -839,7 +839,7 @@ def main():
 
     parser.add_argument('--restore-notes','--restorenotes', '--restore', type=str, 
                       default=DEFAULT_RESTORE_NOTES,
-                      help=f"[str] Options: 'empty' or 'always'  Determines when to move notes from '<folder>_{DEFAULT_PROCESSED_FOLDER_ENDING}' back to their original source Notes folder. The option 'empty' will not restore notes until notecount is 0 in source folder, while 'always' will restore at the end of each max-notes run. Set to 'never' to never move notes back to source folder. (default: '{DEFAULT_RESTORE_NOTES}')")
+                      help=f"[str] Options: 'empty' or 'always' or 'never'. Determines when to move notes from '<folder>___GitMyNotes' back to their original source folder. The option 'empty' will not restore notes until notecount is 0 in source folder, while 'always' will restore at the end of each GitMyNotes run. Set to 'never' to never move notes back to source folder. (default: 'empty') ")
 
 
 
