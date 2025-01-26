@@ -27,8 +27,6 @@
 
 * auto-discover Notes dirs and list them as options for choosing, with "Notes" as default
 
-* --local option to skip github part! duh!
-
 * connect claude MCP to review collected notes
 
 * start fresh like new user, track issues, see what claude can do?
