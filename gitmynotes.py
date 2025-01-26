@@ -984,7 +984,9 @@ Add '--force' to skip confirmation in the future.'''
             
             
             ## SEND TO GITHUB BY DEFAULT, UNLESS 'LOCAL' OPTION SET TRUE
-            if localoption:
+            if args_local_only:
+                print_color(textcolor="magenta",msg=f"The --local-only flag is set. No notes sent to Github",addseparator=True)
+            else:
                 git_add_commit_push(args.export_path, args_folder, args_wrapper_dir)
             
         else:
