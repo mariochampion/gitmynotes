@@ -67,6 +67,15 @@ Learn more with:
 `python gitmynotes.py --help`
 
 
+## Cool cat usage
+
+Set an alias in your user profile:`alias gitmynotes='python gitmynotes.py'`
+
+Then you can run, for example `gitmynotes --folder='myPythonNotes' --maxnotes=10`
+
+or `gitmynotes --help`
+
+
 #### Output Artifacts
 -- Local --
 
@@ -124,4 +133,4 @@ LESS FREQUENTLY USED
 ```
 
 
-### copyright 2024 mariochampion all rights reserved.
+### copyright 2025 mariochampion all rights reserved.
