@@ -1,7 +1,7 @@
 # GitMyNotes
 ## GitMyNotes adds convenient version control, off-site backups, and optional collaboration to your macOS Notes.
 
-A lightweight macOS utility using Python and AppleScript to sync your macOS Notes to your public or private GitHub repos, the GitMyNotes solution exports Notes to Markdown while preserving folder organization and formatting. It features out-of-the-box common sense defaults or user-driven customization, a local audit trail with checkpoint features for interrupted backups, and secure GitHub integration. All processing happens on your machine, with the only external data transmission secured by your enterprise-grade GitHub authentication credentials.
+A lightweight macOS utility using Python and AppleScript to sync your macOS Notes to your public or private GitHub repos, the GitMyNotes solution exports Notes to Markdown in a local directory, while preserving folder organization and formatting. It features out-of-the-box common sense defaults or user-driven customization, a local audit trail file  with checkpoint features for interrupted backups, and secure GitHub integration. All processing happens on your machine, with the only external data transmission secured by your enterprise-grade GitHub authentication credentials.
 
 
 # GitMyNotes is for me?
@@ -20,6 +20,10 @@ Concerned about a fleet of macbooks, and all the useful, non-shareable, and non-
 
 `prepared tech workers win`
 No one can predict the future. Losing a job or a role shouldn't mean losing your personal macOS Notes as well. Set up a free GitHub repo and use GitMyNotes to back up the folders that hold your personal reminders, thoughts, and plans.
+
+
+`but... I dont use Github (yet?)`
+Simply set '--local-only' when you run the command to create, surprise, local-only backups. No GitHub required. But, really, you should [set up](https://docs.github.com/en/get-started/start-your-journey) a free GitHub repo.
 
 
 ## Getting Started
