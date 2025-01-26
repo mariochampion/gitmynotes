@@ -76,6 +76,7 @@ Then you can run, for example `gitmynotes --folder='myPythonNotes' --maxnotes=10
 or `gitmynotes --help`
 
 
+## 
 #### Output Artifacts
 -- Local --
 
