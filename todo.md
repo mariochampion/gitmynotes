@@ -39,7 +39,7 @@
 
 * allow optionally `git push` the audit file as well
 
-* add share code to track optional viralty?
+* add share code to track optional virality?
 
 * create self executing mac shell command to wrap around python script. 
 
@@ -63,7 +63,7 @@
 
 * allow comma separated list of folders at once
 
-* `--properties` option to show the settiings, so dont have to look thru, and option to set that via cli
+* `--properties` option to show the settings, so dont have to look thru, and option to set that via cli
 
 * command to get list of folders and counts so you can decide what to do
 
