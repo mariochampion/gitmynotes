@@ -8,14 +8,14 @@ A lightweight macOS utility using Python and AppleScript to sync your macOS Note
 
 Do you use Notes? Do you use GitHub? Then undoubtedly yes!
 
-Do you use Notes and can [start with GitHub](https://docs.github.com/en/get-started/start-your-journey)? Then also yes!
+Do you use Notes and could [start with GitHub](https://docs.github.com/en/get-started/start-your-journey)? Then also yes!
 
 `writing is re-writing`
 Transform your macOS Notes into a version-controlled archive on GitHub. Use GitMyNotes to preserve and maintain your most excellent lines via versioning to track the full evolution of your work. Learn how to GitHub using branches and forks to explore your ideas, in trusted collabs, or on your own.
 
 
 `IT team gotta keep copies`
-Concerned about a fleet of macbooks, and all the useful, non-shareable, and non-collaborative notes just one cup of coffee away from disaster? Use GitMyNotes on a cronjob on every Mac to keep versioned copies of valuable Notes.
+Concerned about a fleet of MacBooks, and all the useful, non-shareable, and non-collaborative notes just one cup of coffee away from disaster? Use GitMyNotes on a cronjob on every Mac to keep versioned copies of valuable Notes.
 
 
 `prepared tech workers win`
@@ -30,7 +30,7 @@ Simply set '--local-only' when you run the command to create, surprise, local-on
 
 ### Prerequisites
 1. MacOS with Notes app and AppleScript (ships with every Mac)
-2. Python 3.x+ with `ruyaml` ability (run `pip install ruamel.yaml` once)
+2. Python 3.x+ with `ruyaml` ability (run `pip install ruamel.yaml` once to get this library)
 3. GitHub repo (eg, `https://github.com/<MYUSERNAME>/gitmynotes`) accessible from the Mac running this script. Can be public or private, must be configured working auth credentials, etc.
 
 
@@ -45,7 +45,7 @@ Simply set '--local-only' when you run the command to create, surprise, local-on
 	
 	set `DEFAULT_GITHUB_URL` to the the repo where you want to store Notes.
 	
-	example: `'DEFAULT_GITHUB_URL': 'https://github.com/<MyUserName>/gitmynotes'`
+	example: `'DEFAULT_GITHUB_URL': 'https://github.com/<ChangeMe>/gitmynotes'`
 	
 	OPTIONAL: Leave as-is or change the additional `DEFAULT_*` configs the the file.
 	
