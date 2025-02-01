@@ -35,15 +35,15 @@
 
 * ability to update user bash profile to have `alias gitmynotes='python gitmynotes.py'`
 
-* get someone to write tests!!
+* [terminal only] auto-discover Notes dirs and list them as options for choosing, with "Notes" as default
 
-* add share code to track optional virality?
+* get someone to write tests!!
 
 
 
 #### [PRO] 
 
-* auto-discover Notes dirs and list them as options for choosing, with "Notes" as default
+* [via TUI] auto-discover Notes dirs and list them as options for choosing, with "Notes" as default
 
 * connect claude MCP to review collected notes
 
