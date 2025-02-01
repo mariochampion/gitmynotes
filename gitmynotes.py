@@ -925,7 +925,9 @@ def main():
 
 Add '--force' to skip confirmation in the future.'''
             print_color(textcolor='magenta', msg=f"{confirm_warn}", addseparator=True)
-            confirm_msg = f''' Enter a number up to {notes_to_process} of notes to process, or 'x' to eXit.
+            confirm_msg = f'''Please input:
+  a number up to {notes_to_process} of notes to process, 
+  or 'x' to eXit
   [Or 'enter' to process all {notes_to_process} notes] : '''
             
             confirm_num = input(f"{confirm_msg}") or f"{notes_to_process}"
@@ -941,7 +943,6 @@ Add '--force' to skip confirmation in the future.'''
     else:
         pass
     ######## ----  END check for 5x batch size in arg.folder    ---- #######
-    
     
     
     ''' Process in a loop of batches'''
