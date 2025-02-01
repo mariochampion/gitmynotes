@@ -14,6 +14,8 @@
 
 #### [OSS] 
 
+* move all of scraper/prefetch/fetch to reddit_config.yaml
+
 * allow for random scraper dir name and path
 
 * scraper/fetcher dir with reddit 
