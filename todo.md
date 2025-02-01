@@ -33,7 +33,6 @@
 
 #### [OSS] 
 
-* ability to update user bash profile to have `alias gitmynotes='python gitmynotes.py'`
 
 * [terminal only] auto-discover Notes dirs and list them as options for choosing, with "Notes" as default
 
