@@ -3,7 +3,6 @@ import re
 from ruamel.yaml import YAML
 
 MINIMUM_WORD_COUNT = 50
-REDDIT_FOLDER_NAME = "_reddit"
 GITMYNOTES_CONFIG = "gmn_config.yaml"
 
 
@@ -52,18 +51,20 @@ def main():
         with open(config_path, 'r') as file:
             config = yaml.load(file)
         
-        # Initialize REDDIT_FOLDER_NAME ( ie, '_reddit') section of config if it doesn't exist
-        if REDDIT_FOLDER_NAME not in config:
-            config[REDDIT_FOLDER_NAME] = {'FETCHED': [], 'PREFETCHED': []}
+        # Initialize DEFAULT_REDDIT_FOLDER_NAME ( ie, '_reddit') section of config if it doesn't exist
+        if 'DEFAULT_REDDIT_FOLDER_NAME' not in config:
+            config['DEFAULT_REDDIT_FOLDER_NAME'] = {'FETCHED': [], 'PREFETCHED': []}
         
         # Get list of files already in FETCHED or PREFETCHED
-        redditlinks = config[REDDIT_FOLDER_NAME]
-        processed_files = set(redditlinks.get('FETCHED', []) + 
-                            redditlinks.get('PREFETCHED', []))
+        reddit_dict = config['reddit_dict']  # Get the dictionary with FETCHED and PREFETCHED
+        processed_files = set(reddit_dict.get('FETCHED', []) + 
+                     reddit_dict.get('PREFETCHED', []))
+        #print(f"processed_files {processed_files}")
         
         # Process each file in the directory using relative path
         base_dir = config['DEFAULT_NOTES_WRAPPERDIR']  # Use the default wrapper dir
-        dir_path = os.path.join(script_dir, base_dir, REDDIT_FOLDER_NAME)
+        reddit_folder = config['DEFAULT_REDDIT_FOLDER_NAME']  # This gets "reddit_dict"
+        dir_path = os.path.join(script_dir, base_dir, reddit_folder)
         
         for filename in os.listdir(dir_path):
             if not filename.endswith('.md'):
@@ -81,7 +82,7 @@ def main():
                     
                     if word_count < MINIMUM_WORD_COUNT:
                         print(f"Adding {filename} to PREFETCHED (word count: {word_count})")
-                        redditlinks['PREFETCHED'].append(filename)
+                        reddit_dict['PREFETCHED'].append(filename)
                     else:
                         print(f"Skipping {filename} - too many words ({word_count})")
             
