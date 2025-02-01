@@ -12,13 +12,19 @@
 
 ### SCRAPER ENHANCEMENTS
 
-* scraper/fetcher dir with reddit and then optional other scrapers/fetchers
+#### [OSS] 
+
+* allow for random scraper dir name and path
+
+* scraper/fetcher dir with reddit 
+
+#### [PRO] 
+
+* optional other scrapers/fetchers
 
 * make generic scraper, depending on url (each one a separate file so others can contribute)
 
 * auto-populate prefetch yaml from dirs if X conditions met (less than MINIMUM_WORD_COUNT words, etc)
-
-* allow for random scraper dir name and path
 
 
 
