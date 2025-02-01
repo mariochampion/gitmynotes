@@ -3,6 +3,9 @@ import re
 from ruamel.yaml import YAML
 
 MINIMUM_WORD_COUNT = 50
+REDDIT_FOLDER_NAME = "_reddit"
+GITMYNOTES_CONFIG = "gmn_config.yaml"
+
 
 def get_script_dir():
     """Get the directory where the script is located."""
@@ -45,22 +48,22 @@ def main():
         
         script_dir = get_script_dir()
         # Load the YAML file from the same directory as the script
-        config_path = os.path.join(script_dir, 'gmn_config.yaml')
+        config_path = os.path.join(script_dir, GITMYNOTES_CONFIG)
         with open(config_path, 'r') as file:
             config = yaml.load(file)
         
-        # Initialize _reddit section if it doesn't exist
-        if '_reddit' not in config:
-            config['_reddit'] = {'FETCHED': [], 'PREFETCHED': []}
+        # Initialize REDDIT_FOLDER_NAME ( ie, '_reddit') section of config if it doesn't exist
+        if REDDIT_FOLDER_NAME not in config:
+            config[REDDIT_FOLDER_NAME] = {'FETCHED': [], 'PREFETCHED': []}
         
         # Get list of files already in FETCHED or PREFETCHED
-        redditlinks = config['_reddit']
+        redditlinks = config[REDDIT_FOLDER_NAME]
         processed_files = set(redditlinks.get('FETCHED', []) + 
                             redditlinks.get('PREFETCHED', []))
         
         # Process each file in the directory using relative path
         base_dir = config['DEFAULT_NOTES_WRAPPERDIR']  # Use the default wrapper dir
-        dir_path = os.path.join(script_dir, base_dir, '_reddit')
+        dir_path = os.path.join(script_dir, base_dir, REDDIT_FOLDER_NAME)
         
         for filename in os.listdir(dir_path):
             if not filename.endswith('.md'):
