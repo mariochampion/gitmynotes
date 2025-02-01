@@ -55,10 +55,7 @@
 
 * allow optionally `git push` the audit file as well
 
-
-
-
-* oss users trigger/set this up via cron or... automator?
+* config to trigger via cron or... automator?
 
 
 ### prep for release (technical)
