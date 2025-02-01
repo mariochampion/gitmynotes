@@ -29,7 +29,19 @@
 
 
 
-### enhancements
+### OTHER ENHANCEMENTS
+
+#### [OSS] 
+
+* ability to update user bash profile to have `alias gitmynotes='python gitmynotes.py'`
+
+* get someone to write tests!!
+
+* add share code to track optional virality?
+
+
+
+#### [PRO] 
 
 * auto-discover Notes dirs and list them as options for choosing, with "Notes" as default
 
@@ -39,15 +51,12 @@
 
 * improve msg about access rights including steps for GH PAT and implementing it on mac. 
 
-* ability to update user bash profile to have `alias gitmynotes='python gitmynotes.py'`
-
-* get someone to write tests!!
+* create self executing mac shell command to wrap around python script. 
 
 * allow optionally `git push` the audit file as well
 
-* add share code to track optional virality?
 
-* create self executing mac shell command to wrap around python script. 
+
 
 * oss users trigger/set this up via cron or... automator?
 
