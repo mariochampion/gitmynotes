@@ -67,6 +67,7 @@ Learn more with:
 `python gitmynotes.py --help`
 
 
+
 ## Better usage
 
 Set an [alias in your bash profile](https://www.google.com/search?q=set+up+alias+in+mac+bash+profile):`alias gitmynotes='python gitmynotes.py'`
@@ -74,6 +75,9 @@ Set an [alias in your bash profile](https://www.google.com/search?q=set+up+alias
 Then you can run, for example `gitmynotes --folder='myPythonNotes' --maxnotes=10`
 
 or `gitmynotes --help`
+
+
+Note: The reddit_<x>.py are WIP. Full guidance forthcoming.
 
 
 ## 
