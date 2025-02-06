@@ -8,6 +8,10 @@ from collections import Counter
 import spacy
 from string import punctuation
 
+## CONFIGS
+GITMYNOTES_CONFIG = "gmn_config.yaml"
+
+
 def get_script_dir():
     """Get the directory where the script is located."""
     return os.path.dirname(os.path.abspath(__file__))
@@ -16,7 +20,7 @@ def load_config():
     """Load config from the same directory as the script."""
     yaml = YAML()
     yaml.preserve_quotes = True
-    config_path = os.path.join(get_script_dir(), 'gmn_config.yaml')
+    config_path = os.path.join(get_script_dir(), GITMYNOTES_CONFIG)
     with open(config_path, 'r') as file:
         return yaml.load(file)
 
@@ -179,10 +183,10 @@ def update_markdown_file(file_path, post_info):
         print(f"Error updating markdown file {file_path}: {str(e)}")
         return False
 
-def process_reddit_file(filename, base_dir, reddit):
+def process_reddit_file(filename, base_dir, reddit, config):
     """Process a single Reddit file and return success status."""
     script_dir = get_script_dir()
-    full_path = os.path.join(script_dir, base_dir, '_reddit', filename)
+    full_path = os.path.join(script_dir, base_dir, config['DEFAULT_REDDIT_FOLDER_NAME'], filename)
     
     try:
         # Get the URL from the file
@@ -217,7 +221,7 @@ def main():
         reddit = setup_reddit(config)
         
         # Get reddit config from the same config file
-        redditlinks = config['_reddit']
+        redditlinks = config['DEFAULT_REDDIT_FOLDER_NAME']
         base_dir = config['DEFAULT_NOTES_WRAPPERDIR']  # Use the default wrapper dir
         
         # Get list of files to process
@@ -248,7 +252,7 @@ def main():
             yaml = YAML()
             yaml.preserve_quotes = True
             yaml.indent(mapping=2, sequence=4, offset=2)
-            config_path = os.path.join(get_script_dir(), 'gmn_config.yaml')
+            config_path = os.path.join(get_script_dir(), GITMYNOTES_CONFIG)
             with open(config_path, 'w') as yaml_file:
                 yaml.dump(config, yaml_file)
             
