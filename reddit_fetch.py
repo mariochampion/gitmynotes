@@ -13,6 +13,15 @@
 ## ===================================================================
 
 
+##################################################################
+##  THIS IS A WORK IN PROGRESS
+##  REQUIRES USER TO SETUP REDDIT APP to acquire
+##  REDDIT_CLIENT_ID', 'REDDIT_CLIENT_SECRET', 'REDDIT_USER_AGENT'
+##  Instructions to come later
+##################################################################
+
+
+
 import praw
 from ruamel.yaml import YAML
 import os
