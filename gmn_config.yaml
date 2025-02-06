@@ -37,6 +37,7 @@
 'DEFAULT_BATCH_SIZE': 10 # notecount / batchsize = loopcount. 'notecount' is either explicit as 'maxnotes' or returned from get_foldernotecount(folder) if maxnotes not set.
 'DEFAULT_LOOPCOUNT_BEFORE_CONFIRM': 5 # loopcount X batchsize = notecount before you must confirm intention to process in one run. This can be over-ridden for use in full automation by adding '--force' to your command.
 #'PRINT_LEVEL': "RESULTS"  # Can be "NONE", "RESULTS", "DEBUG", or "ALL"
+'DEFAULT_REDDIT_FOLDER_NAME': "_reddit"
 
 # I wouldnt change these, personally.
 'DEFAULT_NEWLINE_DELIMITER': '|||' # this is for internal use when creating local audit file, like "plans.csv"
