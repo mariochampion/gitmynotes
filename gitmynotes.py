@@ -2,10 +2,10 @@
 ## ===================================================================
 ## GitMyNotes - LICENSE AND CREDITS
 ## This app/collection of scripts at https://github.com/mariochampion/gitmynotes
-## released under the GNU General Public License v3.0
+## released under the GNU Affero General Public License v3.0
 ##
 ## 
-## GitMyNotes scripts crafted and copyright 2024 by mario champion (mariochampion.com) 
+## GitMyNotes scripts crafted and copyright 2025 by mario champion (mariochampion.com) 
 ##
 ## please open issues and pull requests and comments
 ## thanks and always remember: this robot loves you. 
@@ -24,8 +24,8 @@
 ## Export up to 17 notes from all folders
 #  python gitmynotes.py --max-notes=17
 
-## Specify a custom output file
-#  python gitmynotes.py --folder-name="somefolder" --max-notes=10 --output-file="some-other-folder.csv"
+## Specify to restore notes folder even if not emptied
+#  python gitmynotes.py --folder-name="somefolder" --max-notes=10 --restore=always
 
 ## go crazy and specify nothing, to get all the defaults!
 #  python gitmynotes.py

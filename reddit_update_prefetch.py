@@ -1,3 +1,18 @@
+#!/usr/bin/env python
+## ===================================================================
+## GitMyNotes - LICENSE AND CREDITS
+## This app/collection of scripts at https://github.com/mariochampion/gitmynotes
+## released under the GNU Affero General Public License v3.0
+##
+## 
+## GitMyNotes scripts crafted and copyright 2025 by mario champion (mariochampion.com) 
+##
+## please open issues and pull requests and comments
+## thanks and always remember: this robot loves you. 
+## boop boop!!!
+## ===================================================================
+
+
 import os
 import re
 from ruamel.yaml import YAML
