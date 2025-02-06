@@ -8,9 +8,22 @@
 
 * FIXED: * do not fail entire job when this applescript error occurs: `execution error: Notes got an error: An error of type 100002 has occurred. (100002)`, but could also be improved with loop completion
 
+### prep for release (technical)
+
+* final names for everything
+
+* make sure the .gitignore is correct
+
+* write some measure of real instructions
+
+* start fresh like new user, track issues, see what claude can do?
+
+* guide to help set up cron job
 
 
-### SCRAPER ENHANCEMENTS
+
+
+### SCRAPER/FETCHER ENHANCEMENTS
 
 #### [OSS] 
 
@@ -40,32 +53,24 @@
 
 * get someone to write tests!!
 
+* ?? `--properties` option to show the settings, so dont have to look thru, and option to set that via cli ??
+
 
 
 #### [PRO] 
 
 * [via TUI] auto-discover Notes dirs and list them as options for choosing, with "Notes" as default
 
-* connect claude MCP to review collected notes
-
-* start fresh like new user, track issues, see what claude can do?
+* desktop claude MCP to review/tag collected notes works, move to python and anthropic api
 
 * improve msg about access rights including steps for GH PAT and implementing it on mac. 
-
-* create self executing mac shell command to wrap around python script. 
 
 * allow optionally `git push` the audit file as well
 
 * config to trigger via cron or... automator?
 
+* create self executing mac shell command to wrap around python script. 
 
-### prep for release (technical)
-
-* final names for everything
-
-* make sure the .gitignore is correct
-
-* write some measure of real instructions
 
 
 ### pro?
@@ -76,17 +81,9 @@
 
 * allow comma separated list of folders at once
 
-* `--properties` option to show the settings, so dont have to look thru, and option to set that via cli
-
 * command to get list of folders and counts so you can decide what to do
 
-* pre-map some folders to some github repos
-
-* add DEFAULT folder name so doesnt try to do ALL NOTES?? if none specified?
-
-* help set up cron job?
-
-* default ignore folder, so when user selects "all folder" it gets skipped
+* default "_ignore" folder, so when user selects "all folders" it gets skipped
 
 
 
