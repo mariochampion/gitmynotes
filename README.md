@@ -120,11 +120,12 @@ FREQUENTLY USED
                         [int] Maximum number of notes to process.
   
   --restore-notes RESTORE_NOTES, --restorenotes RESTORE_NOTES, --restore RESTORE_NOTES
-                        [str] Options: 'empty' or 'always' or 'never'. Determines when to move 
-                        notes from '<folder>___GitMyNotes' back to their original source folder. 
-                        The option 'empty' will not restore notes until notecount is 0 in source 
-                        folder, while 'always' will restore at the end of each GitMyNotes run. 
-                        Set to 'never' to never move notes back to source folder.
+                        [str] Options: 'empty' or 'always' or 'never'. 
+                        Determines when to move  notes from '<folder>___GitMyNotes' back 
+                        to their original source folder. 
+                        Set 'empty' to restore when notecount is 0 in source folder, 
+                        Set 'always' to restore at the end of each GitMyNotes run. 
+                        Set to 'never' to, well, never move notes back to source folder.
                         (default: 'empty')                        
   
   --print PRINT, --print-level PRINT
