@@ -113,31 +113,49 @@ options:
 FREQUENTLY USED
   -h, --help            show this help message and exit
   
-  --folder FOLDER       [str] Specific Notes folder to export.(default: 'Notes')
+  --folder FOLDER       [str] Specific Notes folder to export.
+                        (default: 'Notes')
   
   --max-notes MAX_NOTES, --maxnotes MAX_NOTES
                         [int] Maximum number of notes to process.
   
   --restore-notes RESTORE_NOTES, --restorenotes RESTORE_NOTES, --restore RESTORE_NOTES
-                        [str] Options: 'empty' or 'always' or 'never'. Determines when to move notes from '<folder>___GitMyNotes' back to their original source folder. The option 'empty' will not restore notes until notecount is 0 in source folder, while 'always' will restore at the end of each GitMyNotes run. Set to 'never' to never move notes back to source folder. (default: 'empty')                        
+                        [str] Options: 'empty' or 'always' or 'never'. Determines when to move 
+                        notes from '<folder>___GitMyNotes' back to their original source folder. 
+                        The option 'empty' will not restore notes until notecount is 0 in source 
+                        folder, while 'always' will restore at the end of each GitMyNotes run. 
+                        Set to 'never' to never move notes back to source folder.
+                        (default: 'empty')                        
   
   --print PRINT, --print-level PRINT
-                        [str] Optional set to 'none', 'results', 'debug', 'all' for different in tracking code flow and general debugging. (default: 'all')
+                        [str] Optional set to 'none', 'results', 'debug', 'all' for different 
+                        in tracking code flow and general debugging.
+                        (default: 'all')
 
                         
 LESS FREQUENTLY USED                        
   --batch-size BATCH_SIZE
-                        [int] The number of notes to convert, and git add/commit/push per loop, calculated a max-notes/batch-size. Especially useful for initial runs.(default: 10)
+                        [int] The number of notes to convert, and git add/commit/push per loop, 
+                        calculated a max-notes/batch-size. Especially useful for initial runs.
+                        (default: 10)
   
   --export-path EXPORT_PATH, --exportpath EXPORT_PATH
                         [str] Path to export the notes (default: ~/Documents/gitmynotes)
   
-  --force               [bool] Use as '--force' (no 'true' or 'false' value allowed) to over-ride to the default required user confirmation to process the full count of Notes in the specified folder when it exceed 5x the batch size -- which could be hundreds of notes and could take a looooong time.(default: confirmation will be required)                        
+  --force               [bool] Use as '--force' (no 'true' or 'false' value allowed) 
+                        Use to over-ride to the default required user confirmation to process 
+                        the full count of Notes in the specified folder when it exceed 
+                        5x the batch size -- which could be hundreds of notes and 
+                        could take a looooong time.(default: confirmation will be required)                        
   
-  --local-only          [bool] Use as '--local-only' (no 'true' or 'false' value allowed) to over-ride to the default action of backing up notes to GitHub. When set, only a local copy of notes will be made. (DEFAULT: Send notes to GitHub repo)
+  --local-only          [bool] Use as '--local-only' (no 'true' or 'false' value allowed) 
+                        Use to over-ride to the default action of backing up notes to GitHub. 
+                        When set, only a local copy of notes will be made. 
+                        (DEFAULT: Send notes to GitHub repo)
   
   --github-url GITHUB_URL, --githuburl GITHUB_URL
-                        [str] GitHub repository URL. (default: https://github.com/mariochampion/gitmynotes)
+                        [str] GitHub repository URL. 
+                        (default: https://github.com/<ChangeMe>/gitmynotes)
   
   --newline-delimiter NEWLINE_DELIMITER, --newlinedelimiter NEWLINE_DELIMITER
                         [str] Default CSV newline delimiter (default: '|||')
