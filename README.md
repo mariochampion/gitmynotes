@@ -101,7 +101,7 @@ Note: The reddit_<x>.py are WIP. Full guidance forthcoming.
 
 
 ```
-Export macOS Notes to GitHub
+Export macOS Notes to GitHub repo (or local-only directory)
 
 usage: gitmynotes.py [--folder FOLDER] [--maxnotes MAX_NOTES] [--restore RESTORE_NOTES]
                         [--force] [--batch-size BATCH_SIZE] [--export-path EXPORT_PATH]
@@ -130,7 +130,7 @@ FREQUENTLY USED
   
   --print PRINT, --print-level PRINT
                         [str] Optional set to 'none', 'results', 'debug', 'all' for increasing 
-                        details.  Useful for tracking code flow and general debugging.
+                        details. Useful for tracking code flow and general debugging.
                         (default: 'all')
 
                         
