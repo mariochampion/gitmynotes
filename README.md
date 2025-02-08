@@ -103,10 +103,10 @@ Note: The reddit_<x>.py are WIP. Full guidance forthcoming.
 ```
 Export macOS Notes to GitHub
 
-usage: gitmynotes.py [-h] [--folder FOLDER] [--force] [--max-notes MAX_NOTES] 
-                        [--batch-size BATCH_SIZE] [--export-path EXPORT_PATH]
+usage: gitmynotes.py [--folder FOLDER] [--maxnotes MAX_NOTES] [--restore RESTORE_NOTES]
+                        [--force] [--batch-size BATCH_SIZE] [--export-path EXPORT_PATH]
                         [--github-url GITHUB_URL] [--newline-delimiter NEWLINE_DELIMITER] 
-                        [--audit-file-ending AUDIT_FILE_ENDING] [--restore-notes RESTORE_NOTES]
+                        [--audit-file-ending AUDIT_FILE_ENDING] or [-h]
 
 
 options:
