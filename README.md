@@ -117,11 +117,11 @@ FREQUENTLY USED
                         (default: 'Notes')
   
   --max-notes MAX_NOTES, --maxnotes MAX_NOTES
-                        [int] Maximum number of notes to process.
+                        [int] Maximum number of notes to process in this run.
   
   --restore-notes RESTORE_NOTES, --restorenotes RESTORE_NOTES, --restore RESTORE_NOTES
                         [str] Options: 'empty' or 'always' or 'never'. 
-                        Determines when to move  notes from '<folder>___GitMyNotes' back 
+                        Determines when to move  notes from '<FOLDER>___GitMyNotes' back 
                         to their original source folder. 
                         Set 'empty' to restore when notecount is 0 in source folder, 
                         Set 'always' to restore at the end of each GitMyNotes run. 
@@ -129,8 +129,8 @@ FREQUENTLY USED
                         (default: 'empty')                        
   
   --print PRINT, --print-level PRINT
-                        [str] Optional set to 'none', 'results', 'debug', 'all' for different 
-                        in tracking code flow and general debugging.
+                        [str] Optional set to 'none', 'results', 'debug', 'all' for increasing 
+                        details.  Useful for tracking code flow and general debugging.
                         (default: 'all')
 
                         
