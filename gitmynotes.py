@@ -1073,7 +1073,7 @@ newline_delimiter={args.newline_delimiter}''')
     
     usage_totals = [int(USAGE_GITMYNOTES_TOTAL_NEW), len(USAGE_FOLDERS_PROCESSED), int(USAGE_NOTES_PROCESSED_NEW)]
     
-    share_url = "https://github.com/mariochampion/gitmynotes"
+    share_url = "Get More with GitMyNotes Pro: https://GitMyNotes.com"
     
     final_msg = build_final_msg(gitnotes_url=f"{final_gitnotes_url}", audit_file=f"{audit_file}", usage_totals = usage_totals, share_url=f"{share_url}")
     
