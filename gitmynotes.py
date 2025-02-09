@@ -757,11 +757,8 @@ def build_final_msg(gitnotes_url, audit_file, usage_totals, share_url):
     final_msg += f'''
 '''
     if share_url:
-        final_msg += f'''    - Tell your friends, learn more:
+        final_msg += f'''    - Tell your friends, learn more: https://GitMyNotes.com/
     
-'''
-    if share_url:
-        final_msg += f'''    Get more benefits with GitMyNotes Pro: https://GitMyNotes.com/
 '''
     
     return final_msg
