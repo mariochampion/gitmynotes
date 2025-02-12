@@ -946,9 +946,9 @@ Add '--force' to skip confirmation in the future.'''
     ''' Process in a loop of batches'''
     loop_count = math.ceil(notes_to_process / args.batch_size)
     
-    print("IN MAIN")
-    print(f"notes_to_process {notes_to_process}")
-    print(f"args.batch_size {args.batch_size}")
+    debug_print("IN MAIN")
+    debug_print(f"notes_to_process {notes_to_process}")
+    debug_print(f"args.batch_size {args.batch_size}")
     
     if notes_to_process == args.batch_size:
         final_loop_size = args.batch_size
