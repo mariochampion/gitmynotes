@@ -6,7 +6,6 @@
 
 * mention when locked notes are encountered and the content is NOT sent to github, but a stub file is, with just the title and mod/create dates
 
-* FIXED: * do not fail entire job when this applescript error occurs: `execution error: Notes got an error: An error of type 100002 has occurred. (100002)`, but could also be improved with loop completion
 
 ### prep for release (technical)
 
@@ -51,15 +50,17 @@
 
 * [terminal only] auto-discover Notes dirs and list them as options for choosing, with "Notes" as default
 
-* get someone to write tests!!
-
 * ?? `--properties` option to show the settings, so dont have to look thru, and option to set that via cli ??
+
+* get someone to write tests!!
 
 
 
 #### [PRO] 
 
 * [via TUI] auto-discover Notes dirs and list them as options for choosing, with "Notes" as default
+
+* option to delete __GitMyNotes folders when restored to 0
 
 * desktop claude MCP to review/tag collected notes works, move to python and anthropic api
 
@@ -71,12 +72,6 @@
 
 * create self executing mac shell command to wrap around python script. 
 
-
-
-### pro?
-
-* licensing??
-
 * create a github for non-devs one-pager? video? 
 
 * allow comma separated list of folders at once
@@ -85,7 +80,7 @@
 
 * default "_ignore" folder, so when user selects "all folders" it gets skipped
 
-
+* licensing??
 
 
 
