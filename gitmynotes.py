@@ -954,7 +954,11 @@ Add '--force' to skip confirmation in the future.'''
         final_loop_size = args.batch_size
     else:
         final_loop_size = notes_to_process % args.batch_size
-    
+        if final_loop_size == 0:
+            final_loop_size = args.batch_size
+        
+    debug_print(f"final_loop_size {final_loop_size}")
+        
     notes_processed = 0
     processednotes_data = 0
     for x in range(1,loop_count+1): 
