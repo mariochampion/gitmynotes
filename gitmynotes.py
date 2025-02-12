@@ -915,7 +915,7 @@ def main():
     if notes_to_process > (args.batch_size * DEFAULT_LOOPCOUNT_BEFORE_CONFIRM):
         if args.force:
             print(f"In the original command --force was set, continuing without confirm...")
-            return
+            pass
         else:
             confirm_warn = f'''WHOA. {notes_to_process} notes to process in '{args_folder}' folder!
 
