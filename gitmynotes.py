@@ -808,7 +808,7 @@ def main():
                       default=DEFAULT_LOCAL_ONLY,
                       help=f"[bool] Use as '--local-only' (no 'true' or 'false' value allowed) to over-ride to the default action of backing up notes to GitHub. When set, only a local copy of notes will be made. (DEFAULT: Send notes to GitHub repo)")                      
 
-    parser.add_argument('--max-notes', '--maxnotes', type=int, 
+    parser.add_argument('--max-notes', '--maxnotes', '--max', type=int, 
                       help=f'[int] Maximum number of notes to process.')
 
     parser.add_argument('--batch-size', type=int,
