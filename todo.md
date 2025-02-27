@@ -74,11 +74,13 @@
 
 * create a github for non-devs one-pager? video? 
 
-* allow comma separated list of folders at once
+* allow comma separated list of folders at once -- based on list in the USAGE_FOLDERS_PROCESSED in config yaml
 
 * command to get list of folders and counts so you can decide what to do
 
 * default "_ignore" folder, so when user selects "all folders" it gets skipped
+
+* default folder besides NOTES when you do not specify
 
 * licensing??
 
