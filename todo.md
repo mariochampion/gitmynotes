@@ -80,8 +80,6 @@
 
 * default "_ignore" folder, so when user selects "all folders" it gets skipped
 
-* default folder besides NOTES when you do not specify
-
 * licensing??
 
 
