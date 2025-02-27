@@ -60,6 +60,8 @@
 
 * [via TUI] auto-discover Notes dirs and list them as options for choosing, with "Notes" as default
 
+* check LAST bkup date and autocalc the --maxnotes to get them, or do the whole thing by date which would allow cron job at that interval
+
 * option to delete __GitMyNotes folders when restored to 0
 
 * desktop claude MCP to review/tag collected notes works, move to python and anthropic api
