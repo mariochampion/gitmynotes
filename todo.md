@@ -60,6 +60,11 @@
 
 * [via TUI] auto-discover Notes dirs and list them as options for choosing, with "Notes" as default
 
+* allow comma separated list of folders at once -- or based on list in the USAGE_FOLDERS_PROCESSED in config yaml, 
+process them allwith default number or set --maxnotes
+
+* command to get list of folders and counts so you can decide what to do
+
 * check LAST bkup date and autocalc the --maxnotes to get them, or do the whole thing by date which would allow cron job at that interval
 
 * option to delete __GitMyNotes folders when restored to 0
@@ -75,10 +80,6 @@
 * create self executing mac shell command to wrap around python script. 
 
 * create a github for non-devs one-pager? video? 
-
-* allow comma separated list of folders at once -- based on list in the USAGE_FOLDERS_PROCESSED in config yaml
-
-* command to get list of folders and counts so you can decide what to do
 
 * default "_ignore" folder, so when user selects "all folders" it gets skipped
 
