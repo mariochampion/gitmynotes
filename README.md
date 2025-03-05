@@ -116,7 +116,7 @@ FREQUENTLY USED
   --folder FOLDER       [str] Specific Notes folder to export.
                         (default: 'Notes')
   
-  --max-notes MAX_NOTES, --maxnotes MAX_NOTES
+  --max-notes, --maxnotes, --max MAX_NOTES
                         [int] Maximum number of notes to process in this run.
   
   --restore-notes RESTORE_NOTES, --restorenotes RESTORE_NOTES, --restore RESTORE_NOTES
