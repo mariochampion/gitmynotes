@@ -48,6 +48,8 @@
 #### [OSS] 
 
 
+* add last backup date to "GitMyNotes Usage Data" in gmn_config.yml
+
 * [terminal only] auto-discover Notes dirs and list them as options for choosing, with "Notes" as default
 
 * ?? `--properties` option to show the settings, so dont have to look thru, and option to set that via cli ??
