@@ -70,9 +70,9 @@ Learn more with:
 
 ## Better usage
 
-Set an [alias in your bash profile](https://www.google.com/search?q=set+up+alias+in+mac+bash+profile):`alias gitmynotes='python gitmynotes.py'`
+Do this once: set an [alias in your bash profile](https://www.google.com/search?q=set+up+alias+in+mac+bash+profile):`alias gitmynotes='python gitmynotes.py'`
 
-Then you can run, for example `gitmynotes --folder='myPythonNotes' --maxnotes=10`
+From then on, just use `gitmynotes` as in `gitmynotes --folder='myPythonNotes' --maxnotes=10`
 
 or `gitmynotes --help`
 
