@@ -77,7 +77,7 @@ Then you can run, for example `gitmynotes --folder='myPythonNotes' --maxnotes=10
 or `gitmynotes --help`
 
 
-Note: The reddit_<x>.py are WIP. Full guidance forthcoming.
+**Note: The reddit_<x>.py are WorkInProgress. Full guidance forthcoming.**
 
 
 ## 
