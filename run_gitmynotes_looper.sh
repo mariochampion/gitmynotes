@@ -1,13 +1,14 @@
 #!/bin/sh
 
-# Script to run gitmynotes.py with different folder/max combinations
+# Script to run LOOPs of GitMyNotes with different folder/max combinations
+
+
 # Edit the folder_configs section below to specify your folder names and max values
 
-# Configuration: folder_name:max_value pairs
-# Edit this section with your actual folder names and max values
 folder_configs="
 Notes:10
 "
+
 # Add more lines in the format: folder_name:max_value
 # Example:
 # your_folder_name:your_max_value
