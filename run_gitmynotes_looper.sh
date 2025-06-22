@@ -11,6 +11,10 @@ Notes:10
 # Add more lines in the format: folder_name:max_value
 # Example:
 # your_folder_name:your_max_value
+# books:10
+# movies:10
+# etc:10
+
 
 # Get the directory where this script is located
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
