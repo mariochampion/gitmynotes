@@ -30,8 +30,9 @@ Simply set '--local-only' when you run the command to create, surprise, local-on
 
 ### Prerequisites
 1. MacOS with Notes app and AppleScript (ships with every Mac)
-2. Python 3.x+ with `ruyaml` ability (run `pip install ruamel.yaml` once to get this library)
-3. GitHub repo (eg, `https://github.com/<MYUSERNAME>/gitmynotes`) accessible from the Mac running this script. Can be public or private, must be configured working auth credentials, etc.
+2. Python 3.x+
+3. Install dependencies: `pip install -r requirements.txt` (just `ruamel.yaml`, used for round-trip-safe config edits)
+4. GitHub repo (eg, `https://github.com/<MYUSERNAME>/gitmynotes`) accessible from the Mac running this script. Can be public or private, must be configured working auth credentials, etc.
 
 
 ## Steps 1-2-3
@@ -72,7 +73,7 @@ Learn more with:
 
 Do this once: set an [alias in your bash profile](https://www.google.com/search?q=set+up+alias+in+mac+bash+profile):`alias gitmynotes='python gitmynotes.py'`
 
-From then on, just use `gitmynotes` as in `gitmynotes --folder='myPythonNotes' --maxnotes=10`
+From then on, just use `gitmynotes` as in `gitmynotes --folder='myPythonNotes' --maxnotes=20`
 
 or `gitmynotes --help`
 
@@ -94,6 +95,17 @@ or `gitmynotes --help`
 2. New Github sub-dir mapped to Notes folders: `DEFAULT_GITHUB_URL/DEFAULT_NOTES_WRAPPERDIR/<notesFolderName>`
 3. Github copy of Notes from folder: `DEFAULT_GITHUB_URL/DEFAULT_NOTES_WRAPPERDIR/<notesFolderName>/<a-note.md>`
 4. OPTIONAL - GitMyNotes audit file: `<notesFolderName>.csv`
+
+
+
+## A note on locked notes (important)
+
+macOS Notes distinguishes two states for password-protected notes: **closed** (currently showing the lock screen, body hidden) and **open** (unlocked in your current Notes.app session, body visible). GitMyNotes handles these differently:
+
+- **Locked and closed** — AppleScript returns an empty body. GitMyNotes commits a stub file (title + dates + a marker saying the content wasn't exported) to GitHub. No cleartext leaves your Mac.
+- **Locked and open** — AppleScript returns the real content, same as any unlocked note. GitMyNotes has no way to tell this case apart, so the cleartext body **will be committed to GitHub**.
+
+macOS does not expose a "locked" status to AppleScript, so GitMyNotes cannot detect this automatically. If you want to keep a locked note's contents private, close it (click away so it re-locks, or close the Notes app) before running GitMyNotes. A note currently showing its lock screen is safe; a note you've unlocked in this session is not.
 
 
 
@@ -149,6 +161,15 @@ LESS FREQUENTLY USED
                         5x the batch size -- which could be hundreds of notes and 
                         could take a looooong time.(default: confirmation will be required)                        
   
+  --yes, --non-interactive
+                        [bool] Use as '--yes' or '--non-interactive' (no value allowed)
+                        for scheduled / non-terminal runs (cron, Cowork routines, CI).
+                        Implies '--force' (skips the 5x-batch confirmation) and also
+                        fails fast with a clear error if 'DEFAULT_GITHUB_URL' still
+                        contains the '<ChangeMe>' placeholder, instead of hanging on
+                        the interactive setup prompt.
+                        (default: interactive prompting is allowed)
+  
   --local-only          [bool] Use as '--local-only' (no 'true' or 'false' value allowed) 
                         Use to over-ride to the default action of backing up notes to GitHub. 
                         When set, only a local copy of notes will be made. 
@@ -157,6 +178,12 @@ LESS FREQUENTLY USED
   --github-url GITHUB_URL, --githuburl GITHUB_URL
                         [str] GitHub repository URL. 
                         (default: https://github.com/<ChangeMe>/gitmynotes)
+
+  --notes-account NOTES_ACCOUNT, --notesaccount NOTES_ACCOUNT
+                        [str] macOS Notes account name (e.g. 'iCloud', 
+                        'On My Mac'). Used to scope every AppleScript op to a 
+                        single account. Most users want 'iCloud'.
+                        (default from config: 'iCloud')
   
   --newline-delimiter NEWLINE_DELIMITER, --newlinedelimiter NEWLINE_DELIMITER
                         [str] Default CSV newline delimiter (default: '|||')
@@ -167,4 +194,4 @@ LESS FREQUENTLY USED
 ```
 
 
-### copyright 2025 mariochampion all rights reserved.
+### copyright 2026 mariochampion.com all rights reserved.
