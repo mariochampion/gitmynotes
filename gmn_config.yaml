@@ -1,7 +1,7 @@
 ## ===================================================================
 ## GitMyNotes - LICENSE AND CREDITS
 ## This app/collection of scripts at https://github.com/mariochampion/gitmynotes
-## released under the GNU Affero General Public License v3.0
+## released under the GNU General Public License v3.0
 ##
 ## 
 ## GitMyNotes scripts crafted and copyright 2025 by mario champion (mariochampion.com) 
@@ -30,12 +30,14 @@
 
 ##   REQUIRED: LEAVE AS-IS or CHANGE--
 'DEFAULT_NOTES_FOLDER': 'Notes' # This is the default folder (found on every macOS Notes app) to be processed if --folder not set.
+'DEFAULT_NOTES_ACCOUNT': 'iCloud' # macOS Notes account name. 'iCloud' covers most users; use 'On My Mac' or a custom account name as needed. Override per-run with --notes-account.
 'DEFAULT_EXPORT_PATH': '~/Documents/gitmynotes'
 'DEFAULT_PROCESSED_FOLDER_ENDING': '__GitMyNotes' # ex: if folder is "plans", this will create temp folder "plans__GitMyNotes"
 'DEFAULT_NOTES_WRAPPERDIR': 'macosnotes' # this is the dir in Github in which notes folders will be created
 'DEFAULT_RESTORE_NOTES': 'empty' # options are "empty, always, never"
 'DEFAULT_BATCH_SIZE': 10 # notecount / batchsize = loopcount. 'notecount' is either explicit as 'maxnotes' or returned from get_foldernotecount(folder) if maxnotes not set.
 'DEFAULT_LOOPCOUNT_BEFORE_CONFIRM': 5 # loopcount X batchsize = notecount before you must confirm intention to process in one run. This can be over-ridden for use in full automation by adding '--force' to your command.
+'PRINT_LEVEL': 'ALL' # Can be 'NONE', 'RESULTS', 'DEBUG', or 'ALL'. CLI '--print' flag overrides this.
 
 # This is a Work In Progress for users, like me, who have notes which are just a reddit link
 # Used with reddit_prefetch.py then reddit_fetch.py to flesh these notes with op post and top comment
@@ -59,5 +61,4 @@
 'USAGE_FOLDERS_PROCESSED':
 - placeholder
 'USAGE_NOTES_PROCESSED': 0
-
 
