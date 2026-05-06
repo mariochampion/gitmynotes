@@ -58,7 +58,6 @@
 ##   And to help show the benefit you have received using GitMyNotes
 
 'USAGE_GITMYNOTES_TOTAL': 0
-'USAGE_FOLDERS_PROCESSED':
-- placeholder
+'USAGE_FOLDERS_PROCESSED': {}
 'USAGE_NOTES_PROCESSED': 0
 
