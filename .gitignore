@@ -1,6 +1,8 @@
 .DS_Store
 gmn_config.yaml
 setup.py
+currentnote.txt
+metadata_rows.txt
 
 
 # Byte-compiled / optimized / DLL files
