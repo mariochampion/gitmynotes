@@ -2452,14 +2452,17 @@ def main():
         if folder_outcomes:
             summary_lines.append("    Per-folder outcomes:")
             for o in folder_outcomes:
-                summary_lines.append(f"      - {o['status']:<24} {o['folder']} ({o['notes_processed']} note(s) exported)")
+                summary_lines.append(f"      - {o['notes_processed']} note(s) exported from {o['folder']}")
+                summary_lines.append(f"      - {o['status']:<24}")  
+                summary_lines.append(f"      - {DEFAULT_GITHUB_URL}/tree/main/{args_wrapper_dir}/{o['folder']}")
+                summary_lines.append(f"   ")
         else:
             summary_lines.append("    No folders processed (USAGE_FOLDERS_PROCESSED is empty).")
         summary_lines.append("")
         summary_lines.append(f"    Runs::Folders::Notes: {int(USAGE_GITMYNOTES_TOTAL_NEW)}::{len(USAGE_FOLDERS_PROCESSED)}::{int(USAGE_NOTES_PROCESSED_NEW)}")
         summary_lines.append("")
         if share_url:
-            summary_lines.append("    - Tell your friends, learn more: https://GitMyNotes.com/")
+            summary_lines.append("Tell your friends, learn more: https://GitMyNotes.com/")
         print_color(textcolor="cyan", msg="\n".join(summary_lines), addseparator=True)
     else:
         # Non-auto: existing single-folder final_msg.
