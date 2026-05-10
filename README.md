@@ -31,8 +31,9 @@ Simply set '--local-only' when you run the command to create, surprise, local-on
 ### Prerequisites
 1. MacOS with Notes app and AppleScript (ships with every Mac)
 2. Python 3.x+
-3. Install dependencies: `pip install -r requirements.txt` (just `ruamel.yaml`, used for round-trip-safe config edits)
-4. GitHub repo (eg, `https://github.com/<MYUSERNAME>/gitmynotes`) accessible from the Mac running this script. Can be public or private, must be configured working auth credentials, etc.
+3. Install Python dependencies: `pip install -r requirements.txt` (just `ruamel.yaml`, used for round-trip-safe config edits)
+4. **pandoc** (default output format only): `brew install pandoc`. GitMyNotes uses pandoc to convert each note's HTML body to GitHub-flavored markdown. If you don't want to install pandoc, see the "Output format" section below — there's a one-line config flip that disables the conversion and writes raw HTML inside the `.md` files instead (the pre-2026 behavior).
+5. GitHub repo (eg, `https://github.com/<MYUSERNAME>/gitmynotes`) accessible from the Mac running this script. Can be public or private, must be configured working auth credentials, etc.
 
 
 ## Steps 1-2-3
@@ -95,6 +96,14 @@ For an unattended cron / Claude Co-work-routine run, the typical command is:
 gitmynotes --auto --yes
 ```
 
+If you know you've only been editing one specific folder and don't want `--auto` to walk every folder, narrow the run with `--folder=NAME`:
+
+```
+gitmynotes --auto --folder=myPythonNotes --yes
+```
+
+This still uses the watermark to skip notes that haven't changed since the last successful run — it just limits the scope to that one folder. The folder must already be in `USAGE_FOLDERS_PROCESSED` (i.e. seeded with one prior `--folder=NAME` run); otherwise the script hard-fails with a clear remediation message. A `DEFAULT_NOTES_FOLDER` set in config does NOT trigger this narrowing — you have to pass `--folder` explicitly on the CLI for it to take effect under `--auto`.
+
 
 **Note: The reddit_<x>.py are WorkInProgress. Full guidance forthcoming.**
 
@@ -113,6 +122,36 @@ gitmynotes --auto --yes
 2. New Github sub-dir mapped to Notes folders: `DEFAULT_GITHUB_URL/DEFAULT_NOTES_WRAPPERDIR/<notesFolderName>`
 3. Github copy of Notes from folder: `DEFAULT_GITHUB_URL/DEFAULT_NOTES_WRAPPERDIR/<notesFolderName>/<a-note.md>`
 4. OPTIONAL - GitMyNotes audit file: `<notesFolderName>.csv`
+
+
+
+## Output format
+
+By default (post-2026) each exported note is committed as proper GitHub-flavored markdown with a YAML frontmatter header. The frontmatter carries three fields, recovered directly from Notes.app:
+
+```
+---
+title: 'Original note title (with whatever characters Notes.app allowed)'
+creation_date: '2024-06-01T10:00:00'
+modification_date: '2026-05-09T12:34:56'
+---
+
+The body of your note as real markdown.
+```
+
+The frontmatter is parseable by anything that reads YAML (Python, Obsidian, Hugo, Jekyll, Astro, plain `yaml.safe_load`, etc.) — useful both for downstream tooling and for AI-assisted analysis of your own notes. The `title` field preserves the original unsanitized note title from Notes.app, which is otherwise lost in the GitMyNotes filename sanitization (lowercased, non-alphanumerics replaced with dashes).
+
+Markdown conversion happens via pandoc (`pandoc -f html-native_divs -t gfm`), which handles paragraphs, lists, tables, inline formatting (bold, italic, code), and links cleanly. Notes.app attachment placeholders (drawings, embedded images) cannot survive the round trip — they reference internal Notes.app IDs that aren't part of the exported HTML — so those will appear as broken or absent in the output regardless of conversion.
+
+**If you don't want or can't install pandoc**, set in `gmn_config.yaml`:
+
+```
+'DEFAULT_BODY_FORMAT': 'html'
+```
+
+This disables the pandoc step entirely and falls back to the pre-2026 output: each `.md` file contains the raw HTML body with two `<div>` headers for Creation Date and Modification Date prepended. GitHub still renders this acceptably (markdown allows raw HTML) but downstream parseability is lost. You can flip back to `'markdown'` later — existing committed files won't be re-processed automatically; they'll migrate gradually as each note is edited and re-exported.
+
+If you set `'DEFAULT_BODY_FORMAT': 'markdown'` and pandoc is not on `PATH`, GitMyNotes refuses to run and points you at both options (install pandoc or flip the config to `'html'`).
 
 
 
@@ -171,7 +210,8 @@ FREQUENTLY USED
                         Suppresses the 5x-batch confirmation entirely. Per-folder failures are
                         isolated -- one stale folder doesn't stop the others. Combine with
                         '--yes' for unattended scheduled / cron / Cowork-routine runs.
-                        '--folder' is ignored under '--auto'.
+                        Combine with '--folder=NAME' to narrow the auto run to a single known
+                        folder (still watermark-aware) instead of walking every folder.
                         (default: off)
 
                         
