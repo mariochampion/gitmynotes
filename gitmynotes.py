@@ -1,11 +1,54 @@
 #!/usr/bin/env python
+"""GitMyNotes -- back up Apple Notes (Notes.app) folders to a GitHub repo as Markdown.
+
+For each configured folder, the script drives Notes.app via AppleScript /
+osascript to export every note's HTML body, optionally converts it to GFM
+Markdown via pandoc (R8), writes a per-note .md file with YAML frontmatter,
+commits the result to a local git repo, and pushes to a configured GitHub
+remote. A per-folder CSV append-only audit log is appended on every run.
+
+Configuration lives in `gmn_config.yaml` next to this script. The file is
+edited in-place to advance per-folder mod-date watermarks and run-count
+usage totals (see update_yaml_config_multi for the single-write-per-run
+guarantee). Every DEFAULT_* value can be overridden per run via CLI flags;
+see `python gitmynotes.py --help` for the full list, and the USING THIS
+SCRIPT block below for common invocations.
+
+Entry points worth knowing:
+  - main()                      -- single CLI run; orchestrates everything.
+  - process_one_folder()        -- the per-folder pipeline (count -> export
+                                   -> commit/push -> audit -> move -> restore
+                                   -> watermark advance); called once
+                                   normally or repeatedly under --auto.
+  - export_notes_to_markdown()  -- the AppleScript driver that does the
+                                   actual Notes.app export per batch.
+  - applescript_escape()        -- single source of truth for escaping any
+                                   user-supplied string before it's embedded
+                                   into an AppleScript "..." literal
+
+macOS-only (depends on Notes.app + osascript). External deps: `ruamel.yaml`
+(pinned in requirements.txt) for round-trip config edits, and `pandoc` (a
+hard prereq when DEFAULT_BODY_FORMAT is 'markdown', the default). The 'html'
+escape hatch removes the pandoc prereq at the cost of raw-HTML-in-.md file.
+
+Operational notes:
+  - Non-interactive / unattended runs (Cowork routines, cron, CI): pair
+    --auto with --yes. Exit codes follow the cross-cutting
+    taxonomy: 0 = clean, 1 = hard failure, 2 = partial success.
+  - Side-channel files (`currentnote.txt`, `metadata_rows.txt`) live next
+    to this script; both are .gitignored. 
+  - The append-only audit CSV per folder doubles as a backup index using ISO
+    formatted dates(YYYY-MM-DD HH:MM:SS).
+
+License: AGPL-3.0. See the LICENSE banner below for full credits.
+"""
 ## ===================================================================
 ## GitMyNotes - LICENSE AND CREDITS
 ## This app/collection of scripts at https://github.com/mariochampion/gitmynotes
 ## released under the GNU Affero General Public License v3.0
 ##
 ## 
-## GitMyNotes scripts crafted and copyright 2025 by mario champion (mariochampion.com) 
+## GitMyNotes scripts crafted and copyright 2025-2026 by mario champion (mariochampion.com)
 ##
 ## please open issues and pull requests and comments
 ## thanks and always remember: this robot loves you. 
@@ -23,6 +66,14 @@
 
 ## Specify to restore notes folder even if not emptied
 #  python gitmynotes.py --folder="somefolder" --max-notes=10 --restore=always
+
+## Long runs: every N batches (DEFAULT_LOOPCOUNT_BEFORE_CONFIRM, default 5) GitMyNotes pauses
+## for a y/N/x confirmation before the next batch. Suppress with --force for interactive runs.
+#  python gitmynotes.py --folder="somefolder" --max-notes=100 --force
+
+## Unattended runs (Cowork routines, cron, CI): --yes / --non-interactive implies --force AND
+## fails fast (exit 1) if gmn_config.yaml still has the <ChangeMe> GitHub URL placeholder.
+#  python gitmynotes.py --folder="somefolder" --max-notes=100 --yes
 
 ## Watermark-aware backup of every folder GitMyNotes already knows about
 #  python gitmynotes.py --auto --yes
@@ -55,23 +106,23 @@ class PrintLevel(Enum):
     ALL = 3
 
 
-# Exit code taxonomy (cross-cutting, paired with R4's logging pass to make
+# Exit code taxonomy (cross-cutting, paired with logging to make
 # non-interactive runs -- Cowork routines, cron, CI -- parseable):
 #   EXIT_SUCCESS         = 0  -- run completed all intended work cleanly. Includes
 #                                no-op runs (loop_count == 0), runs whose only
-#                                "issue" was B4 closed-locked notes committed as
+#                                "issue" was closed-locked notes committed as
 #                                stubs (by design, not a partial outcome), runs
 #                                with --local-only that complete the local work,
 #                                and 'x' typed at the 5x-batch confirm prompt
 #                                (clean user-initiated abort -- nothing happened).
-#   EXIT_HARD_FAILURE    = 1  -- run could not proceed at all. Bad config (B8
+#   EXIT_HARD_FAILURE    = 1  -- run could not proceed at all. Bad config, such as
 #                                <ChangeMe> fail-fast under --yes), missing
-#                                required args (B10 folder guard), invalid
-#                                argparse value, or first-step setup failure that
+#                                required args, invalid argparse value,
+#                                or first-step setup failure that
 #                                makes any further work pointless. No useful
 #                                work was done.
 #   EXIT_PARTIAL_SUCCESS = 2  -- run did some work but didn't complete cleanly.
-#                                Mainly B1 (unsupported note aborted batch -- the
+#                                Mainly unsupported note aborted batch -- the
 #                                notes before the bad one were exported, the rest
 #                                are left for next run), git push failures after
 #                                successful local commits (work is recoverable on
@@ -84,31 +135,28 @@ EXIT_HARD_FAILURE = 1
 EXIT_PARTIAL_SUCCESS = 2
 
 
-# R14: well-known string sentinels promoted from inline literals so they live in
-# one place. Keeps the literal out of multiple sites and gives a searchable name.
-#   UNSUPPORTED_NOTE_ERROR_CODE: substring osascript prints to stderr when a
-#     note's body can't be read (typically image-bearing notes). Triggers the
-#     B1 partial-export recovery path.
-#   CHANGEME_PLACEHOLDER: sentinel left in DEFAULT_GITHUB_URL until the user
-#     edits gmn_config.yaml. Drives the first-run interactive setup prompt and
-#     the B8 --yes fail-fast.
-# (FOLDERS_PROCESSED_PLACEHOLDER was retired in R18's data layer: USAGE_FOLDERS_PROCESSED
-# is now a mapping rather than a list, and an empty mapping is the natural seed
-# value -- no sentinel needed.)
+
+# UNSUPPORTED_NOTE_ERROR_CODE: substring osascript prints to stderr when a
+#  note's body can't be read (typically image-bearing notes).
+# CHANGEME_PLACEHOLDER: sentinel left in DEFAULT_GITHUB_URL until the user
+#  edits gmn_config.yaml. Drives the first-run interactive setup prompt and
+#  the --yes fail-fast.
+# USAGE_FOLDERS_PROCESSED:
+# is a mapping rather than a list, and an empty mapping is the natural seed
+# value -- no sentinel needed.
 UNSUPPORTED_NOTE_ERROR_CODE = "type 100002"
 CHANGEME_PLACEHOLDER = "<ChangeMe>"
 
 
-# R4 (incremental): module-level logger. setup_logging() in main() attaches a
+# module-level logger. setup_logging() in main() attaches a
 # FileHandler at <script_dir>/gitmynotes.log so info / warning / error events
 # flow to a parseable record alongside the existing colored TTY output. Colored
 # print_color() callsites are preserved as-is; logger.warning / logger.error /
 # logger.exception calls are added in paired form at each warning/error site so
 # non-interactive runs (Cowork routines, cron) get a structured log without
-# ANSI codes. Chatty debug_print / results_print are deliberately untouched in
-# this pass.
+# ANSI codes. Chatty debug_print / results_print are deliberately untouched.
 #
-# R20 dropped the file handler / logger level from WARNING to INFO so the
+# Set the file handler / logger level from WARNING to INFO so the
 # per-batch timing lines around osascript and pandoc land in the log. Filter
 # with `grep '\[INFO\]' gitmynotes.log` for timing-only / `\[WARNING\]` or
 # `\[ERROR\]` for problem events.
@@ -121,18 +169,74 @@ logger = logging.getLogger("gitmynotes")
 
 PRINT_LEVEL = PrintLevel.ALL
 
-##   get user configs from file ./gmn_config.yaml
 def load_configs_from_file():
+    """Load gmn_config.yaml from the current working directory and return it
+    as a plain dict (safe loader -- no round-trip metadata preserved). Used
+    once at startup by main() to populate DEFAULT_* values and usage counters;
+    in-run mutations go through update_yaml_config / update_yaml_config_multi
+    instead, which use ruamel's round-trip loader to preserve comments and
+    formatting on the way back out.
+    """
     yaml=YAML(typ='safe')   # default, if not specfied, is 'rt' (round-trip)
     loaded_configs = yaml.load(open("gmn_config.yaml"))
-    
+
     return loaded_configs
 
 
-##### Describe this function
+# centralize escaping of user-supplied strings (folder names, account names,
+# note titles, config-derived paths) before they're embedded into AppleScript
+# string literals.
+#
+# Order matters: backslash MUST be escaped before doublequote. Otherwise the
+# backslash we inserted to escape a quote gets re-escaped into '\\"', which
+# AppleScript reads as a literal backslash followed by an unterminated string.
+def applescript_escape(s):
+    """Escape a Python string for safe embedding inside an AppleScript "..."
+    string literal.
+
+    Handles, in order: backslash (\\ -> \\\\), doublequote (" -> \\"), and the
+    three whitespace chars that can terminate or otherwise confuse a literal
+    on the macOS AppleScript parser (newline, carriage return, tab) -- each
+    rewritten to its AppleScript escape sequence so the resulting literal is
+    always on one line.
+
+    Args:
+        s: Any value. None / empty / non-str inputs return ''.
+
+    Returns:
+        str: escape-safe string, ready to drop between doublequotes inside an
+        f-string-built AppleScript block.
+    """
+    if not s:
+        return ''
+    return (str(s)
+        .replace('\\', '\\\\')   # MUST be first
+        .replace('"',  '\\"')
+        .replace('\n', '\\n')
+        .replace('\r', '\\r')
+        .replace('\t', '\\t'))
+
 
 def setup_git_repo(repo_path, DEFAULT_GITHUB_URL):
-    """Initialize Git repo and set remote if not already set up"""
+    """Initialize a git repo at `repo_path` if one doesn't already exist there,
+    set `origin` to `DEFAULT_GITHUB_URL`, force-rename the default branch to
+    `main`, and pull any pre-existing remote content so subsequent commits
+    rebase cleanly.
+
+    Best-effort: every git subprocess call is wrapped in try/except. Failures
+    are logged via logger.exception / logger.warning and surfaced in the TTY
+    via print_color, but this function never raises -- the caller (main())
+    continues into the export pipeline regardless. The rationale is that a
+    repo that already exists locally will trip the `init` step harmlessly, and
+    a missing-remote condition only matters at push time, which has its own
+    error handling in git_add_commit_push.
+
+    Args:
+        repo_path (str): absolute path to the local export root that should be
+            (or already is) a git repo.
+        DEFAULT_GITHUB_URL (str): the configured GitHub remote URL. Used only
+            on the first-run init path; not validated here.
+    """
     
     if not os.path.exists(os.path.join(repo_path, '.git')):
         try:
@@ -165,8 +269,6 @@ def setup_git_repo(repo_path, DEFAULT_GITHUB_URL):
 
 
 
-##### Describe this function
-
 def export_notes_to_markdown(DEFAULT_CURRENTNOTE_FILE, DEFAULT_METADATA_ROWS_FILE, export_path, notes_account, unsupported_folder_ending, body_format, folder_name=None, max_notes=None, wrapper_dir=None):
     """Export Notes using applescript/osascript with folder and count limits.
 
@@ -174,16 +276,16 @@ def export_notes_to_markdown(DEFAULT_CURRENTNOTE_FILE, DEFAULT_METADATA_ROWS_FIL
     account (e.g. 'iCloud', 'On My Mac'). Threaded through from --notes-account /
     DEFAULT_NOTES_ACCOUNT (R6).
 
-    unsupported_folder_ending is the suffix appended to folder_name when the B1
+    unsupported_folder_ending is the suffix appended to folder_name when the
     partial-export recovery path moves an image-bearing note to a sibling folder
     (e.g. folder 'plans' + ending '_unsupported' -> 'plans_unsupported'). Threaded
-    through from DEFAULT_UNSUPPORTED_FOLDER_ENDING (R14).
+    through from DEFAULT_UNSUPPORTED_FOLDER_ENDING.
 
-    body_format is 'markdown' or 'html' (R8). In 'markdown' mode AppleScript writes
+    body_format is 'markdown' or 'html' . In 'markdown' mode AppleScript writes
     each note's raw HTML body to a per-note '<cleanTitle>.html' temp file in the
     export path (no date <div> headers prepended); the caller's Python sweep then
     converts the .html to the final '<cleanTitle>.md' via pandoc and prepends YAML
-    frontmatter. In 'html' mode AppleScript writes the legacy pre-R8 output
+    frontmatter. In 'html' mode AppleScript writes the HTML output
     directly: '<cleanTitle>.md' with the original <div>Creation/Modification
     Date</div> headers + raw HTML body, no Python conversion sweep needed.
     Either way the metadata-rows file (and thus the audit CSV) records the .md
@@ -192,14 +294,14 @@ def export_notes_to_markdown(DEFAULT_CURRENTNOTE_FILE, DEFAULT_METADATA_ROWS_FIL
     DEFAULT_METADATA_ROWS_FILE is the absolute path to the side-channel CSV file
     the AppleScript loop appends one row to per successfully-exported note
     ('title,quoted_title.md,YYYY-MM-DD HH:MM:SS'). Caller reads this file after
-    the function returns and uses it to write the audit CSV (R5). Truncated at
+    the function returns and uses it to write the audit CSV. Truncated at
     function entry so stale rows from a prior batch can't pollute this one. On
-    the B1 type-100002 recovery path the file already contains rows for the
+    the type-100002 recovery path the file already contains rows for the
     goodnotes (1..i-1); on the success path it contains rows for all exported
-    notes including B4 stubs.
+    notes including stubs.
     """
 
-    # R5: clear any stale metadata rows from a prior batch / crashed run before
+    # clear any stale metadata rows from a prior batch / crashed run before
     # the AppleScript loop appends fresh rows. Same defensive truncation pattern
     # we use for currentnote.txt by virtue of always-overwriting.
     try:
@@ -221,14 +323,21 @@ def export_notes_to_markdown(DEFAULT_CURRENTNOTE_FILE, DEFAULT_METADATA_ROWS_FIL
     elif (max_notes==None and folder_name==None and wrapper_dir==None):
         print_color(textcolor="white",msg=f"Starting export of all Notes...")
 
-    # Escape quotes in the account name for AppleScript (R6)
-    notes_account_escaped = notes_account.replace('"', '\\"')
+    # escape every user-supplied string we're about to embed into AppleScript
+    # string literals via applescript_escape (handles backslash, doublequote,
+    # newline, CR, tab).
+    notes_account_escaped = applescript_escape(notes_account)
+    folder_name_escaped = applescript_escape(folder_name)
+    export_path_escaped = applescript_escape(export_path)
+    wrapper_dir_escaped = applescript_escape(wrapper_dir)
+    currentnote_file_escaped = applescript_escape(DEFAULT_CURRENTNOTE_FILE)
+    metadata_rows_file_escaped = applescript_escape(DEFAULT_METADATA_ROWS_FILE)
 
-    # R8: body_format selects which file the AppleScript repeat-loop writes per
+    # body_format selects which file the AppleScript repeat-loop writes per
     # note. 'markdown' mode writes raw HTML body to <cleanTitle>.html (no date
     # <div>s prepended) so the Python sweep can convert it via pandoc. 'html'
-    # mode writes the legacy pre-R8 output directly to <cleanTitle>.md (date
-    # <div>s + raw HTML body) -- byte-identical to what shipped before R8.
+    # mode writes the legacy output directly to <cleanTitle>.md (date
+    # <div>s + raw HTML body) -- byte-identical to what shipped before.
     if body_format == 'markdown':
         write_line = (
             'do shell script "echo " & quoted form of noteContent '
@@ -247,18 +356,18 @@ def export_notes_to_markdown(DEFAULT_CURRENTNOTE_FILE, DEFAULT_METADATA_ROWS_FIL
     tell application "Notes"
         set targetAccount to "{notes_account_escaped}"
         tell account targetAccount
-        if length of "{folder_name if folder_name else ''}" > 0 then
+        if length of "{folder_name_escaped}" > 0 then
             try
-                set targetFolder to folder "{folder_name}"
+                set targetFolder to folder "{folder_name_escaped}"
                 set allNotes to every note in targetFolder
-                set export_path_full to "{export_path}/{wrapper_dir}/{folder_name}"
+                set export_path_full to "{export_path_escaped}/{wrapper_dir_escaped}/{folder_name_escaped}"
             on error
-                log "Folder {folder_name} not found"
+                log "Folder {folder_name_escaped} not found"
                 return 0
             end try
         else
             set allNotes to every note
-            set export_path_full to "{export_path}/{wrapper_dir}"
+            set export_path_full to "{export_path_escaped}/{wrapper_dir_escaped}"
         end if
         
         set noteCount to (count of allNotes)
@@ -274,7 +383,7 @@ def export_notes_to_markdown(DEFAULT_CURRENTNOTE_FILE, DEFAULT_METADATA_ROWS_FIL
             set notesToProcess to noteCount
         end if
 
-        -- B4: track empty/locked notes so caller can report them to the user.
+        -- track empty/locked notes so caller can report them to the user.
         set lockedCount to 0
         set lockedMarker to "<div><i>[empty or locked note -- no content exported by GitMyNotes]</i></div>"
 
@@ -287,7 +396,7 @@ def export_notes_to_markdown(DEFAULT_CURRENTNOTE_FILE, DEFAULT_METADATA_ROWS_FIL
             -- absolute). Otherwise osascript's shell cwd (usually the user's home)
             -- and Python's cwd could disagree, leaving get_currentnote_data to
             -- silently read stale data from a previous run.
-            do shell script "echo " & i & "++++" & quoted form of noteTitle & " > " & quoted form of "{DEFAULT_CURRENTNOTE_FILE}"
+            do shell script "echo " & i & "++++" & quoted form of noteTitle & " > " & quoted form of "{currentnote_file_escaped}"
             --log ("Exporting note: " & noteTitle)
 
             set linebreaker to "\n"
@@ -317,16 +426,16 @@ def export_notes_to_markdown(DEFAULT_CURRENTNOTE_FILE, DEFAULT_METADATA_ROWS_FIL
             set cleanTitle to do shell script "echo " & quoted form of noteTitle & " | sed 's/[^a-zA-Z0-9.]/-/g' | tr '[:upper:]' '[:lower:]'"
             set fileName to cleanTitle & ".md"
 
-            -- Write to file. R8: line built Python-side from body_format
+            -- Write to file. line built Python-side from body_format
             -- ('markdown' -> raw HTML body to <cleanTitle>.html for pandoc to
             -- convert; 'html' -> legacy date-divs + HTML body to <cleanTitle>.md).
             {write_line}
 
-            -- R5: build a locale-independent ISO date string from theModDate's
+            -- build a locale-independent ISO date string from theModDate's
             -- components (mirrors the snippet that used to live in
             -- export_notes_metadata) and append a CSV-shaped row to the
             -- side-channel metadata file. Python reads this after osascript
-            -- completes (success path AND B1 type-100002 partial-bail) and
+            -- completes (success path AND type-100002 partial-bail) and
             -- uses it to write the per-folder audit CSV without firing a
             -- second osascript pass over the same notes (R5).
             set isoYear to year of theModDate as string
@@ -357,11 +466,11 @@ def export_notes_to_markdown(DEFAULT_CURRENTNOTE_FILE, DEFAULT_METADATA_ROWS_FIL
             -- (extended from the R5 3-field shape; read_metadata_rows handles both
             -- shapes for backward-compat with any leftover pre-R8 file).
             set auditRow to auditTitle & "," & fileName & "," & isoModDate & "," & isoCreateDate
-            do shell script "echo " & quoted form of auditRow & " >> " & quoted form of "{DEFAULT_METADATA_ROWS_FILE}"
+            do shell script "echo " & quoted form of auditRow & " >> " & quoted form of "{metadata_rows_file_escaped}"
         end repeat
 
-        -- B4: compound return value so Python can report locked count without needing a
-        -- side-channel file or stderr (stderr would trip the B1 "type 100002" branch).
+        -- compound return value so Python can report locked count without needing a
+        -- side-channel file or stderr (stderr would trip the "type 100002" branch).
         return (notesToProcess as string) & "|" & (lockedCount as string)
         end tell
     end tell
@@ -464,10 +573,29 @@ def export_notes_to_markdown(DEFAULT_CURRENTNOTE_FILE, DEFAULT_METADATA_ROWS_FIL
 
 
 
-##### Describe this function
-
 def git_add_commit_push(repo_path, folder_name=None, wrapper_dir=None):
-    """Commit changes and push to GitHub.
+    """Stage, commit, and push the per-folder export subdir to GitHub.
+
+    Run once per batch from process_one_folder, after the AppleScript export
+    has written .html temps (markdown mode) or .md files (html mode) and the
+    pandoc sweep (markdown mode) has finalized the .md set. Runs `git add
+    <wrapper_dir>` rather than `git add .` so unrelated working-tree changes
+    aren't accidentally captured. Commit message includes the folder name and
+    timestamp.
+
+    The "nothing to commit" case (re-exporting notes whose content is
+    byte-identical to what's already in git) is classified as benign (B11):
+    we still attempt a push afterward to drain any prior unpushed commits.
+
+    Args:
+        repo_path (str): absolute path to the local git repo root (the export
+            path, same value setup_git_repo was called with).
+        folder_name (str, optional): Notes folder being committed. Threaded
+            into the commit message for traceability.
+        wrapper_dir (str, optional): subdir under repo_path being staged
+            (e.g. 'macosnotes'). `git add` runs against this path; falsy
+            means no subdir which would `git add` literally the string ''
+            -- caller should always set it.
 
     Returns:
         bool: True if every git step ran cleanly (add ok, commit ok or benign
@@ -605,7 +733,8 @@ def read_metadata_rows(metadata_rows_file, expected_count, folder, current_datet
         formatted_date is '%Y-%m-%d %H:%M:%S' on the success path (validated
         via strptime); on a parse failure the raw AppleScript value is kept
         and a warning is logged so max_mod_date_from_rows can skip it cleanly
-        (matches the pre-R5 export_notes_metadata fallback shape).
+        (matches the legacy 5-field audit-CSV layout preserved for backward
+        compat with older committed audit files).
         formatted_creation_date is the same shape as formatted_date and is
         used by R8's YAML frontmatter step. Older audit-only consumers
         (write_audit_rows, max_mod_date_from_rows) only read indices 0-4.
@@ -687,8 +816,9 @@ def write_audit_rows(output_file, rows):
 
     Replaces the CSV-write half of the legacy export_notes_metadata. Header is
     written only when creating a new file; existing audit CSVs grow by append,
-    preserving their full history (R3-retired 'audit-trail-via-version-history'
-    behavior).
+    preserving their full history -- the dedupe pass proposed in R3 was
+    retired in favor of this audit-trail-via-version-history behavior, so
+    duplicate rows on re-export are by design.
 
     R8: each row from read_metadata_rows now carries a 6th element
     (formatted_creation_date) used by the YAML frontmatter step. The audit CSV
@@ -1002,10 +1132,36 @@ def get_currentnote_data(filename):
 
 
 
-##### Describe this function
-
 def move_one_note(note_name, folder_source, folder_dest, notes_account, create=True):
-    ''' Move processed notes into destination folder '''
+    """Move a single named note from `folder_source` to `folder_dest` via
+    AppleScript. Used exclusively on the B1 unsupported-note recovery path:
+    when export_notes_to_markdown bails on a `type 100002` error, the offending
+    note's title is read from currentnote.txt and passed here so the next
+    re-run can skip past it.
+
+    `note_name` is matched against the AppleScript `name of` property of each
+    note in `folder_source` (`first note ... whose name is "..."`). R9 routes
+    every embedded string (name, source, dest, account) through
+    applescript_escape so titles containing quotes / backslashes / etc. don't
+    corrupt the script.
+
+    Args:
+        note_name (str): exact title of the note to move. Comes from
+            currentnote.txt, written by AppleScript inside the export loop.
+        folder_source (str): folder the note currently lives in (typically
+            the user's working folder).
+        folder_dest (str): folder to move it to (typically
+            <folder_source><unsupported_folder_ending>, e.g. 'plans_unsupported').
+        notes_account (str): macOS Notes account name to scope the lookup to (R6).
+        create (bool): if True, ensure `folder_dest` exists by calling
+            create_gitnotes_folder first. Defaults True.
+
+    Returns:
+        int: always 0 (the caller -- export_notes_to_markdown's B1 branch --
+            uses this only for side effects; the int return is historical).
+            Side effects: AppleScript move, logger.warning + red print_color
+            telling the user to re-run to drain remaining notes in the batch.
+    """
 
     # if processed_notes exists, then that stage was a success, so next step:
     # create_gitmynotes_folder(folder_dest) so we have a place to move notes
@@ -1021,10 +1177,13 @@ def move_one_note(note_name, folder_source, folder_dest, notes_account, create=T
 
     debug_print(f"Now to move UNSUPPORTED note '{note_name}' from '{folder_source}' to '{folder_dest}'")
 
-    # Escape any quotes in folder names + notes account name (R6)
-    folder_source_escaped = folder_source.replace('"', '\\"')
-    folder_dest_escaped = folder_dest.replace('"', '\\"')
-    notes_account_escaped = notes_account.replace('"', '\\"')
+    # R9: escape folder names, account name, AND the note title (the title comes
+    # from currentnote.txt -- it's user content and can contain anything,
+    # including the doublequotes that would otherwise break this AppleScript).
+    folder_source_escaped = applescript_escape(folder_source)
+    folder_dest_escaped = applescript_escape(folder_dest)
+    notes_account_escaped = applescript_escape(notes_account)
+    note_name_escaped = applescript_escape(note_name)
 
     applescript_moveonenote = f'''
     tell application "Notes"
@@ -1033,7 +1192,7 @@ def move_one_note(note_name, folder_source, folder_dest, notes_account, create=T
             try
                 set sourceFolder to folder "{folder_source_escaped}"
                 set destFolder to folder "{folder_dest_escaped}"
-                set theNote to first note of sourceFolder whose name is "{note_name}"
+                set theNote to first note of sourceFolder whose name is "{note_name_escaped}"
                 
                 -- Check if we have notes to move
                 if theNote is missing value then
@@ -1072,10 +1231,34 @@ def move_one_note(note_name, folder_source, folder_dest, notes_account, create=T
 
 
 
-##### Describe this function
-
 def move_processed_notes(folder_source, folder_dest, max_notes, notes_account, create=True):
-    ''' Move processed notes into destination folder '''
+    """Bulk-move up to `max_notes` notes from `folder_source` to `folder_dest`
+    via AppleScript. Two callers:
+
+    1. Normal post-export move in process_one_folder: after a successful
+       export + commit + push, move the just-exported notes from the user's
+       working folder into <folder_source><processed_folder_ending> (default
+       '__GitMyNotes' suffix) so the next run doesn't re-process them.
+    2. --restore-notes restoration in restore_source_foldernote: move notes
+       back the other direction when the working folder is empty / on every
+       run, depending on the --restore-notes mode.
+
+    Args:
+        folder_source (str): Notes folder to move notes out of.
+        folder_dest (str): Notes folder to move them into. Created via
+            create_gitnotes_folder if `create=True`.
+        max_notes (int): upper bound on the move. The AppleScript clamps to
+            the actual note count if fewer exist; iteration order is whatever
+            `every note of folder` returns (no explicit sort).
+        notes_account (str): macOS Notes account name to scope the lookup to (R6).
+        create (bool): ensure `folder_dest` exists first. Defaults True.
+
+    Returns:
+        bool: True if the AppleScript reported success (process_applescript's
+            success flag). False on any failure -- callers in
+            process_one_folder treat False after a real export as a
+            partial-success signal.
+    """
 
     # if processed_notes exists, then that stage was a success, so next step:
     # create_gitmynotes_folder(folder_dest) so we have a place to move notes
@@ -1091,10 +1274,11 @@ def move_processed_notes(folder_source, folder_dest, max_notes, notes_account, c
 
     debug_print(f"Now to move up to {max_notes} notes from '{folder_source}' to '{folder_dest}'")
 
-    # Escape any quotes in folder names + notes account name (R6)
-    folder_source_escaped = folder_source.replace('"', '\\"')
-    folder_dest_escaped = folder_dest.replace('"', '\\"')
-    notes_account_escaped = notes_account.replace('"', '\\"')
+    # R9: full applescript_escape (backslash + quote + newline/CR/tab) on the
+    # three user-supplied strings before embedding into the AppleScript block.
+    folder_source_escaped = applescript_escape(folder_source)
+    folder_dest_escaped = applescript_escape(folder_dest)
+    notes_account_escaped = applescript_escape(notes_account)
 
     applescript_movenote = f'''
     tell application "Notes"
@@ -1141,8 +1325,6 @@ def move_processed_notes(folder_source, folder_dest, max_notes, notes_account, c
 
 
 
-##### Describe this function
-
 def create_gitnotes_folder(folder: str, notes_account: str) -> Tuple[bool, str]:
     """
     Create a folder in macOS Notes app under the configured Notes account.
@@ -1157,9 +1339,9 @@ def create_gitnotes_folder(folder: str, notes_account: str) -> Tuple[bool, str]:
     """
     print_color(textcolor="white",msg=f"Attempting to create Notes folder: {folder}")
 
-    # Properly escape quotes in folder + account name for AppleScript
-    folder_escaped = folder.replace('"', '\\"')
-    notes_account_escaped = notes_account.replace('"', '\\"')
+    # R9: applescript_escape covers backslash + quote + newline/CR/tab.
+    folder_escaped = applescript_escape(folder)
+    notes_account_escaped = applescript_escape(notes_account)
 
     applescript = f'''
     tell application "Notes"
@@ -1183,10 +1365,32 @@ def create_gitnotes_folder(folder: str, notes_account: str) -> Tuple[bool, str]:
 
 
 
-##### Describe this function
-
 def process_applescript(applescript):
-    ''' generic function to process applescript and return a result object'''
+    """Run an AppleScript block via `osascript -e` and classify the outcome.
+
+    Generic wrapper used by every AppleScript-touching function except
+    export_notes_to_markdown (which needs custom B1 / B4 / R20 handling
+    inline). Captures stdout + stderr, treats any stderr output as failure,
+    treats stdout containing the literal substring "Error:" as failure, and
+    returns (False, error_text) in those cases. Otherwise returns
+    (True, stripped_stdout).
+
+    CalledProcessError from osascript itself (non-zero exit) is caught and
+    returned as (False, "Process Error: <stderr>"). Any other exception is
+    caught and returned as (False, "Unexpected Error: <str>"). The function
+    never raises -- AppleScript-touching code is expected to inspect the
+    returned tuple.
+
+    Args:
+        applescript (str): the raw AppleScript source to execute. Caller is
+            responsible for routing any embedded user-supplied strings through
+            applescript_escape (R9) before assembling this block.
+
+    Returns:
+        Tuple[bool, str]: (success, output_or_error). On success the output
+            is the stripped stdout of osascript (often the AppleScript
+            function's `return` value); on failure it's an error message.
+    """
     # print_color(textcolor='white', msg=f"Processing AppleScript...")
     
     try:
@@ -1222,9 +1426,9 @@ def get_foldernotecount(folder, notes_account):
 
     if folder:
         debug_print(f"Getting count of notes in folder: {folder}")
-        # Properly escape quotes in folder + account name for AppleScript (R6)
-        folder_escaped = folder.replace('"', '\\"')
-        notes_account_escaped = notes_account.replace('"', '\\"')
+        # R9: applescript_escape covers backslash + quote + newline/CR/tab.
+        folder_escaped = applescript_escape(folder)
+        notes_account_escaped = applescript_escape(notes_account)
 
         applescript_notecount = f'''
         tell application "Notes"
@@ -1251,7 +1455,7 @@ def get_foldernotecount(folder, notes_account):
         return int(output_count)
         
     else:
-        print("No folder set. ToDo: work thru defaults flow.")
+        print("No folder set.")
 
 
 
@@ -1362,15 +1566,19 @@ def parse_watermark_iso(watermark_str):
 
 
 def max_mod_date_from_rows(rows):
-    """Walk a processednotes_data list (as produced by export_notes_metadata)
-    and return the maximum parsed modification-date as a naive datetime, or
+    """Walk a metadata-row list (as produced by read_metadata_rows) and
+    return the maximum parsed modification-date as a naive datetime, or
     None if no row had a parseable date.
 
-    Each row is [folder, title, formatted_date, quoted_title, current_datetime];
-    formatted_date is '%Y-%m-%d %H:%M:%S' on the success path of
-    export_notes_metadata's own date parsing. Rows whose date didn't parse
-    cleanly there fall back to the original AppleScript-formatted string and
-    are skipped here -- a partial sample still gives us a usable max.
+    Each row is the 6-element shape
+    [folder, title, formatted_date, quoted_title, current_datetime,
+     formatted_creation_date] (the trailing creation_date was added in R8
+     for the YAML frontmatter step; older audit-only consumers ignore it).
+    Only index 2 (formatted_date, i.e. modification date) is read here.
+    formatted_date is '%Y-%m-%d %H:%M:%S' on the success path (validated via
+    strptime in read_metadata_rows). Rows whose date didn't parse cleanly
+    there carry the raw AppleScript string and are skipped here -- a partial
+    sample still gives us a usable max.
     """
     if not rows:
         return None
@@ -1420,8 +1628,9 @@ def count_notes_modified_since(folder, watermark_iso, notes_account):
     if wm is None:
         return 0
 
-    folder_escaped = folder.replace('"', '\\"')
-    notes_account_escaped = notes_account.replace('"', '\\"')
+    # R9: applescript_escape covers backslash + quote + newline/CR/tab.
+    folder_escaped = applescript_escape(folder)
+    notes_account_escaped = applescript_escape(notes_account)
 
     applescript = f'''
     tell application "Notes"
@@ -1460,10 +1669,18 @@ def count_notes_modified_since(folder, watermark_iso, notes_account):
 
 ## PRINT OPTIONS
 def debug_print(*args, **kwargs):
+    """print() wrapper gated on PRINT_LEVEL >= DEBUG. Prefixes 'DEBUG:' so
+    grep can separate chatty trace lines from RESULT-level output. Intentionally
+    stdout-only -- the R4 logger captures warning/error events; this is for
+    interactive tracing during development."""
     if PRINT_LEVEL.value >= PrintLevel.DEBUG.value:
         print("DEBUG:", *args, **kwargs)
 
 def results_print(*args, **kwargs):
+    """print() wrapper gated on PRINT_LEVEL >= RESULTS. Prefixes 'RESULT:' for
+    the everyday outcome lines (per-folder summaries, audit-row notices) that
+    a non-debug interactive run still wants to see. Stdout-only by design --
+    see debug_print's note on the logger split."""
     if PRINT_LEVEL.value >= PrintLevel.RESULTS.value:
         print("RESULT:", *args, **kwargs)
 
@@ -1569,8 +1786,6 @@ def build_final_msg(gitnotes_url, audit_file, usage_totals, share_url):
 
 
 
-
-##### Describe this function
 
 def process_one_folder(folder, max_notes_request, args, run_config, run_state, skip_5x_confirm=False):
     """Process a single Notes folder end-to-end.
@@ -1902,9 +2117,46 @@ metadata_rows_file={run_config['metadata_rows_file']}''')
     }
 
 
-##### Describe this function
-
 def main():
+    """CLI entry point. Orchestrates one GitMyNotes run end-to-end.
+
+    Pipeline (high-level):
+      1. Wire up the file logger (R4) so warning/error events from any later
+         stage land in <script_dir>/gitmynotes.log.
+      2. Load gmn_config.yaml via load_configs_from_file and pull every
+         DEFAULT_* value into a local. Resolve DEFAULT_CURRENTNOTE_FILE (B9)
+         and DEFAULT_METADATA_ROWS_FILE (R5) to absolute paths anchored to
+         the script directory if the config values are relative.
+      3. Validate DEFAULT_BODY_FORMAT (R8) and, in 'markdown' mode, verify
+         pandoc is on PATH -- missing pandoc hard-fails the run with
+         EXIT_HARD_FAILURE before any work happens.
+      4. Build the argparse parser, parse args, apply --yes implications (B8:
+         --yes implies --force and converts the ChangeMe-on-first-run prompt
+         into a fail-fast).
+      5. If DEFAULT_GITHUB_URL is still the <ChangeMe> placeholder, either
+         prompt the user interactively (and update gmn_config.yaml in place)
+         or fail fast under --yes / --non-interactive (B8).
+      6. setup_git_repo on the export root.
+      7. Bundle per-run config + mutable run_state into dicts for
+         process_one_folder, then either:
+           - --auto: walk USAGE_FOLDERS_PROCESSED (or the single folder named
+             via --auto --folder=NAME, R18b), call count_notes_modified_since
+             for each, skip folders with null watermarks (yellow warning),
+             and call process_one_folder per folder with per-folder failure
+             isolation (one stale folder doesn't black-hole the others).
+           - non-auto: run B10 folder guard, then a single process_one_folder
+             call. R18-era refactor; pre-R18 the batch loop lived inline here.
+      8. After all folders, write the per-run usage counter updates to
+         gmn_config.yaml in a single update_yaml_config_multi call (R10) --
+         one yaml round-trip per run regardless of batch / folder count.
+      9. Exit with EXIT_SUCCESS / EXIT_PARTIAL_SUCCESS per the cross-cutting
+         taxonomy. Hard-failure paths sys.exit(EXIT_HARD_FAILURE) directly
+         earlier and never reach this final exit.
+
+    No args, no return value. Side effects: log writes, git operations,
+    AppleScript invocations, file writes under DEFAULT_EXPORT_PATH, in-place
+    edits to gmn_config.yaml.
+    """
 
     # R4 (incremental): wire up the file logger first so any subsequent
     # warning- / error-level event in this run lands in <script_dir>/gitmynotes.log
